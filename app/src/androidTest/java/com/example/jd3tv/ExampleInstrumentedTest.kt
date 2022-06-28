@@ -1,4 +1,4 @@
-package com.example.jd3tvplayground
+package com.example.jd3tv
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

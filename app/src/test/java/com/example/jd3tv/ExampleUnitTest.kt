@@ -1,4 +1,4 @@
-package com.example.jd3tvplayground
+package com.example.jd3tv
 
 import org.junit.Test
 
