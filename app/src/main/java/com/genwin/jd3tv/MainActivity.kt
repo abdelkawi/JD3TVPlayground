@@ -3,6 +3,7 @@ package com.genwin.jd3tv
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,6 +13,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -64,8 +66,6 @@ class MainActivity : ComponentActivity() {
   }
   @Composable
   fun sectionRow(section: Section){
-
-
     Column {
       Text(section.title , modifier = Modifier.padding(all = 8.dp))
       LazyRow {
@@ -76,8 +76,8 @@ class MainActivity : ComponentActivity() {
     }
   }
   @Composable
-  fun SectionCard(){
-
+  fun SectionCard(imageRes:Int){
+    Image(painter = painterResource(id = imageRes), contentDescription = "")
   }
   @Composable
   fun profile()
