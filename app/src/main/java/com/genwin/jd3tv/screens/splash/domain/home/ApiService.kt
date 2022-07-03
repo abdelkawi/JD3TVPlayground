@@ -1,6 +1,6 @@
-package com.genwin.jd3tv.domain.home
+package com.genwin.jd3tv.screens.splash.domain.home
 
-import com.genwin.jd3tv.domain.ApiResponse
+import com.genwin.jd3tv.common.ApiResponse
 import retrofit2.Response
 import retrofit2.http.GET
 

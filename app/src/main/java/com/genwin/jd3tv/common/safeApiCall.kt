@@ -1,6 +1,6 @@
-package com.genwin.jd3tv.domain
+package com.genwin.jd3tv.common
 
-import com.genwin.jd3tv.domain.Result.Success
+import com.genwin.jd3tv.common.Result.Success
 import com.google.gson.Gson
 import okhttp3.ResponseBody
 import retrofit2.Response

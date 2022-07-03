@@ -1,4 +1,4 @@
-package com.genwin.jd3tv
+package com.genwin.jd3tv.screens.home.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -20,12 +20,17 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.genwin.jd3tv.SectionType.CardWithTitle
-import com.genwin.jd3tv.SectionType.Contest
-import com.genwin.jd3tv.SectionType.ViewPager
-import kotlin.random.Random
+import com.genwin.jd3tv.R
+import com.genwin.jd3tv.screens.home.data.DataItem
+import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
+import com.genwin.jd3tv.screens.home.domain.entity.SectionType.Card
+import com.genwin.jd3tv.screens.home.domain.entity.SectionType.CardWithTitle
+import com.genwin.jd3tv.screens.home.domain.entity.SectionType.Contest
+import com.genwin.jd3tv.screens.home.domain.entity.SectionType.ViewPager
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -38,24 +43,24 @@ class MainActivity : ComponentActivity() {
   @Composable
   fun main(){
     val navController = rememberNavController()
-
     NavHost(navController = navController, startDestination = "home") {
       composable("profile") { profile() }
-      composable("home") { home(navController) }
+      composable("home") {
+        home(listOf(
+          HomeSection("section 1",Card, items = listOf(DataItem("section 1"),DataItem("section 1"))),
+            HomeSection("section 2",ViewPager, items = listOf(DataItem("section 1"),DataItem("section 1"))),
+            HomeSection("section 3",Contest, items = listOf(DataItem("section 1"),DataItem("section 1"))),
+            HomeSection("section 4",CardWithTitle, items = listOf(DataItem("section 1"),DataItem("section 1")))
+          ),
+          navController) }
     }
   }
   @Composable
-  fun home(navController: NavController){
-    val sections = ArrayList<Section>()
-    for (i in 0..4) {
-      val section = Section("section ${i}", listOf("movie 1", "movie 2", "movie 3", "movie 4"), getRandomType())
-      sections.add(section)
-    }
+  fun home(sections:List<HomeSection>,navController: NavController){
     Column {
       LazyColumn {
         items(sections) { section ->
           sectionRow(section)
-
         }
       }
       Button(onClick = { navController.navigate("profile")}) {
@@ -65,12 +70,18 @@ class MainActivity : ComponentActivity() {
 
   }
   @Composable
-  fun sectionRow(section: Section){
+  fun sectionRow(section: HomeSection){
     Column {
       Text(section.title , modifier = Modifier.padding(all = 8.dp))
       LazyRow {
         items(section.items){ item->
-          Text(item, modifier = Modifier.padding(all = 8.dp))
+          when(section.type){
+            Card -> SectionCard(imageRes = R.drawable.image_1)
+            ViewPager -> SectionCard(imageRes = R.drawable.image_2)
+            CardWithTitle -> Text(item.ref?:"No title", modifier = Modifier.padding(all = 8.dp))
+            Contest -> SectionCard(imageRes = R.drawable.image_1)
+          }
+
         }
       }
     }
@@ -84,17 +95,4 @@ class MainActivity : ComponentActivity() {
   {
     Text(text = "this is profile page")
   }  
-}
-fun getRandomType(): SectionType {
-  val random = Random.nextInt(1,4)
-  return  when(random){
-    1-> ViewPager
-    2-> CardWithTitle
-    3-> Contest
-    else -> SectionType.Card
-  }
-}
-data class Section(val title:String,val items:List<String>,val sectionType: SectionType)
-enum class SectionType{
-Card,ViewPager,CardWithTitle,Contest
 }

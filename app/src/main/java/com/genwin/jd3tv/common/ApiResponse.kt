@@ -1,4 +1,4 @@
-package com.genwin.jd3tv.domain
+package com.genwin.jd3tv.common
 
 data class ApiResponse<T>(
      val data: T?,

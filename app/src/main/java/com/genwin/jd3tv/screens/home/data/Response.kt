@@ -1,11 +1,11 @@
-package com.genwin.jd3tv.home.data
+package com.genwin.jd3tv.screens.home.data
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Response(
+data class HomeResponse(
 
 	@field:SerializedName("pagination")
 	val pagination: Pagination? = null,

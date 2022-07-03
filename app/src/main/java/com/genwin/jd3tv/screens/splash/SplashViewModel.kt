@@ -1,7 +1,7 @@
-package com.genwin.jd3tv.presentation.splash
+package com.genwin.jd3tv.screens.splash
 
 import androidx.lifecycle.ViewModel
-import com.genwin.jd3tv.domain.home.RemoteDataSource
+import com.genwin.jd3tv.screens.splash.domain.home.RemoteDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

@@ -1,8 +1,8 @@
-package com.genwin.jd3tv.domain
+package com.genwin.jd3tv.common
 
-import com.example.jd3tv.BuildConfig
-import com.genwin.jd3tv.domain.home.ApiService
-import com.google.gson.GsonBuilder
+import com.genwin.jd3tv.BuildConfig
+import com.genwin.jd3tv.screens.home.domain.HomeApiService
+import com.genwin.jd3tv.screens.splash.domain.home.ApiService
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -21,6 +21,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+
+  @Provides
+  @Singleton
+  fun provideApiService(retrofit: Retrofit): HomeApiService = retrofit.create(HomeApiService::class.java)
 
     @Provides
     @Singleton
@@ -46,12 +50,11 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun providesMoshi() = Moshi.Builder().build()
+    fun providesMoshi(): Moshi = Moshi.Builder().build()
 
     @Provides
     @Singleton
     fun getRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
-        val gson = GsonBuilder().setLenient().create()
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))//GsonConverterFactory.create(gson))

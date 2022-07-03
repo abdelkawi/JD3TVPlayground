@@ -1,4 +1,4 @@
-package com.genwin.jd3tv.presentation.splash
+package com.genwin.jd3tv.screens.splash
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
