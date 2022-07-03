@@ -1,7 +1,7 @@
 package com.example.jd3tvplayground.presentation.splash
 
 import androidx.lifecycle.ViewModel
-import com.example.jd3tvplayground.domain.home.RemoteDataSource
+import com.example.jd3tvplayground.domain.splash.RemoteDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -14,4 +14,8 @@ class SplashViewModel @Inject constructor(
 ) : ViewModel() {
 
     suspend fun getDomainApi() = remoteDataSource.getDomainOfWebClient()
+
+    suspend fun getMainSection(refName: String, themeID: String, clientID: String) =
+        remoteDataSource.getSectionDetails(refName, themeID, clientID)
+
 }

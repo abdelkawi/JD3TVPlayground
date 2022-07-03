@@ -1,4 +1,4 @@
-package com.example.jd3tvplayground.domain
+package com.example.jd3tvplayground.domain.common
 
 
 

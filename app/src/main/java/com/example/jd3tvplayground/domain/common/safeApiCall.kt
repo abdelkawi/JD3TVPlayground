@@ -1,4 +1,4 @@
-package com.example.jd3tvplayground.domain
+package com.example.jd3tvplayground.domain.common
 
 import com.google.gson.Gson
 import okhttp3.ResponseBody

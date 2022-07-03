@@ -1,3 +1,7 @@
 <resources>
   <string name="app_name">JD3TVPlayground</string>
+  <string name="welcome_to">Welcome to</string>
+  <string name="choose_price_plan">CHOOSE YOUR PRICING PLAN</string>
+  <string name="flexible_pricing">flexible pricing plans to suit your lifestyle</string>
+  <string name="get_started">Get Started</string>
 </resources>
