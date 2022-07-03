@@ -15,16 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JD3TVPlayground"
         tools:targetApi="31">
-        <activity
-            android:name="com.genwin.jd3tv.screens.home.presentation.MainActivity"
-            android:exported="true">
+<!--        <activity-->
+<!--            android:name="com.genwin.jd3tv.screens.home.presentation.MainActivity"-->
+<!--            android:exported="true">-->
 
-        </activity>
+<!--        </activity>-->
         <activity
             android:name="com.genwin.jd3tv.screens.splash.SplashActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        </activity>
+      <activity
+        android:name=".screens.home.presentation.MainActivity"
+        android:exported="true">
+        <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -35,6 +39,9 @@
             android:exported="true">
 
         </activity>
+          <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity>
     </application>
 
 </manifest>
