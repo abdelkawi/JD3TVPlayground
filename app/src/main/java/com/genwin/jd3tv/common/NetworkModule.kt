@@ -22,50 +22,49 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
 
-
-
   @Provides
   @Singleton
   fun provideApiService(retrofit: Retrofit): HomeApiService = retrofit.create(HomeApiService::class.java)
 
-    @Provides
-    @Singleton
-    fun loggingInterceptor(): HttpLoggingInterceptor {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        return interceptor
-    }
+  @Provides
+  @Singleton
+  fun loggingInterceptor(): HttpLoggingInterceptor {
+    val interceptor = HttpLoggingInterceptor()
+    interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+    return interceptor
+  }
 
-    @Provides
-    @Singleton
-    fun okHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .cache(null)
-            .build()
-    }
+  @Provides
+  @Singleton
+  fun okHttpClient(
+    loggingInterceptor: HttpLoggingInterceptor
+  ): OkHttpClient {
+    return OkHttpClient.Builder()
+      .addInterceptor(loggingInterceptor)
+      .connectTimeout(10, TimeUnit.SECONDS)
+      .writeTimeout(30, TimeUnit.SECONDS)
+      .readTimeout(30, TimeUnit.SECONDS)
+      .cache(null)
+      .build()
+  }
 
-    @Provides
-    @Singleton
-    fun providesMoshi(): Moshi = Moshi.Builder().build()
+  @Provides
+  @Singleton
+  fun providesMoshi(): Moshi = Moshi.Builder().build()
 
-    @Provides
-    @Singleton
-    fun getRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))//GsonConverterFactory.create(gson))
-            .client(okHttpClient)
-            .build()
-    }
-    @Provides
-    @Singleton
-    fun getApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
-    }
+  @Provides
+  @Singleton
+  fun getRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
+    return Retrofit.Builder()
+      .baseUrl(BuildConfig.BASE_URL)
+      .addConverterFactory(MoshiConverterFactory.create(moshi))//GsonConverterFactory.create(gson))
+      .client(okHttpClient)
+      .build()
+  }
+
+  @Provides
+  @Singleton
+  fun getApiService(retrofit: Retrofit): ApiService {
+    return retrofit.create(ApiService::class.java)
+  }
 }

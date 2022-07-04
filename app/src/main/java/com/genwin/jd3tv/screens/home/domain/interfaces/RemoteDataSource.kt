@@ -5,5 +5,5 @@ import com.genwin.jd3tv.screens.home.data.DataItem
 import com.genwin.jd3tv.screens.home.data.HomeResponse
 
 interface RemoteDataSource {
-  suspend fun getHomeData(clientId:String,themeId:String):Result<List<DataItem>>
+  suspend fun getHomeData(clientId: String, themeId: String): Result<List<DataItem>>
 }

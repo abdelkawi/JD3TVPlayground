@@ -7,7 +7,7 @@ import com.genwin.jd3tv.screens.home.domain.entity.SectionType.ViewPager
 import kotlin.random.Random
 
 
-open class HomeSection(val title:String, val type:SectionType,val endpoint:String ,val items:List<String>?){
+open class HomeSection(val title: String, val type: SectionType, val endpoint: String, val items: List<String>?) {
   companion object {
     fun getRandomType(): SectionType {
       return when (Random.nextInt(1, 4)) {
@@ -21,7 +21,6 @@ open class HomeSection(val title:String, val type:SectionType,val endpoint:Strin
 }
 
 
-
-enum class SectionType{
-  Card,ViewPager,CardWithTitle,Contest
+enum class SectionType {
+  Card, ViewPager, CardWithTitle, Contest
 }
