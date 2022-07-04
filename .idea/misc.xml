@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/compose-model-1656855967077.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/splash_gradient.xml" value="0.14" />
         <entry key="app/src/main/res/drawable/welcome_gradient.xml" value="0.14" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.2515625" />

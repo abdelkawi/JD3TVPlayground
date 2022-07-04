@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface HomeApiService {
-  @GET("app-api/pages")
+  @GET("pages")
   suspend fun getHomeDetails(
     @Query("page_ref") pagerRef:String,
     @Query("theme_id") themeId:String,

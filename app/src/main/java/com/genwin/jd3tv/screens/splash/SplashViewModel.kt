@@ -1,7 +1,8 @@
 package com.genwin.jd3tv.screens.splash
 
 import androidx.lifecycle.ViewModel
-import com.genwin.jd3tv.screens.splash.domain.home.RemoteDataSource
+import com.genwin.jd3tv.screens.splash.domain.home.ApiService
+import com.genwin.jd3tv.screens.splash.domain.home.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -10,7 +11,7 @@ import javax.inject.Inject
 //
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val remoteDataSource: RemoteDataSource
+    private val repository: Repository
 ) : ViewModel() {
-    suspend fun getDomainApi() = remoteDataSource.getDomainOfWebClient()
+    suspend fun getDomainApi() = repository.getDomainOfWebClient()
 }

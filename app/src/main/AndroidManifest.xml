@@ -15,11 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JD3TVPlayground"
         tools:targetApi="31">
-<!--        <activity-->
-<!--            android:name="com.genwin.jd3tv.screens.home.presentation.MainActivity"-->
-<!--            android:exported="true">-->
 
-<!--        </activity>-->
         <activity
             android:name="com.genwin.jd3tv.screens.splash.SplashActivity"
             android:exported="true">
@@ -34,14 +30,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".presentation.home.HomeActivity"
-            android:exported="true">
 
-        </activity>
-          <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-      </activity>
     </application>
 
 </manifest>

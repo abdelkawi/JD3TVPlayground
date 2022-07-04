@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.genwin.jd3tv.R
 
-import com.example.jd3tvplayground.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

@@ -17,7 +17,7 @@ android {
     targetSdk 32
     versionCode 1
     versionName "1.0"
-    buildConfigField 'String', 'BASE_URL', '"https://staging.genwin.app/webclients/app-api/web-clients/"'
+    buildConfigField 'String', 'BASE_URL', '"https://staging.genwin.app/webclients/app-api/"'
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }
 

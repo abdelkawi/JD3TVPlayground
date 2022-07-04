@@ -2,7 +2,7 @@ package com.genwin.jd3tv.screens.welcome.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.jd3tvplayground.R
+import com.genwin.jd3tv.R
 
 //
 // Created by Dina Mounib on 7/3/22.
