@@ -2,7 +2,7 @@ package com.genwin.jd3tv.common
 
 import com.genwin.jd3tv.BuildConfig
 import com.genwin.jd3tv.screens.home.domain.interfaces.api.HomeApiService
-import com.genwin.jd3tv.screens.splash.domain.home.ApiService
+import com.genwin.jd3tv.screens.splash.domain.ApiService
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides

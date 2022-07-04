@@ -2,7 +2,7 @@ package com.genwin.jd3tv.screens.splash.data
 
 import com.genwin.jd3tv.common.Result
 import com.genwin.jd3tv.common.safeApiCall
-import com.genwin.jd3tv.screens.splash.domain.home.ApiService
+import com.genwin.jd3tv.screens.splash.domain.ApiService
 import com.genwin.jd3tv.screens.splash.domain.home.DomainOfWebClientResponse
 import com.genwin.jd3tv.screens.splash.domain.home.RemoteDataSource
 import kotlinx.coroutines.Dispatchers

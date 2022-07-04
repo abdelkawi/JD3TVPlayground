@@ -14,7 +14,7 @@ class HomeRepositoryImpl @Inject constructor(private val remoteDataSource: Remot
     val res = remoteDataSource.getHomeData(clientId,themeId)
     return  when(res){
       is Error -> Error(res.error)
-      is Success -> Success(listOf<HomeSection>(HomeSection(res.data[0].sections?.get(0)?.ref?:"",Card, listOf())))
+      is Success -> Success(listOf<HomeSection>(HomeSection(res.data[0].sections?.get(0)?.ref?:"",Card)))
     }
   }
 }

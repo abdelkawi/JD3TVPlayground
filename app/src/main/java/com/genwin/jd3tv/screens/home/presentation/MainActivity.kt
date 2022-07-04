@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
           when(section.type){
             Card -> SectionCard(imageRes = R.drawable.image_1)
             ViewPager -> SectionCard(imageRes = R.drawable.image_2)
-            CardWithTitle -> Text(item.ref ?: "No title", modifier = Modifier.padding(all = 8.dp))
+            CardWithTitle -> Text(item ?: "No title", modifier = Modifier.padding(all = 8.dp))
             Contest -> SectionCard(imageRes = R.drawable.image_1)
           }
 
