@@ -15,7 +15,7 @@ suspend inline fun <reified T> safeApiCall(
         return when (res.isSuccessful) {
             true -> {
                 Success(
-                    res.body()?.data!! as T
+                    res.body()?.data!! as  T
                 )
             }
             false -> {
