@@ -38,14 +38,14 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-  private val homeViewModel:HomeViewModel by viewModels()
+  private val homeViewModel: HomeViewModel by viewModels()
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     lifecycleScope.launch {
       val res = homeViewModel.getHomeDetails()
-      when(res){
+      when (res) {
         is Error -> {
-          Log.d("Error",res.error?:"wtf")
+          Log.d("Error", res.error ?: "wtf")
         }
         is Success -> {
           setContent {
@@ -55,37 +55,43 @@ class MainActivity : ComponentActivity() {
       }
     }
   }
+
   @Composable
-  fun main(sections:List<HomeSection>){
+  fun main(sections: List<HomeSection>) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
       composable("profile") { profile() }
       composable("home") {
-        home(sections,
-          navController) }
+        home(
+          sections,
+          navController
+        )
+      }
     }
   }
+
   @Composable
-  fun home(sections:List<HomeSection>,navController: NavController){
+  fun home(sections: List<HomeSection>, navController: NavController) {
     Column {
       LazyColumn {
         items(sections) { section ->
           sectionRow(section)
         }
       }
-      Button(onClick = { navController.navigate("profile")}) {
+      Button(onClick = { navController.navigate("profile") }) {
         Text(text = "Go to profile")
       }
     }
 
   }
+
   @Composable
-  fun sectionRow(section: HomeSection){
+  fun sectionRow(section: HomeSection) {
     Column {
-      Text(section.title , modifier = Modifier.padding(all = 8.dp))
+      Text(section.title, modifier = Modifier.padding(all = 8.dp))
       LazyRow {
-        items(section.items){ item->
-          when(section.type){
+        items(section.items?: emptyList()) { item ->
+          when (section.type) {
             Card -> SectionCard(imageRes = R.drawable.image_1)
             ViewPager -> SectionCard(imageRes = R.drawable.image_2)
             CardWithTitle -> Text(item ?: "No title", modifier = Modifier.padding(all = 8.dp))
@@ -96,13 +102,14 @@ class MainActivity : ComponentActivity() {
       }
     }
   }
+
   @Composable
-  fun SectionCard(imageRes:Int){
+  fun SectionCard(imageRes: Int) {
     Image(painter = painterResource(id = imageRes), contentDescription = "")
   }
+
   @Composable
-  fun profile()
-  {
+  fun profile() {
     Text(text = "this is profile page")
-  }  
+  }
 }

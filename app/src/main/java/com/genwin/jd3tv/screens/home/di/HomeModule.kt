@@ -14,7 +14,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 class HomeModule {
   @Provides
-  fun bindRepo(repository: HomeRepositoryImpl) : HomeRepository = repository
+  fun bindRepo(repository: HomeRepositoryImpl): HomeRepository = repository
 
   @Provides
   fun providesDataSource(remoteDataSourceImpl: RemoteDataSourceImpl): RemoteDataSource = remoteDataSourceImpl
