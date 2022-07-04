@@ -2,8 +2,8 @@ package com.genwin.jd3tv.screens.splash.di
 
 import com.genwin.jd3tv.screens.splash.data.RemoteDataSourceImpl
 import com.genwin.jd3tv.screens.splash.data.SplashRepositoryImpl
-import com.genwin.jd3tv.screens.splash.domain.home.RemoteDataSource
-import com.genwin.jd3tv.screens.splash.domain.home.Repository
+import com.genwin.jd3tv.screens.splash.domain.RemoteDataSource
+import com.genwin.jd3tv.screens.splash.domain.Repository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

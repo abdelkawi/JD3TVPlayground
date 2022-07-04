@@ -1,7 +1,16 @@
 <resources>
-  <string name="app_name">JD3TVPlayground</string>
-  <string name="welcome_to">Welcome to</string>
-  <string name="choose_price_plan">CHOOSE YOUR PRICING PLAN</string>
-  <string name="flexible_pricing">flexible pricing plans to suit your lifestyle</string>
-  <string name="get_started">Get Started</string>
+    <string name="app_name">JD3TVPlayground</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="choose_price_plan">CHOOSE YOUR PRICING PLAN</string>
+    <string name="flexible_pricing">flexible pricing plans to suit your lifestyle</string>
+    <string name="get_started">Get Started</string>
+    <string name="login_your_account">Login to your account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forget_password">Forgot the password?</string>
+    <string name="continue_with">or continue with</string>
+    <string name="do_not_have_account">Don’t Have an Account?</string>
+
 </resources>

@@ -1,7 +1,7 @@
 package com.genwin.jd3tv.screens.splash.domain
 
 import com.genwin.jd3tv.common.ApiResponse
-import com.genwin.jd3tv.screens.splash.domain.home.DomainOfWebClientResponse
+import com.genwin.jd3tv.screens.splash.data.SplashResponse
 import retrofit2.Response
 import retrofit2.http.GET
 
@@ -10,5 +10,5 @@ import retrofit2.http.GET
 //
 interface ApiService {
     @GET("web-clients/chefjojo-staging.genwin.net")
-    suspend fun getDomainOfWebClient(): Response<ApiResponse<DomainOfWebClientResponse>>
+    suspend fun getDomainOfWebClient(): Response<ApiResponse<SplashResponse>>
 }
