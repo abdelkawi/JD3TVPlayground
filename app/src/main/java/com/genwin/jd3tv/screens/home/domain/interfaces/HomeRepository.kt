@@ -1,4 +1,4 @@
-package com.genwin.jd3tv.screens.home.domain
+package com.genwin.jd3tv.screens.home.domain.interfaces
 
 import com.genwin.jd3tv.common.Result
 import com.genwin.jd3tv.screens.home.domain.entity.HomeSection

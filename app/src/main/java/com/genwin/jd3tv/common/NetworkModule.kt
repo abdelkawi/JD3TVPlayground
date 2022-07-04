@@ -1,14 +1,9 @@
 package com.genwin.jd3tv.common
 
 import com.genwin.jd3tv.BuildConfig
-import com.genwin.jd3tv.screens.home.data.HomeRepositoryImpl
-import com.genwin.jd3tv.screens.home.data.RemoteDataSourceImpl
-import com.genwin.jd3tv.screens.home.domain.HomeApiService
-import com.genwin.jd3tv.screens.home.domain.HomeRepository
-import com.genwin.jd3tv.screens.home.domain.RemoteDataSource
+import com.genwin.jd3tv.screens.home.domain.interfaces.api.HomeApiService
 import com.genwin.jd3tv.screens.splash.domain.home.ApiService
 import com.squareup.moshi.Moshi
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

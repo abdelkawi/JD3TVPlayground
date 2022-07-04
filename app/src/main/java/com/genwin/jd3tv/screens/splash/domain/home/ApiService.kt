@@ -8,6 +8,6 @@ import retrofit2.http.GET
 // Created by Dina Mounib on 3/3/22.
 //
 interface ApiService {
-    @GET("chefjojo-staging.genwin.net")
+    @GET("web-clients/chefjojo-staging.genwin.net")
     suspend fun getDomainOfWebClient(): Response<ApiResponse<DomainOfWebClientResponse>>
 }

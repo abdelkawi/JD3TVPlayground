@@ -2,8 +2,8 @@ package com.genwin.jd3tv.screens.home.di
 
 import com.genwin.jd3tv.screens.home.data.HomeRepositoryImpl
 import com.genwin.jd3tv.screens.home.data.RemoteDataSourceImpl
-import com.genwin.jd3tv.screens.home.domain.HomeRepository
-import com.genwin.jd3tv.screens.home.domain.RemoteDataSource
+import com.genwin.jd3tv.screens.home.domain.interfaces.HomeRepository
+import com.genwin.jd3tv.screens.home.domain.interfaces.RemoteDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

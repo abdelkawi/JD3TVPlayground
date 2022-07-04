@@ -1,7 +1,7 @@
 package com.genwin.jd3tv.screens.home.presentation
 
 import androidx.lifecycle.ViewModel
-import com.genwin.jd3tv.screens.home.domain.HomeRepository
+import com.genwin.jd3tv.screens.home.domain.interfaces.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
