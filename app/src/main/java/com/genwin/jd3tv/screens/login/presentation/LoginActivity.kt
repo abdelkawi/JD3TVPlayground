@@ -1,5 +1,6 @@
 package com.genwin.jd3tv.screens.login.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.genwin.jd3tv.R
+import com.genwin.jd3tv.screens.home.presentation.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.launch
 
@@ -26,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
             viewModel.validationEvents.collect { event ->
                 when (event) {
                     is LoginViewModel.ValidationEvent.Success -> {
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         Toast.makeText(
                             baseContext,
                             "Login successful",

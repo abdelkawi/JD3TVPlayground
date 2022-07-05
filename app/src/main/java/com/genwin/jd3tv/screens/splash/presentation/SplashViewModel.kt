@@ -1,4 +1,4 @@
-package com.genwin.jd3tv.screens.splash
+package com.genwin.jd3tv.screens.splash.presentation
 
 import androidx.lifecycle.ViewModel
 import com.genwin.jd3tv.screens.splash.domain.interfaces.Repository
