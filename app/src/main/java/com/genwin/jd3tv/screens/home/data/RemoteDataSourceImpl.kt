@@ -15,4 +15,12 @@ class RemoteDataSourceImpl @Inject constructor(private val homeApiService: HomeA
        homeApiService.getHomeDetails("home", themeId, clientId)
       }
     }
+
+  override suspend fun getSectionItems(endpoint:String,itemDetailsRequest: ItemDetailsRequest):
+      Result<List<ItemDetailsResponse>> =
+    withContext(Dispatchers.IO){
+      safeApiCall {
+        homeApiService.getSectionItems(endpoint,itemDetailsRequest)
+      }
+    }
 }
