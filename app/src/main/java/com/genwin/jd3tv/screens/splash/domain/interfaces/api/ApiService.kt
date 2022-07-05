@@ -1,4 +1,4 @@
-package com.genwin.jd3tv.screens.splash.domain
+package com.genwin.jd3tv.screens.splash.domain.interfaces.api
 
 import com.genwin.jd3tv.common.ApiResponse
 import com.genwin.jd3tv.screens.splash.data.SplashResponse

@@ -1,8 +1,8 @@
 package com.genwin.jd3tv.screens.splash.data
 
 import com.genwin.jd3tv.common.Result
-import com.genwin.jd3tv.screens.splash.domain.RemoteDataSource
-import com.genwin.jd3tv.screens.splash.domain.Repository
+import com.genwin.jd3tv.screens.splash.domain.interfaces.RemoteDataSource
+import com.genwin.jd3tv.screens.splash.domain.interfaces.Repository
 import javax.inject.Inject
 
 //
