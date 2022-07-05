@@ -1,14 +1,24 @@
 package com.genwin.jd3tv.screens.home.domain
 
+import com.genwin.jd3tv.screens.home.data.ItemDetailsRequest
+import com.genwin.jd3tv.screens.home.data.ItemDetailsResponse
 import com.genwin.jd3tv.screens.home.data.SectionsItem
+import com.genwin.jd3tv.screens.home.domain.entity.CardSectionItem
+import com.genwin.jd3tv.screens.home.domain.entity.CardWithTitleItem
 import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
 import com.genwin.jd3tv.screens.home.domain.entity.SectionType.Card
 
 fun SectionsItem.toHomeSection(): HomeSection {
+
   return HomeSection(
     title = this.ref ?: "",
     type = Card,
     endpoint = this.content?.query?.endpoint ?: "",
-    items = this.content?.custom?.cards?.mapNotNull { it }
+    dataRequest = ItemDetailsRequest(
+      type = this.content?.query?.criteria?.type,
+      status = this.content?.query?.criteria?.status,
+      select = "main_photo image title name created_at summary type alias _id experience_id",
+      experiences_ids = this.content?.query?.experiencesIds
+    )
   )
 }

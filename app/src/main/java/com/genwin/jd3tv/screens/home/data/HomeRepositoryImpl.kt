@@ -18,4 +18,16 @@ class HomeRepositoryImpl @Inject constructor(private val remoteDataSource: Remot
       is Success -> Success(res.data.get(0).sections?.mapNotNull { it?.toHomeSection() } ?: emptyList())
     }
   }
+
+  override suspend fun getSectionItems(endpoint:String,itemDetailsRequest: ItemDetailsRequest): Result<List<ItemDetailsResponse>> {
+    val res = remoteDataSource.getSectionItems(endpoint,itemDetailsRequest)
+    return when(res){
+      is Error->{
+        Error(res.error)
+      }
+      is Success->{
+        Success(res.data)
+      }
+    }
+  }
 }
