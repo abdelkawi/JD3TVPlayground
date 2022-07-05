@@ -9,7 +9,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.genwin.jd3tv.R
-import com.genwin.jd3tv.common.Result
 import com.genwin.jd3tv.common.Result.Error
 import com.genwin.jd3tv.common.Result.Success
 import com.genwin.jd3tv.screens.home.presentation.MainActivity
@@ -47,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
                             is Error -> {
                                 Toast.makeText(
                                     baseContext,
-                                    res.error,
+                                    res.error.toString(),
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
@@ -84,11 +83,7 @@ class LoginActivity : AppCompatActivity() {
         }
         emailET.addTextChangedListener(emailTW)
         passwordET.addTextChangedListener(passwordTW)
-        rememberMeCB.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                viewModel.onEvent(LoginFormEvent.AcceptTerms(isChecked))
-            }
-        }
+
         signInBtn.setOnClickListener {
             viewModel.onEvent(LoginFormEvent.Submit)
             if (viewModel.state.emailError != null)
@@ -97,9 +92,7 @@ class LoginActivity : AppCompatActivity() {
             if (viewModel.state.passwordError != null)
                 passwordET.error = viewModel.state.passwordError
             else passwordET.error = null
-            if (viewModel.state.termsError != null)
-                rememberMeCB.error = viewModel.state.termsError
-            else rememberMeCB.error = null
+
 
         }
     }
