@@ -1,10 +1,7 @@
 package com.genwin.jd3tv.screens.home.domain
 
 import com.genwin.jd3tv.screens.home.data.ItemDetailsRequest
-import com.genwin.jd3tv.screens.home.data.ItemDetailsResponse
 import com.genwin.jd3tv.screens.home.data.SectionsItem
-import com.genwin.jd3tv.screens.home.domain.entity.CardSectionItem
-import com.genwin.jd3tv.screens.home.domain.entity.CardWithTitleItem
 import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
 import com.genwin.jd3tv.screens.home.domain.entity.SectionType.Card
 

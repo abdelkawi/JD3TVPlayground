@@ -9,6 +9,6 @@ import retrofit2.http.GET
 // Created by Dina Mounib on 3/3/22.
 //
 interface ApiService {
-    @GET("web-clients/chefjojo-staging.genwin.net")
+    @GET("webclients/app-api/web-clients/chefjojo-staging.genwin.net")
     suspend fun getDomainOfWebClient(): Response<ApiResponse<SplashResponse>>
 }
