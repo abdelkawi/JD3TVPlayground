@@ -1,7 +1,7 @@
 package com.genwin.jd3tv.screens.splash
 
 import androidx.lifecycle.ViewModel
-import com.genwin.jd3tv.screens.splash.domain.home.Repository
+import com.genwin.jd3tv.screens.splash.domain.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

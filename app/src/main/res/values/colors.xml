@@ -9,4 +9,9 @@
   <color name="white">#FFFFFFFF</color>
   <color name="indigo">#5e0e88</color>
   <color name="davyGray">#545454</color>
+  <color name="purple_taupe">#49404e</color>
+  <color name="blue_violet">#8d22ef</color>
+  <color name="medium_purple">#a977ff</color>
+  <color name="dim_gray">#6d6472</color>
+  <color name="heliotrope">#bd65fd</color>
 </resources>
