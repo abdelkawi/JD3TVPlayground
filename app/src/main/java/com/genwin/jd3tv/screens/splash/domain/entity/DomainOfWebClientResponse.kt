@@ -1,4 +1,4 @@
-package com.genwin.jd3tv.screens.splash.data
+package com.genwin.jd3tv.screens.splash.domain.entity
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

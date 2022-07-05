@@ -1,7 +1,6 @@
 package com.genwin.jd3tv.common
 
 import com.genwin.jd3tv.common.Result.Success
-import com.genwin.jd3tv.screens.splash.data.DomainOfWebClientResponse
 import com.genwin.jd3tv.screens.splash.data.SplashResponse
 import com.google.gson.Gson
 import okhttp3.ResponseBody

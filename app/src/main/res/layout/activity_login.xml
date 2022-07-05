@@ -19,7 +19,7 @@
             android:src="@drawable/back_btn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="" />
+            android:contentDescription="@string/sign_in" />
 
         <ImageView
             android:id="@+id/logoImg"
@@ -30,7 +30,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/backImg"
-            android:contentDescription="" />
+            android:contentDescription="@string/sign_in" />
 
         <TextView
             android:id="@+id/loginTxt"
@@ -46,15 +46,17 @@
             app:layout_constraintTop_toBottomOf="@+id/logoImg" />
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/email"
+            android:id="@+id/emailET"
             android:layout_width="0dp"
             android:layout_height="58dp"
             android:layout_marginTop="62dp"
             android:background="@drawable/login_edit_text_bg"
             android:hint="@string/email"
+            android:singleLine="true"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textAlignment="viewStart"
+            android:lines="1"
+            android:gravity="center_vertical|start"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="17sp"
@@ -64,7 +66,7 @@
             app:layout_constraintWidth_percent="0.7" />
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/password"
+            android:id="@+id/passwordET"
             android:layout_width="0dp"
             android:layout_height="58dp"
             android:layout_marginTop="32dp"
@@ -72,13 +74,14 @@
             android:hint="@string/password"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textAlignment="viewStart"
+            android:singleLine="true"
+            android:gravity="center_vertical|start"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/email"
+            app:layout_constraintTop_toBottomOf="@+id/emailET"
             app:layout_constraintWidth_percent="0.7" />
 
         <CheckBox
@@ -88,10 +91,11 @@
             android:layout_marginTop="13dp"
             android:fontFamily="@font/poppins_medium"
             android:text="@string/remember_me"
+            android:buttonTint="@color/white"
             android:textColor="@color/white"
             android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="@+id/password"
-            app:layout_constraintTop_toBottomOf="@+id/password" />
+            app:layout_constraintStart_toStartOf="@+id/passwordET"
+            app:layout_constraintTop_toBottomOf="@+id/passwordET" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/signInBtn"
@@ -103,6 +107,7 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:text="@string/sign_in"
+            android:lines="1"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="17sp"
@@ -128,7 +133,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@color/davyGray"
+            android:background="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/continueTV"
             app:layout_constraintEnd_toEndOf="@+id/signInBtn"
             app:layout_constraintStart_toStartOf="@+id/signInBtn"
@@ -141,6 +146,7 @@
             android:layout_marginTop="18dp"
             android:fontFamily="@font/poppins_semibold"
             android:padding="10dp"
+            android:background="@color/indigo"
             android:text="@string/continue_with"
             android:textColor="@color/white"
             android:textSize="17sp"
@@ -161,6 +167,7 @@
             android:id="@+id/faceBookBtn"
             android:layout_width="58dp"
             android:layout_height="58dp"
+            android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:background="@drawable/social_bg"
@@ -171,6 +178,7 @@
                 android:layout_width="58dp"
                 android:layout_height="58dp"
                 android:layout_marginStart="30dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/google_icon"
                 android:background="@drawable/social_bg"
                 app:layout_constraintStart_toEndOf="@+id/faceBookBtn"
