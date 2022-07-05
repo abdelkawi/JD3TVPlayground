@@ -9,13 +9,18 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.genwin.jd3tv.R
+import com.genwin.jd3tv.common.Result
+import com.genwin.jd3tv.common.Result.Error
+import com.genwin.jd3tv.common.Result.Success
 import com.genwin.jd3tv.screens.home.presentation.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.launch
 
 //
 // Created by Dina Mounib on 7/4/22.
 //
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
@@ -28,12 +33,26 @@ class LoginActivity : AppCompatActivity() {
             viewModel.validationEvents.collect { event ->
                 when (event) {
                     is LoginViewModel.ValidationEvent.Success -> {
-                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                        Toast.makeText(
-                            baseContext,
-                            "Login successful",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        val res =
+                            viewModel.login(emailET.text.toString(), passwordET.text.toString())
+                        when (res) {
+                            is Success -> {
+                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                Toast.makeText(
+                                    baseContext,
+                                    "Login successful",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                            is Error -> {
+                                Toast.makeText(
+                                    baseContext,
+                                    res.error,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+
                     }
                 }
             }

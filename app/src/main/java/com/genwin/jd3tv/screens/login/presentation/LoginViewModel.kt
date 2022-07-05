@@ -2,6 +2,7 @@ package com.genwin.jd3tv.screens.login.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.genwin.jd3tv.screens.login.domain.interfaces.LoginRepository
 import com.genwin.jd3tv.screens.login.domain.useCase.ValidateEmail
 import com.genwin.jd3tv.screens.login.domain.useCase.ValidatePassword
 import com.genwin.jd3tv.screens.login.domain.useCase.ValidateTerms
@@ -15,7 +16,8 @@ import javax.inject.Inject
 // Created by Dina Mounib on 7/4/22.
 //
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) :
+    ViewModel() {
     var state = LoginFormState()
     private val validateEmail: ValidateEmail = ValidateEmail()
     private val validatePassword: ValidatePassword = ValidatePassword()
@@ -65,6 +67,11 @@ class LoginViewModel @Inject constructor() : ViewModel() {
             validationEventChannel.send(ValidationEvent.Success)
         }
     }
+
+    suspend fun login(email: String, password: String) =
+        loginRepository.login(username = email, pass = password)
+
+
 
     sealed class ValidationEvent {
         object Success : ValidationEvent()

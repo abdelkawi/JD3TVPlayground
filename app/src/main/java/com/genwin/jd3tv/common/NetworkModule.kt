@@ -2,6 +2,7 @@ package com.genwin.jd3tv.common
 
 import com.genwin.jd3tv.BuildConfig
 import com.genwin.jd3tv.screens.home.domain.interfaces.api.HomeApiService
+import com.genwin.jd3tv.screens.login.domain.interfaces.api.LoginApi
 import com.genwin.jd3tv.screens.splash.domain.interfaces.api.ApiService
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -25,6 +26,10 @@ class NetworkModule {
   @Provides
   @Singleton
   fun provideApiService(retrofit: Retrofit): HomeApiService = retrofit.create(HomeApiService::class.java)
+
+  @Provides
+  @Singleton
+  fun provideLLoginApiService(retrofit: Retrofit): LoginApi = retrofit.create(LoginApi::class.java)
 
   @Provides
   @Singleton
