@@ -7,6 +7,6 @@ import com.genwin.jd3tv.screens.home.data.ItemDetailsRequest
 import com.genwin.jd3tv.screens.home.data.ItemDetailsResponse
 
 interface RemoteDataSource {
-  suspend fun getHomeData(clientId: String, themeId: String): Result<List<DataItem>>
+  suspend fun getHomeData(pageRef:String,clientId: String, themeId: String): Result<List<DataItem>>
   suspend fun getSectionItems(endpoint:String,itemDetailsRequest: ItemDetailsRequest): Result<List<ItemDetailsResponse>>
 }

@@ -12,5 +12,5 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
-    suspend fun getDomainApi() = repository.getDomainOfWebClient()
+    suspend fun getClientData() = repository.getClientData()
 }

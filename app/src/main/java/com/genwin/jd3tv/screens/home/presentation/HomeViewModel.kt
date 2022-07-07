@@ -9,10 +9,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val homeRepository: HomeRepository) : ViewModel() {
-  suspend fun getHomeDetails() =
+  suspend fun getHomeDetails(pageRef:String,clientId:String,themeId:String) =
     homeRepository.getHomeDetails(
-      "61ddcff8097ac672b880c35e",
-      "623acdd8ddab51a90f79f160"
+      clientId,
+      themeId
     )
 
   suspend fun getSectionItems(endpoint:String,itemDetailsRequest: ItemDetailsRequest) =

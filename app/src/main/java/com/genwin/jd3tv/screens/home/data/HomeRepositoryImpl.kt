@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(private val remoteDataSource: RemoteDataSource) : HomeRepository {
   override suspend fun getHomeDetails(clientId: String, themeId: String): Result<List<HomeSection>> {
-    val res = remoteDataSource.getHomeData(clientId, themeId)
+    val res = remoteDataSource.getHomeData("home",clientId, themeId)
     return when (res) {
       is Error -> Error(res.error)
       is Success -> Success(res.data.get(0).sections?.mapNotNull { it?.toHomeSection() } ?: emptyList())

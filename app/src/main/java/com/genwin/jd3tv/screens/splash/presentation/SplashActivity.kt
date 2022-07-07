@@ -26,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         lifecycleScope.launch {
-            val res = viewModel.getDomainApi()
+            val res = viewModel.getClientData()
             when (res) {
                 is Result.Error -> {
                     Log.d("Error", res.error ?: "wtf")

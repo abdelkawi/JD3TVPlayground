@@ -9,10 +9,10 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(private val homeApiService: HomeApiService) : RemoteDataSource {
-  override suspend fun getHomeData(clientId:String,themeId:String): Result<List<DataItem>> =
+  override suspend fun getHomeData(pageRef:String,clientId:String,themeId:String): Result<List<DataItem>> =
     withContext(Dispatchers.IO) {
       safeApiCall {
-       homeApiService.getHomeDetails("home", themeId, clientId)
+       homeApiService.getHomeDetails(pageRef, themeId, clientId)
       }
     }
 

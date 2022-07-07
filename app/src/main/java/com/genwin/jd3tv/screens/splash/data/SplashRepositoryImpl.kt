@@ -10,7 +10,7 @@ import javax.inject.Inject
 //
 class SplashRepositoryImpl @Inject constructor(private val remoteDataSource: RemoteDataSource) :
     Repository {
-    override suspend fun getDomainOfWebClient(): Result<SplashResponse> {
+    override suspend fun getClientData(): Result<SplashResponse> {
         val res = remoteDataSource.getDomainOfWebClient()
         return when (res) {
             is Result.Error -> Result.Error(res.error)

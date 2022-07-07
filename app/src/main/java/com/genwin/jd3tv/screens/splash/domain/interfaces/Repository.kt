@@ -8,5 +8,5 @@ import com.genwin.jd3tv.screens.splash.data.SplashResponse
 // Created by Dina Mounib on 3/3/22.
 //
 interface Repository {
-    suspend fun getDomainOfWebClient(): Result<SplashResponse>
+    suspend fun getClientData(): Result<SplashResponse>
 }
