@@ -33,6 +33,7 @@ class SplashActivity : AppCompatActivity() {
                 }
                 is Result.Success -> {
                     startActivity(Intent(this@SplashActivity, WelcomeActivity::class.java))
+                    this@SplashActivity.finish()
                     Log.i("splash==>", res.data.id ?: "")
 
                     Log.i("splash==>", res.data.themeData?.id ?: "")
