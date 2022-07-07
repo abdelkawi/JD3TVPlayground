@@ -11,10 +11,12 @@ import androidx.lifecycle.lifecycleScope
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.Result.Error
 import com.genwin.jd3tv.common.Result.Success
+import com.genwin.jd3tv.common.SharedPreference
 import com.genwin.jd3tv.screens.home.presentation.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 //
 // Created by Dina Mounib on 7/4/22.
@@ -23,7 +25,8 @@ import kotlinx.coroutines.launch
 class LoginActivity : AppCompatActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
-
+    @Inject
+    lateinit var sharedPreference: SharedPreference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -32,27 +35,42 @@ class LoginActivity : AppCompatActivity() {
             viewModel.validationEvents.collect { event ->
                 when (event) {
                     is LoginViewModel.ValidationEvent.Success -> {
-                        val res =
-                            viewModel.login(emailET.text.toString(), passwordET.text.toString())
-                        when (res) {
-                            is Success -> {
-                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                                Toast.makeText(
-                                    baseContext,
-                                    "Login successful",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                            is Error -> {
-                                Toast.makeText(
-                                    baseContext,
-                                    res.error.toString(),
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-
+                        login()
                     }
+                }
+            }
+        }
+
+        if (sharedPreference.getUserName().isNotEmpty()) {
+            emailET.setText(sharedPreference.getUserName())
+            passwordET.setText(sharedPreference.getPassword())
+            login()
+        }
+    }
+
+    private fun login() {
+        lifecycleScope.launch {
+            val res =
+                viewModel.login(emailET.text.toString(), passwordET.text.toString())
+            when (res) {
+                is Success -> {
+                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                    if (rememberMeCB.isChecked) {
+                        sharedPreference.setUserName(emailET.text.toString())
+                        sharedPreference.setPassword(passwordET.text.toString())
+                    }
+                    Toast.makeText(
+                        baseContext,
+                        "Login successful",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                is Error -> {
+                    Toast.makeText(
+                        baseContext,
+                        res.error.toString(),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }

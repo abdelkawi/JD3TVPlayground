@@ -1,34 +1,39 @@
 package com.genwin.jd3tv.screens.home.presentation
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.ContentScale.Companion
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
@@ -81,12 +86,13 @@ class MainActivity : ComponentActivity() {
                         }
                         setContent {
                             main(sections = sections)
-                            }
+                        }
                     }
                 }
             }
         }
     }
+
 
     @ExperimentalPagerApi
     @Composable
@@ -98,6 +104,9 @@ class MainActivity : ComponentActivity() {
                     sections,
                     navController
                 )
+            }
+            composable("profile") {
+                profileScreen()
             }
         }
     }
@@ -113,6 +122,7 @@ class MainActivity : ComponentActivity() {
                 .fillMaxHeight()
                 .fillMaxWidth()
         ) {
+            setProfileImage(navController)
             sections.forEach { section ->
                 Text(
                     text = section.title,
@@ -180,6 +190,80 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @Composable
+    fun profileScreen() {
+
+        Column {
+            Text(
+                text = "Library",
+                color = Color.White,
+                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                textAlign = TextAlign.Start,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(top = 19.dp)
+            )
+            Text(
+                text = "Orders",
+                color = Color.White,
+                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                textAlign = TextAlign.Start,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(top = 19.dp)
+            )
+            Text(
+                text = "Transaction",
+                color = Color.White,
+                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                textAlign = TextAlign.Start,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(top = 19.dp)
+            )
+            Text(
+                text = "Membership",
+                color = Color.White,
+                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                textAlign = TextAlign.Start,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(top = 19.dp)
+            )
+        }
+    }
+
+    @Composable
+    private fun setProfileImage(navController: NavController) {
+        AsyncImage(
+            model = "https://media-public.genwin.app/staging/619eb2cd491b98b6c8c82f3f/61b0ebe29dd7ea5f7af9e44f/images/K-W0rNqrgWgUmXea8OqA_.jpg",
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(620.dp),
+            contentScale = ContentScale.FillBounds
+        )
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .background(Color(R.color.white), shape = CircleShape)
+        ) {
+            Button(onClick = {
+                //profileScreen()
+                navController.navigate("profile")
+            }) {
+                Text("AL")
+            }
+//            Text(
+//                text = "AL",
+//                textAlign = TextAlign.Center,
+//                color = Color.White,
+//                modifier = Modifier
+//                    .padding(4.dp)
+//                    .clickable {
+//                        setContent {
+//                            profileScreen()
+//                        }
+//                    }
+//            )
+        }
+    }
 
 }
 
