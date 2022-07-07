@@ -21,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,6 +49,8 @@ import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
 import com.genwin.jd3tv.screens.home.domain.entity.SectionType.Card
 import com.genwin.jd3tv.screens.home.domain.entity.SectionType.CardWithTitle
 import com.genwin.jd3tv.screens.splash.presentation.SplashViewModel
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -155,6 +158,43 @@ class MainActivity : ComponentActivity() {
 
   }
 
+  @OptIn(ExperimentalPagerApi::class)
+  @Composable
+  fun Contest(section: HomeSection){
+    Surface(
+      color = Color(R.color.dark_jungle_green)
+    ) {
+      HorizontalPager(
+        count = section.getItems().size,
+        modifier = Modifier
+          .padding(horizontal = 16.dp)
+          .fillMaxWidth()
+      ) { page ->
+        // Our page content
+        Column {
+          AsyncImage(
+            model = section.getItems()[page].mainPhoto?.fileUrl
+              ?: "",
+            placeholder = painterResource(R.drawable.image_1),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier
+              .fillMaxWidth()
+              .height(223.dp)
+              .clip(RoundedCornerShape(10.dp))
+          )
+          Spacer(modifier = Modifier.height(14.dp))
+          Text(
+            text = section.getItems()[page].title ?: "",
+            modifier = Modifier.fillMaxWidth(),
+            color = Color.White,
+            fontSize = 16.sp,
+            fontFamily = FontFamily(Font(R.font.poppins_regular))
+          )
+        }
+      }
+    }
+  }
   @Composable
   fun Home(sections: List<HomeSection>) {
     Column(
