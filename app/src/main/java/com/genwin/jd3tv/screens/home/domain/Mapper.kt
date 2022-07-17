@@ -9,7 +9,7 @@ fun SectionsItem.toHomeSection(): HomeSection {
 
   return HomeSection(
     title = this.ref ?: "",
-    type = Card,
+    type = HomeSection.getRandomType(),
     endpoint = this.content?.query?.endpoint ?: "",
     dataRequest = ItemDetailsRequest(
       type = this.content?.query?.criteria?.type,
