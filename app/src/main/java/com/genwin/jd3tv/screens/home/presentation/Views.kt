@@ -1,5 +1,6 @@
 package com.genwin.jd3tv.screens.home.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -288,9 +290,9 @@ fun DotsIndicator(
 
 @Composable
 fun Profile() {
-  val noImage= true
+  val noImage = true
   Column(Modifier.padding(16.dp)) {
-    if(noImage){
+    if (noImage) {
       Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -307,14 +309,14 @@ fun Profile() {
         )
       }
     } else
-    AsyncImage(
-      model = "", contentDescription = null, modifier = Modifier
-        .clip(CircleShape)
-        .width(28.dp)
-        .height(28.dp)
-        .clip(CircleShape)
-        .background(Color.White)
-    )
+      AsyncImage(
+        model = "", contentDescription = null, modifier = Modifier
+          .clip(CircleShape)
+          .width(28.dp)
+          .height(28.dp)
+          .clip(CircleShape)
+          .background(Color.White)
+      )
     Spacer(modifier = Modifier.height(20.dp))
     Text(text = "aliaa abdelkawi", fontFamily = FontFamily(Font(R.font.poppins_semibold)), fontSize = 18.sp, color = Color.White)
     Spacer(modifier = Modifier.height(10.dp))
@@ -360,7 +362,28 @@ fun ErrorView(errorTxt: String, reloadAction: () -> Unit) {
 
 @Composable
 fun Banner() {
-  AsyncImage(model = painterResource(id = R.drawable.movie_poster_), contentDescription = null)
-  Text(text = "", fontSize = 50.sp, color = Color.White, fontFamily = FontFamily(Font(R.font.cooper_std_black)))
-  Text(text = "", fontSize = 18.sp, color = Color.White, fontFamily = FontFamily(Font(R.font.poppins_medium)))
+  ConstraintLayout() {
+    val (image, dataContainer, gradient) = createRefs()
+    AsyncImage(modifier = Modifier.constrainAs(image) {
+      top.linkTo(parent.top)
+      start.linkTo(parent.start)
+      end.linkTo(parent.end)
+    }, model = painterResource(id = R.drawable.movie_poster_), contentDescription = null)
+    Image(painter = painterResource(id = R.drawable.ic_gradient_transparent), contentDescription = "", modifier = Modifier.constrainAs(gradient) {
+      bottom.linkTo(image.bottom)
+      start.linkTo(image.start)
+      end.linkTo(image.end)
+    })
+    Column(modifier = Modifier.constrainAs(dataContainer) {
+      bottom.linkTo(image.bottom)
+      start.linkTo(image.start)
+      end.linkTo(image.end)
+    }) {
+      Text(text = "", fontSize = 50.sp, color = Color.White, fontFamily = FontFamily(Font(R.font.cooper_std_black)))
+      Text(text = "", fontSize = 18.sp, color = Color.White, fontFamily = FontFamily(Font(R.font.poppins_medium)))
+      Button(onClick = { }, modifier = Modifier.background(colorResource(id = R.color.blue_violet), shape = RoundedCornerShape(18.dp))) {
+        Text(text = "Play", color = Color.White)
+      }
+    }
+  }
 }
