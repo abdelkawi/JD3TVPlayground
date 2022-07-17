@@ -53,11 +53,6 @@ class LoginActivity : AppCompatActivity() {
                         sharedPreference.setUserName(emailET.text.toString())
                         sharedPreference.setPassword(passwordET.text.toString())
                     }
-                    Toast.makeText(
-                        baseContext,
-                        "Login successful",
-                        Toast.LENGTH_LONG
-                    ).show()
                 }
                 is Error -> {
                     Toast.makeText(

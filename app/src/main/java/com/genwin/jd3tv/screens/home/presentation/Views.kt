@@ -272,7 +272,7 @@ fun DotsIndicator(
       } else {
         Box(
           modifier = Modifier
-            .size(10.dp)
+            .size(6.dp)
             .clip(CircleShape)
             .background(color = Color.White)
         )
@@ -315,23 +315,23 @@ fun Profile() {
         .clip(CircleShape)
         .background(Color.White)
     )
-    Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(7.dp))
     Text(text = "aliaa abdelkawi", fontFamily = FontFamily(Font(R.font.poppins_semibold)), fontSize = 18.sp, color = Color.White)
-    Spacer(modifier = Modifier.height(10.dp))
+    Spacer(modifier = Modifier.height(2.dp))
     Text(text = "mohammedabdelkawi06@gmail.com", fontFamily = FontFamily(Font(R.font.poppins_regular)), fontSize = 14.sp, color = Color.White)
-    Spacer(modifier = Modifier.height(44.dp))
+    Spacer(modifier = Modifier.height(45.dp))
     Text(text = "Library", fontFamily = FontFamily(Font(R.font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
-    Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(35.dp))
     Text(text = "Orders", fontFamily = FontFamily(Font(R.font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
-    Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(35.dp))
     Text(text = "Transactions", fontFamily = FontFamily(Font(R.font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
-    Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(35.dp))
     Text(text = "Membership", fontFamily = FontFamily(Font(R.font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
-    Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(35.dp))
     Text(text = "Account info", fontFamily = FontFamily(Font(R.font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
-    Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(35.dp))
     Text(text = "Payment methods", fontFamily = FontFamily(Font(R.font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
-    Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(35.dp))
 
   }
 }

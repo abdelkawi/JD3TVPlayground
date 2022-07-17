@@ -48,6 +48,9 @@ class MainActivity : ComponentActivity() {
   private val splashViewModel: SplashViewModel by viewModels()
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    setContent{
+
+    }
     lifecycleScope.launch {
       when (val res = splashViewModel.getClientData()) {
         is Error -> {
