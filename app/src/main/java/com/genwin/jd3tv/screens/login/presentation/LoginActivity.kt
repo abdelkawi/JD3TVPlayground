@@ -40,12 +40,6 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
-
-        if (sharedPreference.getUserName().isNotEmpty()) {
-            emailET.setText(sharedPreference.getUserName())
-            passwordET.setText(sharedPreference.getPassword())
-            login()
-        }
     }
 
     private fun login() {
