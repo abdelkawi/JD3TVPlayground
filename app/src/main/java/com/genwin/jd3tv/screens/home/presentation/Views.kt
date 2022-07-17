@@ -28,6 +28,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,11 +37,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection.Ltr
+import androidx.compose.ui.unit.LayoutDirection.Rtl
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -52,6 +56,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
+import com.genwin.jd3tv.R.color
 import com.genwin.jd3tv.R.drawable
 import com.genwin.jd3tv.R.font
 import com.genwin.jd3tv.screens.home.domain.entity.BottomTab
@@ -291,6 +296,7 @@ fun DotsIndicator(
 @Composable
 fun Profile() {
   val noImage = true
+  CompositionLocalProvider(LocalLayoutDirection provides Ltr) {
   Column(Modifier.padding(16.dp)) {
     if (noImage) {
       Box(
@@ -299,13 +305,13 @@ fun Profile() {
           .background(Color.White, shape = CircleShape)
           .height(34.dp)
           .width(34.dp)
-          .border(1.dp, colorResource(id = R.color.languid_lavender), CircleShape)
+          .border(1.dp, colorResource(id = color.languid_lavender), CircleShape)
       ) {
         Text(
           text = "AL",
           fontSize = 12.sp,
           textAlign = TextAlign.Center,
-          fontFamily = FontFamily(Font(R.font.poppins_semibold))
+          fontFamily = FontFamily(Font(font.poppins_semibold))
         )
       }
     } else
@@ -318,23 +324,23 @@ fun Profile() {
           .background(Color.White)
       )
     Spacer(modifier = Modifier.height(20.dp))
-    Text(text = "aliaa abdelkawi", fontFamily = FontFamily(Font(R.font.poppins_semibold)), fontSize = 18.sp, color = Color.White)
+    Text(text = "aliaa abdelkawi", fontFamily = FontFamily(Font(font.poppins_semibold)), fontSize = 18.sp, color = Color.White)
     Spacer(modifier = Modifier.height(10.dp))
-    Text(text = "mohammedabdelkawi06@gmail.com", fontFamily = FontFamily(Font(R.font.poppins_regular)), fontSize = 14.sp, color = Color.White)
+    Text(text = "mohammedabdelkawi06@gmail.com", fontFamily = FontFamily(Font(font.poppins_regular)), fontSize = 14.sp, color = Color.White)
     Spacer(modifier = Modifier.height(44.dp))
-    Text(text = "Library", fontFamily = FontFamily(Font(R.font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
+    Text(text = "Library", fontFamily = FontFamily(Font(font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
     Spacer(modifier = Modifier.height(20.dp))
-    Text(text = "Orders", fontFamily = FontFamily(Font(R.font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
+    Text(text = "Orders", fontFamily = FontFamily(Font(font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
     Spacer(modifier = Modifier.height(20.dp))
-    Text(text = "Transactions", fontFamily = FontFamily(Font(R.font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
+    Text(text = "Transactions", fontFamily = FontFamily(Font(font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
     Spacer(modifier = Modifier.height(20.dp))
-    Text(text = "Membership", fontFamily = FontFamily(Font(R.font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
+    Text(text = "Membership", fontFamily = FontFamily(Font(font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
     Spacer(modifier = Modifier.height(20.dp))
-    Text(text = "Account info", fontFamily = FontFamily(Font(R.font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
+    Text(text = "Account info", fontFamily = FontFamily(Font(font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
     Spacer(modifier = Modifier.height(20.dp))
-    Text(text = "Payment methods", fontFamily = FontFamily(Font(R.font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
+    Text(text = "Payment methods", fontFamily = FontFamily(Font(font.poppins_medium)), fontSize = 16.sp, color = Color(0xFFFFF8F8))
     Spacer(modifier = Modifier.height(20.dp))
-
+  }
   }
 }
 
@@ -363,18 +369,16 @@ fun ErrorView(errorTxt: String, reloadAction: () -> Unit) {
 @Composable
 fun Banner() {
   ConstraintLayout() {
-    val (image, dataContainer, gradient) = createRefs()
+    val (image, dataContainer,gradient) = createRefs()
     AsyncImage(modifier = Modifier.constrainAs(image) {
       top.linkTo(parent.top)
       start.linkTo(parent.start)
       end.linkTo(parent.end)
     }, model = painterResource(id = R.drawable.movie_poster_), contentDescription = null)
-    Image(painter = painterResource(id = R.drawable.ic_gradient_transparent), contentDescription = "", modifier = Modifier.constrainAs(gradient) {
-      bottom.linkTo(image.bottom)
-      start.linkTo(image.start)
-      end.linkTo(image.end)
+    Image(painter = painterResource(id = R.drawable.ic_gradient_transparent), contentDescription ="" , modifier = Modifier.constrainAs(gradient){
+
     })
-    Column(modifier = Modifier.constrainAs(dataContainer) {
+    Column(modifier = Modifier.constrainAs(dataContainer){
       bottom.linkTo(image.bottom)
       start.linkTo(image.start)
       end.linkTo(image.end)

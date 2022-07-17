@@ -84,11 +84,12 @@ class MainActivity : ComponentActivity() {
                         Profile()
                       },
                       content = {
+                        CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Ltr) {
                         Main(
                           sections = sections,
                           tabs = tabs.map { BottomTab(it, it) }.subList(0, 4)
                         )
-                      },
+                      }},
                       drawerBackgroundColor = Color(0xE6460383)
                     )
                   }
