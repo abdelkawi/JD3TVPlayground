@@ -1,6 +1,7 @@
 package com.genwin.jd3tv.screens.home.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,9 +34,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -263,7 +267,7 @@ fun DotsIndicator(
             .width(20.dp)
             .height(6.dp)
             .clip(RoundedCornerShape(2.dp))
-            .background(Color( 0xFFe225ff))
+            .background(Color(0xFFe225ff))
         )
       } else {
         Box(
@@ -284,11 +288,25 @@ fun DotsIndicator(
 
 @Composable
 fun Profile() {
-  val noImage= false
+  val noImage= true
   Column(Modifier.padding(16.dp)) {
     if(noImage){
-      Text(text = "MA",Modifier.background(Color.White, RectangleShape))
-    }else
+      Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+          .background(Color.White, shape = CircleShape)
+          .height(34.dp)
+          .width(34.dp)
+          .border(1.dp, colorResource(id = R.color.languid_lavender), CircleShape)
+      ) {
+        Text(
+          text = "AL",
+          fontSize = 12.sp,
+          textAlign = TextAlign.Center,
+          fontFamily = FontFamily(Font(R.font.poppins_semibold))
+        )
+      }
+    } else
     AsyncImage(
       model = "", contentDescription = null, modifier = Modifier
         .clip(CircleShape)
