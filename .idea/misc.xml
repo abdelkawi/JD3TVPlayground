@@ -3,11 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../../layout/compose-model-1656417372323.xml" value="0.22001689189189189" />
-        <entry key="../../../../layout/compose-model-1656418736175.xml" value="1.0" />
-        <entry key="app/src/main/res/drawable/welcome_gradient.xml" value="0.1545" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.24583333333333332" />
+        <entry key="../../../../layout/compose-model-1656855967077.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_email.xml" value="0.14" />
+        <entry key="app/src/main/res/drawable/ic_passwprd_icon.xml" value="0.14" />
+        <entry key="app/src/main/res/drawable/ic_show.xml" value="0.14" />
+        <entry key="app/src/main/res/drawable/login_edit_text_bg.xml" value="0.14" />
+        <entry key="app/src/main/res/drawable/login_edit_text_bg_selected.xml" value="0.14" />
+        <entry key="app/src/main/res/drawable/login_gradient.xml" value="0.14" />
+        <entry key="app/src/main/res/drawable/selector_edittext.xml" value="0.14" />
+        <entry key="app/src/main/res/drawable/show_password_selector.xml" value="0.14" />
+        <entry key="app/src/main/res/drawable/social_bg.xml" value="0.14" />
+        <entry key="app/src/main/res/drawable/splash_gradient.xml" value="0.14" />
+        <entry key="app/src/main/res/drawable/welcome_gradient.xml" value="0.14" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.2515625" />
         <entry key="app/src/main/res/layout/activity_welcome.xml" value="0.165" />
       </map>
     </option>
