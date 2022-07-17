@@ -24,8 +24,6 @@ import kotlin.random.Random
   companion object {
     fun getRandomType(): SectionType {
       return when (Random.nextInt(1, 4)) {
-        1 -> ViewPager
-        2 -> CardWithTitle
         3 -> Contest
         else -> Card
       }
