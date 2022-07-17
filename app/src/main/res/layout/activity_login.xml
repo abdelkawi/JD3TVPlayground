@@ -10,17 +10,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/login_gradient">
 
-        <ImageView
-            android:id="@+id/backImg"
-            android:layout_width="21dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="30dp"
-            android:contentDescription="@string/sign_in"
-            android:scaleType="fitCenter"
-            android:src="@drawable/back_btn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/logoImg"
@@ -31,7 +20,7 @@
             android:src="@drawable/jd3tv_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/backImg" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/loginTxt"
