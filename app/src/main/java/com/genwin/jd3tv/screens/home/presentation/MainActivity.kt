@@ -1,12 +1,10 @@
 package com.genwin.jd3tv.screens.home.presentation
 
 import android.os.Bundle
-import android.util.LayoutDirection
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -30,6 +28,7 @@ import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.Result.Error
 import com.genwin.jd3tv.common.Result.Success
+import com.genwin.jd3tv.common.SharedPreference
 import com.genwin.jd3tv.screens.home.domain.entity.BottomTab
 import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
 import com.genwin.jd3tv.screens.splash.presentation.SplashViewModel
@@ -37,12 +36,16 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
   private val homeViewModel: HomeViewModel by viewModels()
   private val splashViewModel: SplashViewModel by viewModels()
+  @Inject
+  lateinit var sharedPreference: SharedPreference
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent{
@@ -87,7 +90,7 @@ class MainActivity : ComponentActivity() {
                   CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Rtl) {
                     ModalDrawer(
                       drawerContent = {
-                        Profile()
+                        Profile(sharedPreference.getEmail(),sharedPreference.getNickName(),sharedPreference.getPhoto(),sharedPreference.getFullName(),sharedPreference)
                       },
                       content = {
                         Main(

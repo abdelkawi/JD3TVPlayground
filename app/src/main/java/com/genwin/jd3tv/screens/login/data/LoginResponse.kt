@@ -4,18 +4,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class LoginResponse(
-
-	@Json(name="data")
-	val data: Data? = null,
-
-	@Json(name="message")
-	val message: String? = null,
-
-	@Json(name="status")
-	val status: String? = null
-)
-@JsonClass(generateAdapter = true)
 data class SolanaAddress(
 
 	@Json(name="privateKey")
@@ -40,7 +28,7 @@ data class CryptoWallet(
 	val nonce: String? = null
 )
 @JsonClass(generateAdapter = true)
-data class Data(
+data class LoginResponse(
 
 	@Json(name="country")
 	val country: String? = null,
@@ -105,7 +93,7 @@ data class Data(
 	@Json(name="state_id")
 	val stateId: String? = null,
 
-	@Json(name="id")
+	@Json(name="_id")
 	val id: String? = null,
 
 	@Json(name="total_donation_value")
@@ -142,7 +130,7 @@ data class Data(
 	val lastName: String? = null,
 
 	@Json(name="photo")
-	val photo: Any? = null,
+	val photo: String? = null,
 
 	@Json(name="has_winnings")
 	val hasWinnings: Boolean? = null,
@@ -167,9 +155,6 @@ data class Data(
 
 	@Json(name="organization_id")
 	val organizationId: Any? = null,
-
-	@Json(name="_id")
-	val _id: String? = null,
 
 	@Json(name="key_managed_by")
 	val keyManagedBy: String? = null,

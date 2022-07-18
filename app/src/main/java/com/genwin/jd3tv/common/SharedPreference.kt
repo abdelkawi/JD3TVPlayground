@@ -24,4 +24,39 @@ class SharedPreference @Inject constructor(@ApplicationContext context: Context)
     fun setPassword(password: String) {
         prefs.edit().putString("password", password).apply()
     }
+
+    fun getNickName(): String {
+        return prefs.getString("nickname", "")!!
+    }
+
+    fun setNickName(nickName: String) {
+        prefs.edit().putString("nickname", nickName).apply()
+    }
+
+    fun getFullName(): String {
+        return prefs.getString("fullname", "")!!
+    }
+
+    fun setFullName(fullName: String) {
+        prefs.edit().putString("fullname", fullName).apply()
+    }
+    fun getPhoto(): String {
+        return prefs.getString("photo", "")!!
+    }
+
+    fun setPhoto(photo: String) {
+        prefs.edit().putString("photo", photo).apply()
+    }
+
+    fun getEmail(): String {
+        return prefs.getString("email", "")!!
+    }
+
+    fun setEmail(email: String) {
+        prefs.edit().putString("email", email).apply()
+    }
+
+    fun signOut(){
+        prefs.edit().clear().apply()
+    }
 }

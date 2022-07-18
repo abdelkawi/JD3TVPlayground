@@ -13,4 +13,12 @@
     <string name="continue_with">or continue with</string>
     <string name="do_not_have_account">Don’t Have an Account?</string>
 
+    <!--drawer data -->
+    <string name="library">Library</string>
+    <string name="orders">Orders</string>
+    <string name="transaction">Transactions</string>
+    <string name="membership">Membership</string>
+    <string name="account_info">Account info</string>
+    <string name="payment_method">Payment methods</string>
+    <string name="sign_out">Sign out</string>
 </resources>

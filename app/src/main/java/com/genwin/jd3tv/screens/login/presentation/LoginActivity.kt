@@ -26,6 +26,7 @@ import javax.inject.Inject
 class LoginActivity : AppCompatActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
+
     @Inject
     lateinit var sharedPreference: SharedPreference
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +59,16 @@ class LoginActivity : AppCompatActivity() {
                     if (rememberMeCB.isChecked) {
                         sharedPreference.setUserName(emailET.text.toString())
                         sharedPreference.setPassword(passwordET.text.toString())
-                    }
+                        sharedPreference.setEmail(res.data.email ?: "")
+                        sharedPreference.setPhoto(res.data.photo ?: "")
+                        sharedPreference.setFullName(res.data.firstName + res.data.lastName)
+                        sharedPreference.setNickName(
+                            res.data.firstName?.substring(
+                                0,
+                                1
+                            ) + res.data.lastName?.substring(0, 1)
+                        )
+                          }
                 }
                 is Error -> {
 
