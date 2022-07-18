@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -43,11 +44,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun login() {
+        loginPB.visibility = View.VISIBLE
+        signInBtn.visibility = View.GONE
         lifecycleScope.launch {
             val res =
                 viewModel.login(emailET.text.toString(), passwordET.text.toString())
             when (res) {
                 is Success -> {
+
+                    loginPB.visibility = View.GONE
+                    signInBtn.visibility = View.VISIBLE
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     if (rememberMeCB.isChecked) {
                         sharedPreference.setUserName(emailET.text.toString())
@@ -55,6 +61,9 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
                 is Error -> {
+
+                    loginPB.visibility = View.GONE
+                    signInBtn.visibility = View.VISIBLE
                     Toast.makeText(
                         baseContext,
                         res.error.toString(),
