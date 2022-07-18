@@ -36,9 +36,9 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-//        if (sharedPreference.getUserName().isNotEmpty()) {
-//            login(sharedPreference.getUserName(), sharedPreference.getPassword())
-//        }else
+        if (sharedPreference.getUserName().isNotEmpty()) {
+            login(sharedPreference.getUserName(), sharedPreference.getPassword())
+        }else
             startActivity(Intent(this@SplashActivity, WelcomeActivity::class.java))
     }
 
