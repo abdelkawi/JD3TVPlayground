@@ -17,7 +17,7 @@ import kotlin.random.Random
   ) {
 
   private var itemsList:List<ItemDetailsResponse> = emptyList()
-  fun setItems(items:List<ItemDetailsResponse>){
+  fun setItems(items: List<ItemDetailsResponse>){
     this.itemsList = items
   }
    fun getItems() = itemsList

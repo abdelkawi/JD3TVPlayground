@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -72,7 +73,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 
 @Composable
-fun Main(sections: List<HomeSection>, tabs: List<BottomTab>) {
+fun Main(sections: List<HomeSection>, tabs: List<BottomTab>, sharedPreference: SharedPreference) {
     val navController = rememberNavController()
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (profileImg, content, bottomBar) = createRefs()
@@ -95,10 +96,9 @@ fun Main(sections: List<HomeSection>, tabs: List<BottomTab>) {
                             Home(sections)
                         }
                     }
-                    "search" -> {
+                    "events" -> {
                         composable(it.route) {
-                            //search view
-                            Home(sections)
+                            Event()
                         }
                     }
                     else -> {
@@ -110,21 +110,43 @@ fun Main(sections: List<HomeSection>, tabs: List<BottomTab>) {
 
             }
         }
-        AsyncImage(
-            model = "",
-            modifier = Modifier
-                .constrainAs(profileImg) {
-                    top.linkTo(parent.top, margin = 16.dp)
-                    end.linkTo(parent.end, margin = 16.dp)
-                }
-                .clickable {
-                }
-                .width(28.dp)
-                .height(28.dp)
-                .clip(CircleShape)
-                .background(Color.White),
-            contentDescription = "",
-        )
+        if (sharedPreference.getPhoto().isNotEmpty())
+            AsyncImage(
+                model = sharedPreference.getPhoto(),
+                contentDescription = null,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .width(28.dp)
+                    .height(28.dp)
+                    .clip(CircleShape)
+                    .background(Color.White)
+                    .constrainAs(profileImg) {
+                        top.linkTo(parent.top, margin = 16.dp)
+                        end.linkTo(parent.end, margin = 16.dp)
+                    }
+            ) else {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .background(colorResource(id = R.color.persian_blue), shape = CircleShape)
+                    .height(28.dp)
+                    .width(28.dp)
+                    .border(1.dp, Color.White, CircleShape)
+                    .constrainAs(profileImg) {
+                        top.linkTo(parent.top, margin = 16.dp)
+                        end.linkTo(parent.end, margin = 16.dp)
+                    }
+            ) {
+                Text(
+                    text = sharedPreference.getNickName(),
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                    fontFamily = FontFamily(Font(R.font.poppins_semibold))
+                )
+            }
+        }
+
         BottomNavigation(backgroundColor = Color(0xff1f212a), modifier = Modifier
             .constrainAs(bottomBar) {
                 bottom.linkTo(parent.bottom)
@@ -135,7 +157,8 @@ fun Main(sections: List<HomeSection>, tabs: List<BottomTab>) {
             val backStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = backStackEntry?.destination?.route
             tabs.forEach {
-                BottomNavigationItem(selected = currentRoute == it.route, onClick = {
+                var isSelected = currentRoute == it.route
+                BottomNavigationItem(selected = isSelected, onClick = {
                     navController.navigate(it.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
@@ -146,15 +169,20 @@ fun Main(sections: List<HomeSection>, tabs: List<BottomTab>) {
                 },
                     icon = {},
                     label = {
-                        Text(text = it.title, color = Color.White)
+                        Text(text = it.title, color = if(isSelected) colorResource(id = R.color.psychedelic_purple) else Color.White)
                     }
                 )
             }
         }
 
     }
+
 }
 
+@Composable
+fun Header(){
+
+}
 @Composable
 fun Home(sections: List<HomeSection>) {
     Column(
@@ -444,26 +472,45 @@ fun ErrorView(errorTxt: String, reloadAction: () -> Unit) {
 
 @Composable
 fun Banner() {
-  ConstraintLayout() {
-    val (image, dataContainer,gradient) = createRefs()
-    AsyncImage(modifier = Modifier.constrainAs(image) {
-      top.linkTo(parent.top)
-      start.linkTo(parent.start)
-      end.linkTo(parent.end)
-    }, model = painterResource(id = R.drawable.movie_poster_), contentDescription = null)
-    Image(painter = painterResource(id = R.drawable.ic_gradient_transparent), contentDescription ="" , modifier = Modifier.constrainAs(gradient){
+    ConstraintLayout() {
+        val (image, dataContainer, gradient) = createRefs()
+        AsyncImage(modifier = Modifier.constrainAs(image) {
+            top.linkTo(parent.top)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }, model = painterResource(id = R.drawable.movie_poster_), contentDescription = null)
+        Image(
+            painter = painterResource(id = R.drawable.ic_gradient_transparent),
+            contentDescription = "",
+            modifier = Modifier.constrainAs(gradient) {
 
-    })
-    Column(modifier = Modifier.constrainAs(dataContainer){
-      bottom.linkTo(image.bottom)
-      start.linkTo(image.start)
-      end.linkTo(image.end)
-    }) {
-      Text(text = "", fontSize = 50.sp, color = Color.White, fontFamily = FontFamily(Font(R.font.cooper_std_black)))
-      Text(text = "", fontSize = 18.sp, color = Color.White, fontFamily = FontFamily(Font(R.font.poppins_medium)))
-      Button(onClick = { }, modifier = Modifier.background(colorResource(id = R.color.blue_violet), shape = RoundedCornerShape(18.dp))) {
-        Text(text = "Play", color = Color.White)
-      }
+            })
+        Column(modifier = Modifier.constrainAs(dataContainer) {
+            bottom.linkTo(image.bottom)
+            start.linkTo(image.start)
+            end.linkTo(image.end)
+        }) {
+            Text(
+                text = "",
+                fontSize = 50.sp,
+                color = Color.White,
+                fontFamily = FontFamily(Font(R.font.cooper_std_black))
+            )
+            Text(
+                text = "",
+                fontSize = 18.sp,
+                color = Color.White,
+                fontFamily = FontFamily(Font(R.font.poppins_medium))
+            )
+            Button(
+                onClick = { },
+                modifier = Modifier.background(
+                    colorResource(id = R.color.blue_violet),
+                    shape = RoundedCornerShape(18.dp)
+                )
+            ) {
+                Text(text = "Play", color = Color.White)
+            }
+        }
     }
-  }
 }

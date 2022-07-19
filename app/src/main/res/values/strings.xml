@@ -21,4 +21,9 @@
     <string name="account_info">Account info</string>
     <string name="payment_method">Payment methods</string>
     <string name="sign_out">Sign out</string>
+
+    <!-- event screen-->
+    <string name="event">Event</string>
+    <string name="event_calender">Events Calendar</string>
+    <string name="previous_calender">previous Events</string>
 </resources>
