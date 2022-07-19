@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +26,7 @@ import javax.inject.Inject
 class LoginActivity : AppCompatActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
+
     @Inject
     lateinit var sharedPreference: SharedPreference
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,23 +45,35 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun login() {
+        loginPB.visibility = View.VISIBLE
+        signInBtn.visibility = View.GONE
         lifecycleScope.launch {
             val res =
                 viewModel.login(emailET.text.toString(), passwordET.text.toString())
             when (res) {
                 is Success -> {
+
+                    loginPB.visibility = View.GONE
+                    signInBtn.visibility = View.VISIBLE
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     if (rememberMeCB.isChecked) {
                         sharedPreference.setUserName(emailET.text.toString())
                         sharedPreference.setPassword(passwordET.text.toString())
-                    }
-                    Toast.makeText(
-                        baseContext,
-                        "Login successful",
-                        Toast.LENGTH_LONG
-                    ).show()
+                        sharedPreference.setEmail(res.data.email ?: "")
+                        sharedPreference.setPhoto(res.data.photo ?: "")
+                        sharedPreference.setFullName(res.data.firstName + res.data.lastName)
+                        sharedPreference.setNickName(
+                            res.data.firstName?.substring(
+                                0,
+                                1
+                            ) + res.data.lastName?.substring(0, 1)
+                        )
+                          }
                 }
                 is Error -> {
+
+                    loginPB.visibility = View.GONE
+                    signInBtn.visibility = View.VISIBLE
                     Toast.makeText(
                         baseContext,
                         res.error.toString(),

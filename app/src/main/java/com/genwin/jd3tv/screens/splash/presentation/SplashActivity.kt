@@ -28,6 +28,7 @@ import javax.inject.Inject
 class SplashActivity : AppCompatActivity() {
     private val viewModel: SplashViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
+
     @Inject
     lateinit var sharedPreference: SharedPreference
 
@@ -35,25 +36,20 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-//        if (sharedPreference.getUserName().isNotEmpty()) {
-//            login( sharedPreference.getUserName(), sharedPreference.getPassword())
-//        }
-        startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
-
+        if (sharedPreference.getUserName().isNotEmpty()) {
+            login(sharedPreference.getUserName(), sharedPreference.getPassword())
+        }else
+            startActivity(Intent(this@SplashActivity, WelcomeActivity::class.java))
     }
 
-    private fun login(userName:String,password:String) {
+    private fun login(userName: String, password: String) {
         lifecycleScope.launch {
             val res =
                 loginViewModel.login(userName, password)
             when (res) {
                 is Result.Success -> {
                     startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                    Toast.makeText(
-                        baseContext,
-                        "Login successful",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    this@SplashActivity.finish()
                 }
                 is Result.Error -> {
                     Toast.makeText(

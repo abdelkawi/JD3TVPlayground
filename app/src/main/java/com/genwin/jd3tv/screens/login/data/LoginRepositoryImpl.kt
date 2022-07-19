@@ -9,7 +9,14 @@ import javax.inject.Inject
 //
 // Created by Dina Mounib on 7/5/22.
 //
-class LoginRepositoryImpl @Inject constructor(private val remoteDataSource: RemoteDataSource):LoginRepository {
-    override suspend fun login(username: String, pass: String): Result<LoginResponse> =
-        remoteDataSource.login(username,pass)
+class LoginRepositoryImpl @Inject constructor(private val remoteDataSource: RemoteDataSource) :
+    LoginRepository {
+    override suspend fun login(username: String, pass: String): Result<LoginResponse> {
+        val res = remoteDataSource.login(username, pass)
+        return when (res) {
+            is Result.Error -> Result.Error(res.error)
+            is Result.Success -> Result.Success(res.data)
+        }
+    }
+
 }
