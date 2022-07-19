@@ -18,7 +18,8 @@
 
         <activity
             android:name="com.genwin.jd3tv.screens.splash.presentation.SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            tools:node="merge">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,19 +28,22 @@
         </activity>
         <activity
             android:name=".screens.home.presentation.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            tools:node="merge">
 
         </activity>
 
         <activity
             android:name=".screens.welcome.presentation.WelcomeActivity"
-            android:exported="true">
+            android:exported="true"
+            tools:node="merge">
 
         </activity>
 
         <activity
             android:name=".screens.login.presentation.LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            tools:node="merge">
 
         </activity>
 
