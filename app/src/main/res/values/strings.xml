@@ -13,6 +13,9 @@
     <string name="continue_with">or continue with</string>
     <string name="do_not_have_account">Don’t Have an Account?</string>
 
+    <!-- top bar-->
+    <string name="shows">Shows</string>
+    <string name="movies">Movies</string>
     <!--drawer data -->
     <string name="library">Library</string>
     <string name="orders">Orders</string>

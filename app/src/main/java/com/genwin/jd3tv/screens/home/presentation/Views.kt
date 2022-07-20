@@ -4,19 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -52,6 +40,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -73,8 +62,13 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 
 @Composable
-fun Main(sections: List<HomeSection>, tabs: List<BottomTab>, sharedPreference: SharedPreference) {
-    val navController = rememberNavController()
+fun Main(
+    sections: List<HomeSection>,
+    tabs: List<BottomTab>,
+    sharedPreference: SharedPreference,
+    navController: NavHostController
+) {
+    // val navController = rememberNavController()
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (profileImg, content, bottomBar) = createRefs()
         NavHost(
@@ -101,6 +95,11 @@ fun Main(sections: List<HomeSection>, tabs: List<BottomTab>, sharedPreference: S
                             Event()
                         }
                     }
+                    "experiences" -> {
+                        composable(it.route) {
+                            Host(10, "Hosts")
+                        }
+                    }
                     else -> {
                         composable(it.route) {
                             Text("this is another one ", fontSize = 30.sp, color = Color.White)
@@ -109,44 +108,48 @@ fun Main(sections: List<HomeSection>, tabs: List<BottomTab>, sharedPreference: S
                 }
 
             }
-        }
-        if (sharedPreference.getPhoto().isNotEmpty())
-            AsyncImage(
-                model = sharedPreference.getPhoto(),
-                contentDescription = null,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .width(28.dp)
-                    .height(28.dp)
-                    .clip(CircleShape)
-                    .background(Color.White)
-                    .constrainAs(profileImg) {
-                        top.linkTo(parent.top, margin = 16.dp)
-                        end.linkTo(parent.end, margin = 16.dp)
-                    }
-            ) else {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .background(colorResource(id = R.color.persian_blue), shape = CircleShape)
-                    .height(28.dp)
-                    .width(28.dp)
-                    .border(1.dp, Color.White, CircleShape)
-                    .constrainAs(profileImg) {
-                        top.linkTo(parent.top, margin = 16.dp)
-                        end.linkTo(parent.end, margin = 16.dp)
-                    }
-            ) {
-                Text(
-                    text = sharedPreference.getNickName(),
-                    fontSize = 14.sp,
-                    textAlign = TextAlign.Center,
-                    color = Color.White,
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold))
-                )
+            composable("search") {
+                Search()
             }
-        }
 
+        }
+//        if (sharedPreference.getPhoto().isNotEmpty())
+//            AsyncImage(
+//                model = sharedPreference.getPhoto(),
+//                contentDescription = null,
+//                modifier = Modifier
+//                    .clip(CircleShape)
+//                    .width(28.dp)
+//                    .height(28.dp)
+//                    .clip(CircleShape)
+//                    .background(Color.White)
+//                    .constrainAs(profileImg) {
+//                        top.linkTo(parent.top, margin = 16.dp)
+//                        end.linkTo(parent.end, margin = 16.dp)
+//                    }
+//            ) else {
+//            Box(
+//                contentAlignment = Alignment.Center,
+//                modifier = Modifier
+//                    .background(colorResource(id = R.color.persian_blue), shape = CircleShape)
+//                    .height(28.dp)
+//                    .width(28.dp)
+//                    .border(1.dp, Color.White, CircleShape)
+//                    .constrainAs(profileImg) {
+//                        top.linkTo(parent.top, margin = 16.dp)
+//                        end.linkTo(parent.end, margin = 16.dp)
+//                    }
+//            ) {
+//                Text(
+//                    text = sharedPreference.getNickName(),
+//                    fontSize = 14.sp,
+//                    textAlign = TextAlign.Center,
+//                    color = Color.White,
+//                    fontFamily = FontFamily(Font(R.font.poppins_semibold))
+//                )
+//            }
+//        }
+        Header(sharedPreference)
         BottomNavigation(backgroundColor = Color(0xff1f212a), modifier = Modifier
             .constrainAs(bottomBar) {
                 bottom.linkTo(parent.bottom)
@@ -156,7 +159,7 @@ fun Main(sections: List<HomeSection>, tabs: List<BottomTab>, sharedPreference: S
             .wrapContentHeight()) {
             val backStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = backStackEntry?.destination?.route
-            tabs.forEach {
+            tabs.subList(0, 4).forEach {
                 var isSelected = currentRoute == it.route
                 BottomNavigationItem(selected = isSelected, onClick = {
                     navController.navigate(it.route) {
@@ -169,7 +172,10 @@ fun Main(sections: List<HomeSection>, tabs: List<BottomTab>, sharedPreference: S
                 },
                     icon = {},
                     label = {
-                        Text(text = it.title, color = if(isSelected) colorResource(id = R.color.psychedelic_purple) else Color.White)
+                        Text(
+                            text = it.title,
+                            color = if (isSelected) colorResource(id = R.color.psychedelic_purple) else Color.White
+                        )
                     }
                 )
             }
@@ -180,9 +186,23 @@ fun Main(sections: List<HomeSection>, tabs: List<BottomTab>, sharedPreference: S
 }
 
 @Composable
-fun Header(){
+fun Search() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.Black)
+    ) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .background(Color.Black)
+                .fillMaxSize()
+        ) {
 
+        }
+    }
 }
+
 @Composable
 fun Home(sections: List<HomeSection>) {
     Column(
@@ -292,7 +312,8 @@ fun viewPagerWithDots(section: HomeSection) {
                     top.linkTo(topSpacer.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                })
+                }, Color(0xFFe225ff)
+            )
             Spacer(modifier = Modifier
                 .padding(4.dp)
                 .constrainAs(bottomSpacer) { top.linkTo(dots.bottom) })
@@ -304,7 +325,8 @@ fun viewPagerWithDots(section: HomeSection) {
 fun DotsIndicator(
     totalDots: Int,
     selectedIndex: Int,
-    modifier: Modifier
+    modifier: Modifier,
+    backGroundColor: Color
 ) {
     LazyRow(
         modifier = modifier,
@@ -319,7 +341,7 @@ fun DotsIndicator(
                         .width(20.dp)
                         .height(6.dp)
                         .clip(RoundedCornerShape(2.dp))
-                        .background(Color(0xFFe225ff))
+                        .background(backGroundColor)
                 )
             } else {
                 Box(
@@ -391,7 +413,7 @@ fun Profile(
         )
         Spacer(modifier = Modifier.height(45.dp))
         Text(
-            text = "Library",
+            text = stringResource(R.string.library),
             fontFamily = FontFamily(Font(R.font.poppins_medium)),
             fontSize = 16.sp,
             color = colorResource(R.color.snow)
@@ -467,6 +489,116 @@ fun ErrorView(errorTxt: String, reloadAction: () -> Unit) {
         )
 
 
+    }
+}
+
+@Composable
+fun Header(sharedPreference: SharedPreference) {
+    Row() {
+        ConstraintLayout() {
+            val (logo, profileImg, gradient, container) = createRefs()
+            Image(
+                painter = painterResource(id = R.drawable.top_bar_gradient),
+                contentDescription = "",
+                modifier = Modifier.constrainAs(gradient) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                })
+            Image(
+                painter = painterResource(id = R.drawable.ic_jd_tv_logo),
+                contentDescription = "",
+                contentScale = ContentScale.Inside,
+                alignment = Alignment.TopStart,
+                modifier = Modifier.constrainAs(logo) {
+                    top.linkTo(parent.top, margin = 16.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                }
+            )
+
+            if (sharedPreference.getPhoto().isNotEmpty())
+                AsyncImage(
+                    model = sharedPreference.getPhoto(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .width(28.dp)
+                        .height(28.dp)
+                        .clip(CircleShape)
+                        .background(Color.White)
+                        .constrainAs(profileImg) {
+                            top.linkTo(parent.top, margin = 16.dp)
+                            end.linkTo(parent.end, margin = 16.dp)
+                        }
+                ) else {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .background(colorResource(id = R.color.persian_blue), shape = CircleShape)
+                        .height(28.dp)
+                        .width(28.dp)
+                        .border(1.dp, Color.White, CircleShape)
+                        .constrainAs(profileImg) {
+                            top.linkTo(parent.top, margin = 16.dp)
+                            end.linkTo(parent.end, margin = 16.dp)
+                        }
+                ) {
+                    Text(
+                        text = sharedPreference.getNickName(),
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        fontFamily = FontFamily(Font(R.font.poppins_semibold))
+                    )
+                }
+            }
+
+            ConstraintLayout(modifier = Modifier.constrainAs(container) {
+                top.linkTo(logo.bottom, 26.dp)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }) {
+                val (text1, text2, arrow1, arrow2) = createRefs()
+                Text(
+                    text = stringResource(id = R.string.shows),
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                    modifier = Modifier.constrainAs(text1) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    }
+                )
+                Image(
+                    painter = painterResource(R.drawable.ic_arrow_dropdown),
+                    contentDescription = "", alignment = Alignment.Center,
+                    modifier = Modifier.constrainAs(arrow1) {
+                        top.linkTo(text1.top)
+                        bottom.linkTo(text1.bottom)
+                        start.linkTo(text1.end, margin = 6.dp)
+                    }
+                )
+                Text(
+                    text = stringResource(id = R.string.movies),
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                    modifier = Modifier.constrainAs(text2) {
+                        top.linkTo(parent.top)
+                        start.linkTo(arrow1.end, margin = 30.dp)
+                    }
+                )
+                Image(
+                    painter = painterResource(R.drawable.ic_arrow_dropdown),
+                    contentDescription = "", alignment = Alignment.Center,
+                    modifier = Modifier.constrainAs(arrow2) {
+                        top.linkTo(text2.top)
+                        bottom.linkTo(text2.bottom)
+                        start.linkTo(text2.end, margin = 6.dp)
+                    }
+                )
+            }
+        }
     }
 }
 

@@ -8,7 +8,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -330,7 +329,7 @@ fun eventViewPagerWithDots(section: HomeSection) {
                                 bottom.linkTo(image.bottom, margin = 16.dp)
                                 end.linkTo(image.end, margin = 16.dp)
                             }
-                            .background(Color.Magenta, shape = RoundedCornerShape(5.dp))
+                            .background(colorResource(id = R.color.deep_magenta), shape = RoundedCornerShape(5.dp))
                     )
                 }
             }
@@ -344,7 +343,8 @@ fun eventViewPagerWithDots(section: HomeSection) {
                     top.linkTo(topSpacer.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                })
+                }, colorResource(R.color.indigo2)
+            )
             Spacer(modifier = Modifier
                 .padding(4.dp)
                 .constrainAs(bottomSpacer) { top.linkTo(dots.bottom) })

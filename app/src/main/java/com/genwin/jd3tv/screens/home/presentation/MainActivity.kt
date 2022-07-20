@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +28,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
@@ -95,6 +98,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                                 setContent {
+                                    val navController = rememberNavController()
                                     CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Rtl) {
                                         Scaffold(
                                             drawerContent = {
@@ -111,8 +115,10 @@ class MainActivity : ComponentActivity() {
                                                     Main(
                                                         sections = sections,
                                                         tabs = tabs.map { BottomTab(it, it) }
-                                                            .subList(0, 4),
-                                                        sharedPreference = sharedPreference
+                                                            .subList(1, 5),
+                                                            //.plus(BottomTab("search", "search")),
+                                                        sharedPreference = sharedPreference,
+                                                        navController
                                                     )
                                                 }
                                             },
@@ -135,7 +141,7 @@ class MainActivity : ComponentActivity() {
                                                     shape = CircleShape,
                                                     backgroundColor = colorResource(id = android.R.color.transparent),
                                                     onClick = {
-
+                                                        navController.navigate("search")
                                                     }
                                                 )
                                             }
