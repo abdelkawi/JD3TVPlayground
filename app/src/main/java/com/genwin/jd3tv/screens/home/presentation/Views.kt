@@ -10,44 +10,30 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Button
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.LayoutDirection.Ltr
-import androidx.compose.ui.unit.LayoutDirection.Rtl
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
-import com.genwin.jd3tv.R.color
 import com.genwin.jd3tv.R.drawable
 import com.genwin.jd3tv.R.font
 import com.genwin.jd3tv.common.SharedPreference
@@ -87,7 +73,7 @@ fun Main(
                 when (it.route) {
                     "home" -> {
                         composable(it.route) {
-                            Home(sections)
+                            Home(sections, sharedPreference)
                         }
                     }
                     "events" -> {
@@ -98,6 +84,11 @@ fun Main(
                     "experiences" -> {
                         composable(it.route) {
                             Host(10, "Hosts")
+                        }
+                    }
+                    "merch" -> {
+                        composable(it.route) {
+                            Shop(sharedPreference = sharedPreference)
                         }
                     }
                     else -> {
@@ -149,7 +140,7 @@ fun Main(
 //                )
 //            }
 //        }
-        Header(sharedPreference)
+
         BottomNavigation(backgroundColor = Color(0xff1f212a), modifier = Modifier
             .constrainAs(bottomBar) {
                 bottom.linkTo(parent.bottom)
@@ -159,7 +150,7 @@ fun Main(
             .wrapContentHeight()) {
             val backStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = backStackEntry?.destination?.route
-            tabs.subList(0, 4).forEach {
+            tabs.map { BottomTab(it.title, it.route) }.forEach {
                 var isSelected = currentRoute == it.route
                 BottomNavigationItem(selected = isSelected, onClick = {
                     navController.navigate(it.route) {
@@ -170,17 +161,22 @@ fun Main(
                         restoreState = true
                     }
                 },
-                    icon = {},
+                    icon = {
+                        Icon(
+                            painterResource(id = R.drawable.ic_bottom_bar),
+                            contentDescription = ""
+                        )
+                    },
+                    selectedContentColor = colorResource(id = R.color.psychedelic_purple),
+                    unselectedContentColor = Color.White,
                     label = {
                         Text(
-                            text = it.title,
-                            color = if (isSelected) colorResource(id = R.color.psychedelic_purple) else Color.White
+                            text = it.title
                         )
                     }
                 )
             }
         }
-
     }
 
 }
@@ -204,13 +200,14 @@ fun Search() {
 }
 
 @Composable
-fun Home(sections: List<HomeSection>) {
+fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .background(Color.Black)
             .wrapContentHeight()
     ) {
+        Banner(sharedPreference)
         sections.forEach { section ->
             Text(
                 text = section.title,
@@ -494,6 +491,63 @@ fun ErrorView(errorTxt: String, reloadAction: () -> Unit) {
 
 @Composable
 fun Header(sharedPreference: SharedPreference) {
+    Row(modifier = Modifier.fillMaxSize()) {
+        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+            val (logo, profileImg) = createRefs()
+            Image(
+                painter = painterResource(id = R.drawable.ic_jd_tv_logo),
+                contentDescription = "",
+                contentScale = ContentScale.Inside,
+                alignment = Alignment.TopStart,
+                modifier = Modifier.constrainAs(logo) {
+                    top.linkTo(parent.top, margin = 16.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
+                }
+            )
+
+            if (sharedPreference.getPhoto().isNotEmpty())
+                AsyncImage(
+                    model = sharedPreference.getPhoto(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .width(28.dp)
+                        .height(28.dp)
+                        .clip(CircleShape)
+                        .background(Color.White)
+                        .constrainAs(profileImg) {
+                            top.linkTo(parent.top, margin = 16.dp)
+                            end.linkTo(parent.end, margin = 16.dp)
+                        }
+                ) else {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .background(colorResource(id = R.color.persian_blue), shape = CircleShape)
+                        .height(28.dp)
+                        .width(28.dp)
+                        .border(1.dp, Color.White, CircleShape)
+                        .constrainAs(profileImg) {
+                            top.linkTo(parent.top, margin = 16.dp)
+                            end.linkTo(parent.end, margin = 16.dp)
+                        }
+                ) {
+                    Text(
+                        text = sharedPreference.getNickName(),
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        fontFamily = FontFamily(Font(R.font.poppins_semibold))
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun HomeHeader(sharedPreference: SharedPreference) {
+    var expanded by remember { mutableStateOf(false) }
     Row() {
         ConstraintLayout() {
             val (logo, profileImg, gradient, container) = createRefs()
@@ -569,6 +623,7 @@ fun Header(sharedPreference: SharedPreference) {
                         start.linkTo(parent.start)
                     }
                 )
+
                 Image(
                     painter = painterResource(R.drawable.ic_arrow_dropdown),
                     contentDescription = "", alignment = Alignment.Center,
@@ -578,6 +633,7 @@ fun Header(sharedPreference: SharedPreference) {
                         start.linkTo(text1.end, margin = 6.dp)
                     }
                 )
+
                 Text(
                     text = stringResource(id = R.string.movies),
                     color = Color.White,
@@ -597,52 +653,95 @@ fun Header(sharedPreference: SharedPreference) {
                         start.linkTo(text2.end, margin = 6.dp)
                     }
                 )
+
+
+//                IconButton( onClick = {expanded = true}){
+//                    Icon(painter = painterResource(R.drawable.ic_arrow_dropdown), contentDescription =""
+//                }
+//                DropdownMenu(
+//                    expanded = expanded,
+//                    onDismissRequest = {
+//                        expanded = false
+//                    }
+//                ) {
+//                    DropdownMenuItem(onClick = { expanded = false }) {
+//                        Text("item1")
+//                    }
+//                    DropdownMenuItem(onClick = { expanded = false }) {
+//                        Text("item2")
+//                    }
+//                }
             }
         }
     }
 }
 
 @Composable
-fun Banner() {
+fun Banner(sharedPreference: SharedPreference) {
     ConstraintLayout() {
         val (image, dataContainer, gradient) = createRefs()
-        AsyncImage(modifier = Modifier.constrainAs(image) {
-            top.linkTo(parent.top)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }, model = painterResource(id = R.drawable.movie_poster_), contentDescription = null)
+//        AsyncImage(modifier = Modifier.constrainAs(image) {
+//            top.linkTo(parent.top)
+//            start.linkTo(parent.start)
+//            end.linkTo(parent.end)
+//        }, model = painterResource(id = R.drawable.movie_poster_), contentDescription = null)
+
+        Image(
+            painter = painterResource(id = R.drawable.movie_poster_),
+            contentDescription = "",
+            modifier = Modifier
+                .constrainAs(image) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+        )
         Image(
             painter = painterResource(id = R.drawable.ic_gradient_transparent),
             contentDescription = "",
             modifier = Modifier.constrainAs(gradient) {
-
-            })
-        Column(modifier = Modifier.constrainAs(dataContainer) {
-            bottom.linkTo(image.bottom)
-            start.linkTo(image.start)
-            end.linkTo(image.end)
-        }) {
+                start.linkTo(parent.start)
+                bottom.linkTo(image.bottom)
+                end.linkTo(parent.end)
+            }
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(dataContainer) {
+                    bottom.linkTo(image.bottom)
+                    start.linkTo(image.start)
+                    end.linkTo(image.end)
+                },
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
-                text = "",
-                fontSize = 50.sp,
+                text = "Walk Of Fame",
+                fontSize = 40.sp,
                 color = Color.White,
                 fontFamily = FontFamily(Font(R.font.cooper_std_black))
             )
             Text(
-                text = "",
+                text = "Drama * Romance",
                 fontSize = 18.sp,
                 color = Color.White,
                 fontFamily = FontFamily(Font(R.font.poppins_medium))
             )
-            Button(
-                onClick = { },
-                modifier = Modifier.background(
-                    colorResource(id = R.color.blue_violet),
-                    shape = RoundedCornerShape(18.dp)
+            IconButton(onClick = { }) {
+                Image(
+                    painter = painterResource(R.drawable.ic_play_button),
+                    contentDescription = "",
+                    Modifier.background(color = colorResource(id = android.R.color.transparent))
                 )
-            ) {
-                Text(text = "Play", color = Color.White)
+                Text(
+                    text = "Play",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins_semibold))
+                )
             }
         }
+        HomeHeader(sharedPreference = sharedPreference)
+
     }
 }

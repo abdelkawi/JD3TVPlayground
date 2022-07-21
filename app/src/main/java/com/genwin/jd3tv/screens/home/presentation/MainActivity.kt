@@ -101,6 +101,7 @@ class MainActivity : ComponentActivity() {
                                     val navController = rememberNavController()
                                     CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Rtl) {
                                         Scaffold(
+
                                             drawerContent = {
                                                 Profile(
                                                     sharedPreference.getEmail(),
@@ -115,8 +116,8 @@ class MainActivity : ComponentActivity() {
                                                     Main(
                                                         sections = sections,
                                                         tabs = tabs.map { BottomTab(it, it) }
-                                                            .subList(1, 5),
-                                                            //.plus(BottomTab("search", "search")),
+                                                            .subList(1, 6),
+                                                        //.plus(BottomTab("search", "search")),
                                                         sharedPreference = sharedPreference,
                                                         navController
                                                     )

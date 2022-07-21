@@ -29,4 +29,6 @@
     <string name="event">Event</string>
     <string name="event_calender">Events Calendar</string>
     <string name="previous_calender">previous Events</string>
+
+    <string name="shop">Shop</string>
 </resources>

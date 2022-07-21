@@ -41,8 +41,11 @@ fun Event() {
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
-        ) {
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .background(Color.Black)
+                .wrapContentHeight()
+        )  {
             ConstraintLayout(modifier = Modifier.fillMaxSize()) {
                 val (logo, title, viewPager, newEventsTxt, previousEventsTxt, newEventsList, previousEventsList) = createRefs()
                 Image(
