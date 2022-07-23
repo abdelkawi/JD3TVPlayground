@@ -91,6 +91,11 @@ fun Main(
                             Shop(sharedPreference = sharedPreference)
                         }
                     }
+                    "coin" -> {
+                        composable(it.route) {
+                            Search(sharedPreference = sharedPreference)
+                        }
+                    }
                     else -> {
                         composable(it.route) {
                             Text("this is another one ", fontSize = 30.sp, color = Color.White)
@@ -100,7 +105,7 @@ fun Main(
 
             }
             composable("search") {
-                Search()
+                Search(sharedPreference = sharedPreference)
             }
 
         }
@@ -179,24 +184,6 @@ fun Main(
         }
     }
 
-}
-
-@Composable
-fun Search() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.Black)
-    ) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .background(Color.Black)
-                .fillMaxSize()
-        ) {
-
-        }
-    }
 }
 
 @Composable

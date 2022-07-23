@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -56,6 +57,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             Box(
                 contentAlignment = Alignment.Center,
@@ -85,6 +87,7 @@ class MainActivity : ComponentActivity() {
                         }
                         is Success -> {
                             val sections = homeRes.data
+
                             sections.forEach { section ->
                                 when (val sectionRes = homeViewModel.getSectionItems(
                                     section.endpoint,
@@ -99,6 +102,7 @@ class MainActivity : ComponentActivity() {
                                 }
                                 setContent {
                                     val navController = rememberNavController()
+                                    val configuration = LocalConfiguration.current
                                     CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Rtl) {
                                         Scaffold(
 
@@ -124,27 +128,30 @@ class MainActivity : ComponentActivity() {
                                                 }
                                             },
                                             drawerBackgroundColor = Color(0xE6460383),
-                                            floatingActionButtonPosition = FabPosition.End,
+                                            floatingActionButtonPosition = FabPosition.Center,
                                             floatingActionButton = {
-                                                ExtendedFloatingActionButton(
-                                                    modifier = Modifier.offset(
-                                                        x = -230.dp,
-                                                        y = -50.dp
-                                                    ),
-                                                    icon = {
-                                                        Image(
-                                                            painter = painterResource(id = R.drawable.ic_search_icon),
-                                                            contentDescription = "fab",
-                                                            contentScale = ContentScale.FillBounds
-                                                        )
-                                                    },
-                                                    text = { Text("") },
-                                                    shape = CircleShape,
-                                                    backgroundColor = colorResource(id = android.R.color.transparent),
-                                                    onClick = {
-                                                        navController.navigate("search")
-                                                    }
-                                                )
+                                                CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Ltr) {
+                                                    ExtendedFloatingActionButton(
+                                                        modifier = Modifier.offset(
+                                                            x = (configuration.screenWidthDp.div(2)
+                                                                .minus(26)).dp,
+                                                            y = -50.dp
+                                                        ),
+                                                        icon = {
+                                                            Image(
+                                                                painter = painterResource(id = R.drawable.ic_search_icon),
+                                                                contentDescription = "fab",
+                                                                contentScale = ContentScale.FillBounds
+                                                            )
+                                                        },
+                                                        text = { Text("") },
+                                                        shape = CircleShape,
+                                                        backgroundColor = colorResource(id = android.R.color.transparent),
+                                                        onClick = {
+                                                            navController.navigate("search")
+                                                        }
+                                                    )
+                                                }
                                             }
                                         )
                                     }

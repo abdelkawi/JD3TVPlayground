@@ -31,4 +31,6 @@
     <string name="previous_calender">previous Events</string>
 
     <string name="shop">Shop</string>
+    <string name="back">Back</string>
+    <string name="search">Search</string>
 </resources>
