@@ -68,8 +68,8 @@ fun Shop(sharedPreference: SharedPreference) {
             .fillMaxSize()
             .background(color = Color.Black),
         cells = GridCells.Fixed(2),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
 
         ) {
         item(span = {

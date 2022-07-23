@@ -171,15 +171,6 @@ fun SearchHeader(sharedPreference: SharedPreference) {
                         start.linkTo(parent.start, margin = 6.dp)
                     }
             )
-//            Text(
-//                stringResource(id = R.string.back),
-//                fontSize = 17.sp,
-//                fontFamily = FontFamily(Font(R.font.poppins_regular)), color = Color.White,
-//                modifier = Modifier.constrainAs(back) {
-//                    start.linkTo(logo.end, margin = 7.dp)
-//                    top.linkTo(parent.top, margin = 16.dp)
-//                })
-
             if (sharedPreference.getPhoto().isNotEmpty())
                 AsyncImage(
                     model = sharedPreference.getPhoto(),

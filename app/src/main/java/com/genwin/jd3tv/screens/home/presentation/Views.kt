@@ -78,12 +78,12 @@ fun Main(
                     }
                     "events" -> {
                         composable(it.route) {
-                            Event()
+                            Event( sharedPreference = sharedPreference)
                         }
                     }
                     "experiences" -> {
                         composable(it.route) {
-                            Host(10, "Hosts")
+                            Host(10, "Hosts", sharedPreference = sharedPreference)
                         }
                     }
                     "merch" -> {
@@ -487,8 +487,8 @@ fun Header(sharedPreference: SharedPreference) {
                 contentScale = ContentScale.Inside,
                 alignment = Alignment.TopStart,
                 modifier = Modifier.constrainAs(logo) {
-                    top.linkTo(parent.top, margin = 16.dp)
-                    start.linkTo(parent.start, margin = 16.dp)
+                    top.linkTo(parent.top, margin = 20.dp)
+                    start.linkTo(parent.start)
                 }
             )
 
@@ -504,7 +504,7 @@ fun Header(sharedPreference: SharedPreference) {
                         .background(Color.White)
                         .constrainAs(profileImg) {
                             top.linkTo(parent.top, margin = 16.dp)
-                            end.linkTo(parent.end, margin = 16.dp)
+                            end.linkTo(parent.end)
                         }
                 ) else {
                 Box(
@@ -516,7 +516,7 @@ fun Header(sharedPreference: SharedPreference) {
                         .border(1.dp, Color.White, CircleShape)
                         .constrainAs(profileImg) {
                             top.linkTo(parent.top, margin = 16.dp)
-                            end.linkTo(parent.end, margin = 16.dp)
+                            end.linkTo(parent.end)
                         }
                 ) {
                     Text(
