@@ -5,7 +5,6 @@ import com.genwin.jd3tv.screens.splash.data.SplashResponse
 import com.google.gson.Gson
 import okhttp3.ResponseBody
 import retrofit2.Response
-import java.lang.Exception
 
 
 suspend inline fun <reified T> safeApiCall(

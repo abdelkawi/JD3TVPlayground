@@ -3,13 +3,11 @@ package com.genwin.jd3tv.screens.home.domain.entity
 import com.genwin.jd3tv.screens.home.data.ItemDetailsRequest
 import com.genwin.jd3tv.screens.home.data.ItemDetailsResponse
 import com.genwin.jd3tv.screens.home.domain.entity.SectionType.Card
-import com.genwin.jd3tv.screens.home.domain.entity.SectionType.CardWithTitle
 import com.genwin.jd3tv.screens.home.domain.entity.SectionType.Contest
-import com.genwin.jd3tv.screens.home.domain.entity.SectionType.ViewPager
 import kotlin.random.Random
 
 
- class HomeSection(
+class HomeSection(
   val title: String,
   val type: SectionType,
   val endpoint: String,

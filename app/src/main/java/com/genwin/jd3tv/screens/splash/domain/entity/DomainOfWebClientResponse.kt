@@ -1,8 +1,5 @@
 package com.genwin.jd3tv.screens.splash.domain.entity
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-
 //
 // Created by Dina Mounib on 6/28/22.
 //

@@ -3,10 +3,9 @@ package com.genwin.jd3tv.screens.home.data
 import com.genwin.jd3tv.common.Result
 import com.genwin.jd3tv.common.Result.Error
 import com.genwin.jd3tv.common.Result.Success
+import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
 import com.genwin.jd3tv.screens.home.domain.interfaces.HomeRepository
 import com.genwin.jd3tv.screens.home.domain.interfaces.RemoteDataSource
-import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
-import com.genwin.jd3tv.screens.home.domain.entity.SectionType.Card
 import com.genwin.jd3tv.screens.home.domain.toHomeSection
 import javax.inject.Inject
 

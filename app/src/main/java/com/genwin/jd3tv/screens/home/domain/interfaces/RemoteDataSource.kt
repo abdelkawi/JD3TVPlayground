@@ -2,7 +2,6 @@ package com.genwin.jd3tv.screens.home.domain.interfaces
 
 import com.genwin.jd3tv.common.Result
 import com.genwin.jd3tv.screens.home.data.DataItem
-import com.genwin.jd3tv.screens.home.data.HomeResponse
 import com.genwin.jd3tv.screens.home.data.ItemDetailsRequest
 import com.genwin.jd3tv.screens.home.data.ItemDetailsResponse
 

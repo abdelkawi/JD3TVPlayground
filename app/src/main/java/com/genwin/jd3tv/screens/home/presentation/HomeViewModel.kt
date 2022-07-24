@@ -2,7 +2,6 @@ package com.genwin.jd3tv.screens.home.presentation
 
 import androidx.lifecycle.ViewModel
 import com.genwin.jd3tv.screens.home.data.ItemDetailsRequest
-import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
 import com.genwin.jd3tv.screens.home.domain.interfaces.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

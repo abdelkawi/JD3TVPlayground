@@ -2,7 +2,6 @@ package com.genwin.jd3tv.screens.splash.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,13 +10,10 @@ import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.Result
 import com.genwin.jd3tv.common.SharedPreference
 import com.genwin.jd3tv.screens.home.presentation.MainActivity
-import com.genwin.jd3tv.screens.login.presentation.LoginActivity
 import com.genwin.jd3tv.screens.login.presentation.LoginViewModel
 import com.genwin.jd3tv.screens.welcome.presentation.WelcomeActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 

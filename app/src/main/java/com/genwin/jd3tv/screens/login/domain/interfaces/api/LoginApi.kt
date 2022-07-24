@@ -2,7 +2,6 @@ package com.genwin.jd3tv.screens.login.domain.interfaces.api
 
 import com.genwin.jd3tv.common.ApiResponse
 import com.genwin.jd3tv.screens.login.data.LoginResponse
-import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Headers

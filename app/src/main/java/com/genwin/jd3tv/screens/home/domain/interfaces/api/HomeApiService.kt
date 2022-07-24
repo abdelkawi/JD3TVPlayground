@@ -5,11 +5,7 @@ import com.genwin.jd3tv.screens.home.data.DataItem
 import com.genwin.jd3tv.screens.home.data.ItemDetailsRequest
 import com.genwin.jd3tv.screens.home.data.ItemDetailsResponse
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
-import retrofit2.http.Url
+import retrofit2.http.*
 
 interface HomeApiService {
 
