@@ -34,8 +34,8 @@ import com.google.accompanist.pager.rememberPagerState
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Shop(sharedPreference: SharedPreference) {
-    var shops = mutableListOf<ShopData>()
-    var grids = mutableListOf<GridData>()
+    val shops = mutableListOf<ShopData>()
+    val grids = mutableListOf<GridData>()
     grids.add(GridData("Product Name 1", "Price 1"))
     grids.add(GridData("Product Name 2", "Price 2"))
     grids.add(GridData("Product Name 3", "Price 3"))

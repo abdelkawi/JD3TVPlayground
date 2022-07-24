@@ -14,10 +14,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,9 +31,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -43,7 +39,6 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.SharedPreference
-import java.time.format.TextStyle
 
 //
 // Created by Dina Mounib on 7/21/22.
@@ -103,7 +98,7 @@ fun Search(sharedPreference: SharedPreference,navController: NavController) {
 
 @Composable
 fun searchBar() {
-    var text = remember { mutableStateOf("") }
+    val text = remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     TextField(
         value = text.value,

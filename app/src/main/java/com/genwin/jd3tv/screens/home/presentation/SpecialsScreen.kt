@@ -55,14 +55,17 @@ fun SpecialsScreen(sharedPreference: SharedPreference) {
                 SpecialType.ViewPagerWithDateItem -> {
 
                 }
+                SpecialType.ViewPagerWithDateAndTitleItem -> {
+
+                }
             }
         }
     }
 }
 
 fun getSpecials(): List<Special> {
-    var shops = mutableListOf<Special>()
-    var grids = mutableListOf<SpecialData>()
+    val shops = mutableListOf<Special>()
+    val grids = mutableListOf<SpecialData>()
     grids.add(SpecialData("Product Name 1", "Price 1"))
     grids.add(SpecialData("Product Name 2", "Price 2"))
     grids.add(SpecialData("Product Name 3", "Price 3"))
@@ -75,30 +78,59 @@ fun getSpecials(): List<Special> {
     grids.add(SpecialData("Product Name 10", "Price 10"))
     shops.add(
         Special(
-            "Enter to win a life time experience with \n" +
-                    "Kimberly Lechnick", grids, SpecialType.ViewPagerItem
+            "", grids, SpecialType.ViewPagerItem
         )
     )
     shops.add(
         Special(
-            "", grids, SpecialType.HorizontalScrollItem
+            "Classes", grids, SpecialType.HorizontalScrollWithTitleItem
         )
     )
     shops.add(
         Special(
-            "", grids, SpecialType.HorizontalScrollWithTitleItem
+            "Books", grids, SpecialType.HorizontalScrollItem
         )
     )
     shops.add(
         Special(
-            "", grids, SpecialType.ViewPagerWithDateItem
+            "Articles", grids, SpecialType.HorizontalScrollWithTitleItem
         )
     )
+    shops.add(
+        Special(
+            "Contests", grids, SpecialType.ViewPagerWithDateAndTitleItem
+        )
+    )
+    shops.add(
+        Special(
+            "Auctions", grids, SpecialType.HorizontalScrollWithTitleItem
+        )
+    )
+    shops.add(
+        Special(
+            "Donations", grids, SpecialType.ViewPagerWithDateAndTitleItem
+        )
+    )
+    shops.add(
+        Special(
+            "Galleries", grids, SpecialType.HorizontalScrollWithTitleItem
+        )
+    )
+    shops.add(
+        Special(
+            "Music", grids, SpecialType.ViewPagerWithDateAndTitleItem
+        )
+    )
+
     return shops
 }
 
+@Composable
+fun ViewPagerItemDesign(){
+
+}
 data class Special(val title: String, val gridData: List<SpecialData>, val type: SpecialType)
 data class SpecialData(val title: String, val date: String)
 enum class SpecialType {
-    ViewPagerItem, HorizontalScrollWithTitleItem, HorizontalScrollItem, ViewPagerWithDateItem
+    ViewPagerItem, HorizontalScrollWithTitleItem, HorizontalScrollItem, ViewPagerWithDateItem, ViewPagerWithDateAndTitleItem
 }
