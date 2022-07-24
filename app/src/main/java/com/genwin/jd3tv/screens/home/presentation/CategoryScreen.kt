@@ -1,9 +1,6 @@
 package com.genwin.jd3tv.screens.home.presentation
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
@@ -37,15 +34,34 @@ import com.genwin.jd3tv.common.SharedPreference
 fun Category(
     categoryType: String,
     sharedPreference: SharedPreference,
-    homeNavController: NavHostController
+    navController:NavHostController,
 ) {
-    CategoryBanner(sharedPreference, homeNavController, categoryType)
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .background(Color.Black)
+            .wrapContentHeight()
+    ) {
+        CategoryBanner(sharedPreference,navController, categoryType)
+
+
+        getCategories().forEach {
+            when (it.type) {
+                SpecialType.ViewPagerItem -> {
+                    viewPagerItem(it.title, it.gridData, hasDetails = true, isSmall = false)
+                }
+                SpecialType.ViewPagerWithDateAndTitleItem -> {
+                    viewPagerItem(it.title, it.gridData, hasDetails = false, isSmall = true)
+                }
+            }
+        }
+    }
 }
 
 @Composable
 fun CategoryBanner(
     sharedPreference: SharedPreference,
-    homeNavController: NavHostController,
+    navController:NavHostController,
     title: String
 ) {
     ConstraintLayout() {
@@ -105,13 +121,14 @@ fun CategoryBanner(
                 )
             }
         }
-        CategoryHeader(sharedPreference = sharedPreference, title)
+        CategoryHeader(sharedPreference = sharedPreference,navController, title)
     }
 }
 
 @Composable
 fun CategoryHeader(
     sharedPreference: SharedPreference,
+    navController:NavHostController,
     title: String
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -127,14 +144,15 @@ fun CategoryHeader(
                     top.linkTo(parent.top)
                 })
             Image(
-                painter = painterResource(id = R.drawable.ic_jd_tv_logo),
+                painter = painterResource(id = R.drawable.back_button),
                 contentDescription = "",
                 contentScale = ContentScale.Inside,
                 alignment = Alignment.TopStart,
-                modifier = Modifier.constrainAs(logo) {
-                    top.linkTo(parent.top, margin = 16.dp)
-                    start.linkTo(parent.start, margin = 16.dp)
-                }
+                modifier = Modifier
+                    .constrainAs(logo) {
+                        top.linkTo(parent.top, margin = 6.dp)
+                        start.linkTo(parent.start, margin = 6.dp)
+                    }.clickable { navController.popBackStack() }
             )
 
             if (sharedPreference.getPhoto().isNotEmpty())
@@ -256,4 +274,88 @@ fun CategoryHeader(
         }
     }
 
+}
+
+fun getCategories(): List<Special> {
+    val shops = mutableListOf<Special>()
+    val grids = mutableListOf<SpecialData>()
+    grids.add(SpecialData("Product Name 1", "Price 1"))
+    grids.add(SpecialData("Product Name 2", "Price 2"))
+    grids.add(SpecialData("Product Name 3", "Price 3"))
+    grids.add(SpecialData("Product Name 4", "Price 4"))
+    grids.add(SpecialData("Product Name 5", "Price 5"))
+    grids.add(SpecialData("Product Name 6", "Price 6"))
+    grids.add(SpecialData("Product Name 7", "Price 7"))
+    grids.add(SpecialData("Product Name 8", "Price 8"))
+    grids.add(SpecialData("Product Name 9", "Price 9"))
+    grids.add(SpecialData("Product Name 10", "Price 10"))
+
+    val gridsWithoutDate = mutableListOf<SpecialData>()
+    gridsWithoutDate.add(SpecialData("Product Name 1", ""))
+    gridsWithoutDate.add(SpecialData("Product Name 2", ""))
+    gridsWithoutDate.add(SpecialData("Product Name 3", ""))
+    gridsWithoutDate.add(SpecialData("Product Name 4", ""))
+    gridsWithoutDate.add(SpecialData("Product Name 5", ""))
+    gridsWithoutDate.add(SpecialData("Product Name 6", ""))
+    gridsWithoutDate.add(SpecialData("Product Name 7", ""))
+    gridsWithoutDate.add(SpecialData("Product Name 8", ""))
+    gridsWithoutDate.add(SpecialData("Product Name 9", ""))
+    gridsWithoutDate.add(SpecialData("Product Name 10", ""))
+    shops.add(
+        Special(
+            "New Shows", gridsWithoutDate, SpecialType.ViewPagerItem
+        )
+    )
+    shops.add(
+        Special(
+            "Podcasts", grids, SpecialType.ViewPagerWithDateAndTitleItem
+        )
+    )
+    shops.add(
+        Special(
+            "Trending", grids, SpecialType.ViewPagerItem
+        )
+    )
+    shops.add(
+        Special(
+            "Faith", grids, SpecialType.ViewPagerItem
+        )
+    )
+    shops.add(
+        Special(
+            "Entertainment", grids, SpecialType.ViewPagerItem
+        )
+    )
+    shops.add(
+        Special(
+            "Talk Show", grids, SpecialType.ViewPagerItem
+        )
+    )
+    shops.add(
+        Special(
+            "Self Development", gridsWithoutDate, SpecialType.ViewPagerItem
+        )
+    )
+    shops.add(
+        Special(
+            "Drama", grids, SpecialType.ViewPagerItem
+        )
+    )
+    shops.add(
+        Special(
+            "Family Matters", gridsWithoutDate, SpecialType.ViewPagerItem
+        )
+    )
+    shops.add(
+        Special(
+            "cooking", gridsWithoutDate, SpecialType.ViewPagerItem
+        )
+    )
+    shops.add(
+        Special(
+            "Business & Finance", gridsWithoutDate, SpecialType.ViewPagerItem
+        )
+    )
+
+    return shops
 }

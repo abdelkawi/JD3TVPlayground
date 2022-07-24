@@ -38,9 +38,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
-import com.genwin.jd3tv.R.drawable
 import com.genwin.jd3tv.R.drawable.*
-import com.genwin.jd3tv.R.font
 import com.genwin.jd3tv.R.font.*
 import com.genwin.jd3tv.common.SharedPreference
 import com.genwin.jd3tv.screens.home.domain.entity.BottomTab
@@ -220,10 +218,18 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
             }
         }
         composable("shows") {
-            Category("Shows", sharedPreference = sharedPreference,homeNavController)
+            Category(
+                "Shows",
+                sharedPreference = sharedPreference,
+                navController = homeNavController
+            )
         }
         composable("movies") {
-            Category("Movies", sharedPreference = sharedPreference,homeNavController)
+            Category(
+                "Movies",
+                sharedPreference = sharedPreference,
+                navController = homeNavController
+            )
         }
     }
 
@@ -725,6 +731,7 @@ fun Banner(sharedPreference: SharedPreference, homeNavController: NavHostControl
 
     }
 }
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Contest(section: HomeSection) {
