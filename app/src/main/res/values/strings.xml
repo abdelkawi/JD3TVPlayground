@@ -33,5 +33,9 @@
     <string name="shop">Shop</string>
     <string name="back">Back</string>
     <string name="search">Search</string>
+    <!-- specials screen-->
     <string name="special">Specials</string>
+    <string name="day">Day</string>
+    <string name="hour">Hrs</string>
+    <string name="min">Min</string>
 </resources>
