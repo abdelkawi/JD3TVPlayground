@@ -1,9 +1,6 @@
 package com.genwin.jd3tv.screens.home.presentation
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.GridItemSpan
@@ -42,6 +39,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.SharedPreference
@@ -52,7 +50,7 @@ import java.time.format.TextStyle
 //
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Search(sharedPreference: SharedPreference) {
+fun Search(sharedPreference: SharedPreference,navController: NavController) {
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxSize()
@@ -68,7 +66,7 @@ fun Search(sharedPreference: SharedPreference) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-            ) { SearchHeader(sharedPreference = sharedPreference) }
+            ) { SearchHeader(sharedPreference = sharedPreference,navController) }
         }
         item(span = {
             GridItemSpan(2)
@@ -156,7 +154,7 @@ fun searchBar() {
 }
 
 @Composable
-fun SearchHeader(sharedPreference: SharedPreference) {
+fun SearchHeader(sharedPreference: SharedPreference,navController: NavController) {
     Row(modifier = Modifier.fillMaxSize()) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (logo, back, profileImg) = createRefs()
@@ -169,7 +167,7 @@ fun SearchHeader(sharedPreference: SharedPreference) {
                     .constrainAs(logo) {
                         top.linkTo(parent.top, margin = 6.dp)
                         start.linkTo(parent.start, margin = 6.dp)
-                    }
+                    }.clickable { navController.popBackStack() }
             )
             if (sharedPreference.getPhoto().isNotEmpty())
                 AsyncImage(

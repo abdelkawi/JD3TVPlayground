@@ -117,7 +117,7 @@ class MainActivity : ComponentActivity() {
                                             },
                                             content = {
                                                 CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Ltr) {
-                                                    Main(
+                                                    Main2(
                                                         sections = sections,
                                                         tabs = tabs.map { BottomTab(it, it) }
                                                             .subList(1, 6),

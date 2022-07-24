@@ -1,5 +1,8 @@
 package com.genwin.jd3tv.screens.home.presentation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,9 +12,11 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +25,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
@@ -32,6 +39,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.R.drawable
@@ -78,7 +87,7 @@ fun Main(
                     }
                     "events" -> {
                         composable(it.route) {
-                            Event( sharedPreference = sharedPreference)
+                            Event(sharedPreference = sharedPreference)
                         }
                     }
                     "experiences" -> {
@@ -93,7 +102,9 @@ fun Main(
                     }
                     "coin" -> {
                         composable(it.route) {
-                            Search(sharedPreference = sharedPreference)
+                            SpecialsScreen(
+                                sharedPreference = sharedPreference
+                            )
                         }
                     }
                     else -> {
@@ -101,126 +112,203 @@ fun Main(
                             Text("this is another one ", fontSize = 30.sp, color = Color.White)
                         }
                     }
+
                 }
 
             }
             composable("search") {
-                Search(sharedPreference = sharedPreference)
-            }
-
-        }
-//        if (sharedPreference.getPhoto().isNotEmpty())
-//            AsyncImage(
-//                model = sharedPreference.getPhoto(),
-//                contentDescription = null,
-//                modifier = Modifier
-//                    .clip(CircleShape)
-//                    .width(28.dp)
-//                    .height(28.dp)
-//                    .clip(CircleShape)
-//                    .background(Color.White)
-//                    .constrainAs(profileImg) {
-//                        top.linkTo(parent.top, margin = 16.dp)
-//                        end.linkTo(parent.end, margin = 16.dp)
-//                    }
-//            ) else {
-//            Box(
-//                contentAlignment = Alignment.Center,
-//                modifier = Modifier
-//                    .background(colorResource(id = R.color.persian_blue), shape = CircleShape)
-//                    .height(28.dp)
-//                    .width(28.dp)
-//                    .border(1.dp, Color.White, CircleShape)
-//                    .constrainAs(profileImg) {
-//                        top.linkTo(parent.top, margin = 16.dp)
-//                        end.linkTo(parent.end, margin = 16.dp)
-//                    }
-//            ) {
-//                Text(
-//                    text = sharedPreference.getNickName(),
-//                    fontSize = 14.sp,
-//                    textAlign = TextAlign.Center,
-//                    color = Color.White,
-//                    fontFamily = FontFamily(Font(R.font.poppins_semibold))
-//                )
-//            }
-//        }
-
-        BottomNavigation(backgroundColor = Color(0xff1f212a), modifier = Modifier
-            .constrainAs(bottomBar) {
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-            .wrapContentHeight()) {
-            val backStackEntry by navController.currentBackStackEntryAsState()
-            val currentRoute = backStackEntry?.destination?.route
-            tabs.map { BottomTab(it.title, it.route) }.forEach {
-                var isSelected = currentRoute == it.route
-                BottomNavigationItem(selected = isSelected, onClick = {
-                    navController.navigate(it.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-                    icon = {
-                        Icon(
-                            painterResource(id = R.drawable.ic_bottom_bar),
-                            contentDescription = ""
-                        )
-                    },
-                    selectedContentColor = colorResource(id = R.color.psychedelic_purple),
-                    unselectedContentColor = Color.White,
-                    label = {
-                        Text(
-                            text = it.title
-                        )
-                    }
+                Search(
+                    sharedPreference = sharedPreference,
+                    navController = navController
                 )
             }
+
         }
+
+//        BottomBar(tabs = tabs, navController = navController)
     }
 
 }
 
 @Composable
-fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .background(Color.Black)
-            .wrapContentHeight()
-    ) {
-        Banner(sharedPreference)
-        sections.forEach { section ->
-            Text(
-                text = section.title,
-                color = Color.White,
-                fontFamily = FontFamily(Font(font.poppins_semibold)),
-                fontSize = 20.sp,
-                modifier = Modifier.padding(top = 19.dp, start = 16.dp)
-            )
-            when (section.type) {
-                Card -> {
-                    viewPagerWithDots(section = section)
+fun Main2(
+    sections: List<HomeSection>,
+    tabs: List<BottomTab>,
+    sharedPreference: SharedPreference,
+    navController: NavHostController
+) {
+    val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val (content, bottomBar) = createRefs()
+        NavHost(
+            navController = navController,
+            startDestination = "home",
+            modifier = Modifier
+                .constrainAs(content) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(bottomBar.top)
+                    height = Dimension.fillToConstraints
                 }
-                CardWithTitle -> viewPagerWithDots(section = section)
-                ViewPager -> {
+        ) {
+            tabs.forEach {
+                when (it.route) {
+                    "home" -> {
+                        composable(it.route) {
+                            Home(sections, sharedPreference)
+                            bottomBarState.value = true
+                        }
+                    }
+                    "events" -> {
+                        composable(it.route) {
+                            Event(sharedPreference = sharedPreference)
+                            bottomBarState.value = true
+                        }
+                    }
+                    "experiences" -> {
+                        composable(it.route) {
+                            Host(10, "Hosts", sharedPreference = sharedPreference)
+                            bottomBarState.value = true
+                        }
+                    }
+                    "merch" -> {
+                        composable(it.route) {
+                            Shop(sharedPreference = sharedPreference)
+                            bottomBarState.value = true
+                        }
+                    }
+                    "coin" -> {
+                        composable(it.route) {
+                            SpecialsScreen(
+                                sharedPreference = sharedPreference
+                            )
+                            bottomBarState.value = true
+                        }
+                    }
+                    else -> {
+                        composable(it.route) {
+                            Text("this is another one ", fontSize = 30.sp, color = Color.White)
+                            bottomBarState.value = true
+                        }
+                    }
 
                 }
-                Contest -> {
-                    viewPagerWithDots(section = section)
+
+            }
+
+            composable("search") {
+                Search(
+                    sharedPreference = sharedPreference,
+                    navController = navController
+                )
+                bottomBarState.value = false
+            }
+
+        }
+        AnimatedVisibility(
+            visible = bottomBarState.value,
+            enter = slideInVertically(initialOffsetY = { it }),
+            exit = slideOutVertically(targetOffsetY = { it }),
+            modifier = Modifier
+                .constrainAs(bottomBar) {
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
                 }
-                else -> {
-                    viewPagerWithDots(section = section)
+                .wrapContentHeight(),
+            content = {
+                BottomNavigation(
+                    backgroundColor = Color(0xff1f212a)
+                ) {
+                    val backStackEntry by navController.currentBackStackEntryAsState()
+                    val currentRoute = backStackEntry?.destination?.route
+                    tabs.map { BottomTab(it.title, it.route) }.forEach {
+                        var isSelected = currentRoute == it.route
+                        BottomNavigationItem(selected = isSelected, onClick = {
+                            navController.navigate(it.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                            icon = {
+                                Icon(
+                                    painterResource(id = R.drawable.ic_bottom_bar),
+                                    contentDescription = ""
+                                )
+                            },
+                            selectedContentColor = colorResource(id = R.color.psychedelic_purple),
+                            unselectedContentColor = Color.White,
+                            label = {
+                                Text(
+                                    text = it.title
+                                )
+                            }
+                        )
+                    }
+                }
+            }
+        )
+
+    }
+
+}
+
+
+@Composable
+fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
+    val homeNavController = rememberNavController()
+    NavHost(
+        navController = homeNavController,
+        startDestination = "main"
+    ) {
+        composable("main") {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .background(Color.Black)
+                    .wrapContentHeight()
+            ) {
+                Banner(sharedPreference, homeNavController)
+                sections.forEach { section ->
+                    Text(
+                        text = section.title,
+                        color = Color.White,
+                        fontFamily = FontFamily(Font(font.poppins_semibold)),
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(top = 19.dp, start = 16.dp)
+                    )
+                    when (section.type) {
+                        Card -> {
+                            viewPagerWithDots(section = section)
+                        }
+                        CardWithTitle -> viewPagerWithDots(section = section)
+                        ViewPager -> {
+
+                        }
+                        Contest -> {
+                            viewPagerWithDots(section = section)
+                        }
+                        else -> {
+                            viewPagerWithDots(section = section)
+                        }
+                    }
                 }
             }
         }
+        composable("shows") {
+            Shows()
+        }
+        composable("movies") {
+            Movies()
+        }
     }
+
 }
+
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -533,7 +621,7 @@ fun Header(sharedPreference: SharedPreference) {
 }
 
 @Composable
-fun HomeHeader(sharedPreference: SharedPreference) {
+fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostController) {
     var expanded by remember { mutableStateOf(false) }
     Row() {
         ConstraintLayout() {
@@ -600,11 +688,16 @@ fun HomeHeader(sharedPreference: SharedPreference) {
                 end.linkTo(parent.end)
             }) {
                 val (text1, text2, arrow1, arrow2) = createRefs()
-                Text(
-                    text = stringResource(id = R.string.shows),
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                ClickableText(
+                    text = AnnotatedString(stringResource(id = R.string.shows)),
+                    onClick = {
+                        homeNavController.navigate("shows")
+                    },
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_medium))
+                    ),
                     modifier = Modifier.constrainAs(text1) {
                         top.linkTo(parent.top)
                         start.linkTo(parent.start)
@@ -621,11 +714,16 @@ fun HomeHeader(sharedPreference: SharedPreference) {
                     }
                 )
 
-                Text(
-                    text = stringResource(id = R.string.movies),
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                ClickableText(
+                    text = AnnotatedString(stringResource(id = R.string.movies)),
+                    onClick = {
+                        homeNavController.navigate("movies")
+                    },
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins_medium))
+                    ),
                     modifier = Modifier.constrainAs(text2) {
                         top.linkTo(parent.top)
                         start.linkTo(arrow1.end, margin = 30.dp)
@@ -664,7 +762,7 @@ fun HomeHeader(sharedPreference: SharedPreference) {
 }
 
 @Composable
-fun Banner(sharedPreference: SharedPreference) {
+fun Banner(sharedPreference: SharedPreference, homeNavController: NavHostController) {
     ConstraintLayout() {
         val (image, dataContainer, gradient) = createRefs()
 //        AsyncImage(modifier = Modifier.constrainAs(image) {
@@ -728,7 +826,7 @@ fun Banner(sharedPreference: SharedPreference) {
                 )
             }
         }
-        HomeHeader(sharedPreference = sharedPreference)
+        HomeHeader(sharedPreference = sharedPreference, homeNavController)
 
     }
 }
