@@ -39,7 +39,9 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.R.drawable
+import com.genwin.jd3tv.R.drawable.*
 import com.genwin.jd3tv.R.font
+import com.genwin.jd3tv.R.font.*
 import com.genwin.jd3tv.common.SharedPreference
 import com.genwin.jd3tv.screens.home.domain.entity.BottomTab
 import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
@@ -142,7 +144,7 @@ fun Main(
                     val backStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = backStackEntry?.destination?.route
                     tabs.map { BottomTab(it.title, it.route) }.forEach {
-                        var isSelected = currentRoute == it.route
+                        val isSelected = currentRoute == it.route
                         BottomNavigationItem(selected = isSelected, onClick = {
                             navController.navigate(it.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
@@ -154,7 +156,7 @@ fun Main(
                         },
                             icon = {
                                 Icon(
-                                    painterResource(id = R.drawable.ic_bottom_bar),
+                                    painterResource(id = ic_bottom_bar),
                                     contentDescription = ""
                                 )
                             },
@@ -195,7 +197,7 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
                     Text(
                         text = section.title,
                         color = Color.White,
-                        fontFamily = FontFamily(Font(font.poppins_semibold)),
+                        fontFamily = FontFamily(Font(poppins_semibold)),
                         fontSize = 20.sp,
                         modifier = Modifier.padding(top = 19.dp, start = 16.dp)
                     )
@@ -218,10 +220,10 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
             }
         }
         composable("shows") {
-            Shows()
+            Category("Shows", sharedPreference = sharedPreference,homeNavController)
         }
         composable("movies") {
-            Movies()
+            Category("Movies", sharedPreference = sharedPreference,homeNavController)
         }
     }
 
@@ -255,8 +257,8 @@ fun viewPagerWithDots(section: HomeSection) {
                     AsyncImage(
                         model = item.mainPhoto?.fileUrl ?: "",
                         contentDescription = "",
-                        placeholder = painterResource(drawable.image_1),
-                        error = painterResource(drawable.image_1),
+                        placeholder = painterResource(image_1),
+                        error = painterResource(image_1),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -272,7 +274,7 @@ fun viewPagerWithDots(section: HomeSection) {
                         text = item.title ?: "This is title ",
                         fontSize = 16.sp,
                         color = Color.White,
-                        fontFamily = FontFamily(Font(font.poppins_regular)),
+                        fontFamily = FontFamily(Font(poppins_regular)),
                         modifier = Modifier.constrainAs(title) {
                             top.linkTo(image.bottom, margin = 16.dp)
                             start.linkTo(image.start)
@@ -282,7 +284,7 @@ fun viewPagerWithDots(section: HomeSection) {
                         text = "Contest",
                         fontSize = 16.sp,
                         color = Color.White,
-                        fontFamily = FontFamily(Font(font.poppins_semibold)),
+                        fontFamily = FontFamily(Font(poppins_semibold)),
                         modifier = Modifier
                             .constrainAs(type) {
                                 bottom.linkTo(image.bottom, margin = 16.dp)
@@ -375,7 +377,7 @@ fun Profile(
                     text = nickName,
                     fontSize = 12.sp,
                     textAlign = TextAlign.Center,
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold))
+                    fontFamily = FontFamily(Font(poppins_semibold))
                 )
             }
         } else
@@ -390,63 +392,63 @@ fun Profile(
         Spacer(modifier = Modifier.height(7.dp))
         Text(
             text = fullName,
-            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+            fontFamily = FontFamily(Font(poppins_semibold)),
             fontSize = 18.sp,
             color = Color.White
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = email,
-            fontFamily = FontFamily(Font(R.font.poppins_regular)),
+            fontFamily = FontFamily(Font(poppins_regular)),
             fontSize = 14.sp,
             color = Color.White
         )
         Spacer(modifier = Modifier.height(45.dp))
         Text(
             text = stringResource(R.string.library),
-            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+            fontFamily = FontFamily(Font(poppins_medium)),
             fontSize = 16.sp,
             color = colorResource(R.color.snow)
         )
         Spacer(modifier = Modifier.height(35.dp))
         Text(
             text = stringResource(id = R.string.orders),
-            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+            fontFamily = FontFamily(Font(poppins_medium)),
             fontSize = 16.sp,
             color = colorResource(R.color.snow)
         )
         Spacer(modifier = Modifier.height(35.dp))
         Text(
             text = stringResource(id = R.string.transaction),
-            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+            fontFamily = FontFamily(Font(poppins_medium)),
             fontSize = 16.sp,
             color = colorResource(R.color.snow)
         )
         Spacer(modifier = Modifier.height(35.dp))
         Text(
             text = stringResource(id = R.string.membership),
-            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+            fontFamily = FontFamily(Font(poppins_medium)),
             fontSize = 16.sp,
             color = colorResource(R.color.snow)
         )
         Spacer(modifier = Modifier.height(35.dp))
         Text(
             text = stringResource(id = R.string.account_info),
-            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+            fontFamily = FontFamily(Font(poppins_medium)),
             fontSize = 16.sp,
             color = colorResource(R.color.snow)
         )
         Spacer(modifier = Modifier.height(35.dp))
         Text(
             text = stringResource(id = R.string.payment_method),
-            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+            fontFamily = FontFamily(Font(poppins_medium)),
             fontSize = 16.sp,
             color = colorResource(R.color.snow)
         )
         Spacer(modifier = Modifier.height(35.dp))
         Text(
             text = stringResource(id = R.string.sign_out),
-            fontFamily = FontFamily(Font(R.font.poppins_medium)),
+            fontFamily = FontFamily(Font(poppins_medium)),
             fontSize = 16.sp,
             color = colorResource(R.color.snow),
             modifier = Modifier.clickable { sharedPreference.signOut() })
@@ -475,7 +477,7 @@ fun ErrorView(errorTxt: String, reloadAction: () -> Unit) {
             },
             color = Color.Black,
             fontSize = 14.sp,
-            fontFamily = FontFamily(Font(R.font.poppins_regular))
+            fontFamily = FontFamily(Font(poppins_regular))
         )
 
 
@@ -488,7 +490,7 @@ fun Header(sharedPreference: SharedPreference) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (logo, profileImg) = createRefs()
             Image(
-                painter = painterResource(id = R.drawable.ic_jd_tv_logo),
+                painter = painterResource(id = ic_jd_tv_logo),
                 contentDescription = "",
                 contentScale = ContentScale.Inside,
                 alignment = Alignment.TopStart,
@@ -530,7 +532,7 @@ fun Header(sharedPreference: SharedPreference) {
                         fontSize = 14.sp,
                         textAlign = TextAlign.Center,
                         color = Color.White,
-                        fontFamily = FontFamily(Font(R.font.poppins_semibold))
+                        fontFamily = FontFamily(Font(poppins_semibold))
                     )
                 }
             }
@@ -540,12 +542,11 @@ fun Header(sharedPreference: SharedPreference) {
 
 @Composable
 fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostController) {
-    var expanded by remember { mutableStateOf(false) }
     Row() {
         ConstraintLayout() {
             val (logo, profileImg, gradient, container) = createRefs()
             Image(
-                painter = painterResource(id = R.drawable.top_bar_gradient),
+                painter = painterResource(id = top_bar_gradient),
                 contentDescription = "",
                 modifier = Modifier.constrainAs(gradient) {
                     start.linkTo(parent.start)
@@ -553,7 +554,7 @@ fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostCon
                     top.linkTo(parent.top)
                 })
             Image(
-                painter = painterResource(id = R.drawable.ic_jd_tv_logo),
+                painter = painterResource(id = ic_jd_tv_logo),
                 contentDescription = "",
                 contentScale = ContentScale.Inside,
                 alignment = Alignment.TopStart,
@@ -595,7 +596,7 @@ fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostCon
                         fontSize = 14.sp,
                         textAlign = TextAlign.Center,
                         color = Color.White,
-                        fontFamily = FontFamily(Font(R.font.poppins_semibold))
+                        fontFamily = FontFamily(Font(poppins_semibold))
                     )
                 }
             }
@@ -614,7 +615,7 @@ fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostCon
                     style = TextStyle(
                         color = Color.White,
                         fontSize = 18.sp,
-                        fontFamily = FontFamily(Font(R.font.poppins_medium))
+                        fontFamily = FontFamily(Font(poppins_medium))
                     ),
                     modifier = Modifier.constrainAs(text1) {
                         top.linkTo(parent.top)
@@ -623,7 +624,7 @@ fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostCon
                 )
 
                 Image(
-                    painter = painterResource(R.drawable.ic_arrow_dropdown),
+                    painter = painterResource(ic_arrow_dropdown),
                     contentDescription = "", alignment = Alignment.Center,
                     modifier = Modifier.constrainAs(arrow1) {
                         top.linkTo(text1.top)
@@ -640,7 +641,7 @@ fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostCon
                     style = TextStyle(
                         color = Color.White,
                         fontSize = 18.sp,
-                        fontFamily = FontFamily(Font(R.font.poppins_medium))
+                        fontFamily = FontFamily(Font(poppins_medium))
                     ),
                     modifier = Modifier.constrainAs(text2) {
                         top.linkTo(parent.top)
@@ -648,7 +649,7 @@ fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostCon
                     }
                 )
                 Image(
-                    painter = painterResource(R.drawable.ic_arrow_dropdown),
+                    painter = painterResource(ic_arrow_dropdown),
                     contentDescription = "", alignment = Alignment.Center,
                     modifier = Modifier.constrainAs(arrow2) {
                         top.linkTo(text2.top)
@@ -656,24 +657,6 @@ fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostCon
                         start.linkTo(text2.end, margin = 6.dp)
                     }
                 )
-
-
-//                IconButton( onClick = {expanded = true}){
-//                    Icon(painter = painterResource(R.drawable.ic_arrow_dropdown), contentDescription =""
-//                }
-//                DropdownMenu(
-//                    expanded = expanded,
-//                    onDismissRequest = {
-//                        expanded = false
-//                    }
-//                ) {
-//                    DropdownMenuItem(onClick = { expanded = false }) {
-//                        Text("item1")
-//                    }
-//                    DropdownMenuItem(onClick = { expanded = false }) {
-//                        Text("item2")
-//                    }
-//                }
             }
         }
     }
@@ -683,14 +666,8 @@ fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostCon
 fun Banner(sharedPreference: SharedPreference, homeNavController: NavHostController) {
     ConstraintLayout() {
         val (image, dataContainer, gradient) = createRefs()
-//        AsyncImage(modifier = Modifier.constrainAs(image) {
-//            top.linkTo(parent.top)
-//            start.linkTo(parent.start)
-//            end.linkTo(parent.end)
-//        }, model = painterResource(id = R.drawable.movie_poster_), contentDescription = null)
-
         Image(
-            painter = painterResource(id = R.drawable.movie_poster_),
+            painter = painterResource(id = movie_poster_),
             contentDescription = "",
             modifier = Modifier
                 .constrainAs(image) {
@@ -700,7 +677,7 @@ fun Banner(sharedPreference: SharedPreference, homeNavController: NavHostControl
                 }
         )
         Image(
-            painter = painterResource(id = R.drawable.ic_gradient_transparent),
+            painter = painterResource(id = ic_gradient_transparent),
             contentDescription = "",
             modifier = Modifier.constrainAs(gradient) {
                 start.linkTo(parent.start)
@@ -722,17 +699,17 @@ fun Banner(sharedPreference: SharedPreference, homeNavController: NavHostControl
                 text = "Walk Of Fame",
                 fontSize = 40.sp,
                 color = Color.White,
-                fontFamily = FontFamily(Font(R.font.cooper_std_black))
+                fontFamily = FontFamily(Font(cooper_std_black))
             )
             Text(
                 text = "Drama * Romance",
                 fontSize = 18.sp,
                 color = Color.White,
-                fontFamily = FontFamily(Font(R.font.poppins_medium))
+                fontFamily = FontFamily(Font(poppins_medium))
             )
             IconButton(onClick = { }) {
                 Image(
-                    painter = painterResource(R.drawable.ic_play_button),
+                    painter = painterResource(ic_play_button),
                     contentDescription = "",
                     Modifier.background(color = colorResource(id = android.R.color.transparent))
                 )
@@ -740,7 +717,7 @@ fun Banner(sharedPreference: SharedPreference, homeNavController: NavHostControl
                     text = "Play",
                     color = Color.White,
                     fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold))
+                    fontFamily = FontFamily(Font(poppins_semibold))
                 )
             }
         }
@@ -765,7 +742,7 @@ fun Contest(section: HomeSection) {
                 AsyncImage(
                     model = section.getItems()[page].mainPhoto?.fileUrl
                         ?: "",
-                    placeholder = painterResource(R.drawable.image_1),
+                    placeholder = painterResource(image_1),
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier
@@ -779,7 +756,7 @@ fun Contest(section: HomeSection) {
                     modifier = Modifier.fillMaxWidth(),
                     color = Color.White,
                     fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular))
+                    fontFamily = FontFamily(Font(poppins_regular))
                 )
             }
         }
@@ -794,9 +771,9 @@ fun CardsSection(section: HomeSection) {
             items(section.getItems()) {
                 AsyncImage(
                     model = it.mainPhoto?.fileUrl ?: "",
-                    placeholder = painterResource(R.drawable.image_1),
+                    placeholder = painterResource(image_1),
                     contentDescription = null,
-                    error = painterResource(R.drawable.image_1),
+                    error = painterResource(image_1),
                     modifier = Modifier
                         .height(180.dp)
                         .width(126.dp)
@@ -817,9 +794,9 @@ fun CardsWithTitleSection(section: HomeSection) {
             Column {
                 AsyncImage(
                     model = item.mainPhoto?.fileUrl ?: "",
-                    placeholder = painterResource(R.drawable.image_1),
+                    placeholder = painterResource(image_1),
                     contentDescription = null,
-                    error = painterResource(R.drawable.image_1),
+                    error = painterResource(image_1),
                     modifier = Modifier
                         .height(180.dp)
                         .width(126.dp)
@@ -831,7 +808,7 @@ fun CardsWithTitleSection(section: HomeSection) {
                     modifier = Modifier.padding(top = 14.dp),
                     color = Color.White,
                     fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular))
+                    fontFamily = FontFamily(Font(poppins_regular))
                 )
             }
             Spacer(modifier = Modifier.width(10.dp))
