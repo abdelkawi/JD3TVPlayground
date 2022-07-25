@@ -1,8 +1,6 @@
 package com.genwin.jd3tv.screens.hosts.presentation
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -14,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -29,18 +29,27 @@ import com.genwin.jd3tv.screens.home.presentation.Header
 @Composable
 fun Host(hostSize: Int, titleStr: String, sharedPreference: SharedPreference) {
     val numbers = (0..10).toList()
+
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.Black),
         columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(6.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
 
         ) {
         item(span = {
             GridItemSpan(2)
-        }) { Header(sharedPreference = sharedPreference) }
+        }) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp, start = 16.dp, end = 16.dp)
+            ) {
+                Header(sharedPreference = sharedPreference)
+            }
+        }
         item(span = {
             GridItemSpan(2)
         }) {
@@ -56,17 +65,21 @@ fun Host(hostSize: Int, titleStr: String, sharedPreference: SharedPreference) {
             )
         }
         items(numbers.size) {
-            Column {
+            Row(modifier = Modifier.padding(top = 14.dp, start = 5.dp, end = 5.dp)) {
                 HostCell("", "Host 1")
             }
         }
-    }
 
+    }
 }
 
 @Composable
 fun HostCell(image: String, hostName: String) {
-    Column() {//horizontalAlignment = Layout.Alignment.CenterHorizontally) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 5.dp, end = 5.dp)
+    ) {//horizontalAlignment = Layout.Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(R.drawable.ic_host), contentDescription = "",
             contentScale = ContentScale.Inside
@@ -77,6 +90,7 @@ fun HostCell(image: String, hostName: String) {
             color = Color.White,
             fontSize = 14.sp,
             fontFamily = FontFamily(Font(R.font.poppins_regular))
+
         )
 
     }

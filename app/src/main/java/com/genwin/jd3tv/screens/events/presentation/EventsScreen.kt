@@ -49,16 +49,17 @@ fun Event(sharedPreference: SharedPreference) {
             .fillMaxSize()
             .background(color = Color.Black),
         columns = GridCells.Fixed(2),
-        verticalArrangement = Arrangement.spacedBy(13.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
 
         ) {
-        item (span = {
+        item(span = {
             GridItemSpan(2)
         }) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(top = 6.dp, start = 16.dp, end = 16.dp)
             ) { Header(sharedPreference = sharedPreference) }
         }
         item(span = {
@@ -132,7 +133,10 @@ fun Event(sharedPreference: SharedPreference) {
                 text = stringResource(id = R.string.event_calender),
                 color = Color.White,
                 fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 19.dp, start = 30.dp, end = 30.dp)
             )
         }
         items(2) {
@@ -149,7 +153,11 @@ fun Event(sharedPreference: SharedPreference) {
                 text = stringResource(id = R.string.previous_calender),
                 color = Color.White,
                 fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 19.dp, start = 30.dp, end = 30.dp)
+
             )
         }
         items(2) {
@@ -166,45 +174,47 @@ fun Event(sharedPreference: SharedPreference) {
 fun EventItem(
     itemUrl: String, dateStr: String, titleStr: String
 ) {
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (img1, title1, date1) = createRefs()
-        AsyncImage(
-            model = itemUrl,
-            contentDescription = "",
-            placeholder = painterResource(R.drawable.image_1),
-            error = painterResource(R.drawable.image_1),
-            contentScale = ContentScale.Crop,
+        ConstraintLayout(
             modifier = Modifier
-                .height(246.dp)
-                .width(152.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .constrainAs(img1) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
+                .fillMaxSize()
+        ) {
+            val (img1, title1, date1) = createRefs()
+            AsyncImage(
+                model = itemUrl,
+                contentDescription = "",
+                placeholder = painterResource(R.drawable.image_1),
+                error = painterResource(R.drawable.image_1),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .height(246.dp)
+                    .width(152.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .constrainAs(img1) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    })
+            Text(
+                text = dateStr,
+                color = Color.White,
+                fontSize = 12.sp,
+                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                modifier = Modifier.constrainAs(date1) {
+                    top.linkTo(img1.bottom, margin = 10.dp)
+                    start.linkTo(img1.start)
+
                 })
-        Text(
-            text = dateStr,
-            color = Color.White,
-            fontSize = 12.sp,
-            fontFamily = FontFamily(Font(R.font.poppins_regular)),
-            modifier = Modifier.constrainAs(date1) {
-                top.linkTo(img1.bottom, margin = 10.dp)
-                start.linkTo(img1.start)
 
-            })
+            Text(
+                text = titleStr,
+                color = Color.White,
+                fontSize = 14.sp,
+                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                modifier = Modifier.constrainAs(title1) {
+                    top.linkTo(date1.bottom, margin = 2.dp)
+                    start.linkTo(img1.start)
 
-        Text(
-            text = titleStr,
-            color = Color.White,
-            fontSize = 14.sp,
-            fontFamily = FontFamily(Font(R.font.poppins_regular)),
-            modifier = Modifier.constrainAs(title1) {
-                top.linkTo(date1.bottom, margin = 2.dp)
-                start.linkTo(img1.start)
-
-            })
-    }
-
+                })
+        }
 }
 
 @OptIn(ExperimentalPagerApi::class)

@@ -18,6 +18,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -81,7 +84,7 @@ fun Shop(sharedPreference: SharedPreference) {
         }) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().padding(top=6.dp, start = 16.dp,end=16.dp)
             ) { Header(sharedPreference = sharedPreference) }
         }
         item(span = {
@@ -120,7 +123,7 @@ fun Shop(sharedPreference: SharedPreference) {
                 }
                 ShopType.Grid -> {
                     items(numbers.size) {
-                        Column {
+                        Column (modifier = Modifier.padding(top= 20.dp)){
                             GridItemShop()
                         }
                     }
@@ -180,7 +183,7 @@ fun CollectionShop(size: Int) {
             fontFamily = FontFamily(Font(R.font.poppins_semibold)),
             modifier = Modifier.constrainAs(title) {
                 start.linkTo(parent.start)
-                top.linkTo(parent.top)
+                top.linkTo(parent.top,margin=13.dp)
             })
         HorizontalPager(
             state = state,
@@ -221,6 +224,7 @@ fun CollectionShop(size: Int) {
     }
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun ViewPagerItem() {
     ConstraintLayout(modifier = Modifier.padding(8.dp)) {
@@ -230,7 +234,6 @@ fun ViewPagerItem() {
             contentScale = ContentScale.Inside,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp)
                 .clip(RoundedCornerShape(5.dp))
                 .constrainAs(image) {
                     top.linkTo(parent.top)
@@ -247,7 +250,8 @@ fun ViewPagerItem() {
             modifier = Modifier.constrainAs(title) {
                 top.linkTo(image.bottom, margin = 7.dp)
                 start.linkTo(image.start)
-            }
+            },
+            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
         )
         Text(
             text = "Price",
@@ -257,12 +261,14 @@ fun ViewPagerItem() {
             modifier = Modifier
                 .constrainAs(type) {
                     top.linkTo(title.bottom, margin = 3.dp)
-                }
+                },
+            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
 
         )
     }
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun GridItemShop() {
     Column(modifier = Modifier.background(color = Color.Black)) {//horizontalAlignment = Layout.Alignment.CenterHorizontally) {
@@ -275,14 +281,16 @@ fun GridItemShop() {
             text = "Product Name",
             color = Color.White,
             fontSize = 14.sp,
-            fontFamily = FontFamily(Font(R.font.poppins_regular))
+            fontFamily = FontFamily(Font(R.font.poppins_regular)),
+            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
         )
-        Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = "Price",
             color = Color.White,
             fontSize = 14.sp,
-            fontFamily = FontFamily(Font(R.font.poppins_regular))
+            fontFamily = FontFamily(Font(R.font.poppins_regular)),
+            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+
         )
 
     }
