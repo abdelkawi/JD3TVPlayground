@@ -1,4 +1,4 @@
-package com.genwin.jd3tv.screens.home.presentation
+package com.genwin.jd3tv.screens.specials.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,6 +18,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -26,6 +29,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.SharedPreference
+import com.genwin.jd3tv.screens.home.presentation.DotsIndicator
+import com.genwin.jd3tv.screens.home.presentation.Header
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -39,7 +44,8 @@ fun SpecialsScreen(sharedPreference: SharedPreference) {
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .background(Color.Black)
-            .wrapContentHeight().padding(top = 19.dp)
+            .wrapContentHeight()
+            .padding(top = 6.dp)
     ) {
         Header(sharedPreference = sharedPreference)
         Text(
@@ -51,6 +57,7 @@ fun SpecialsScreen(sharedPreference: SharedPreference) {
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(Alignment.Center)
+                .padding(top = 6.dp)
         )
         getSpecials().forEach {
             when (it.type) {
@@ -61,7 +68,7 @@ fun SpecialsScreen(sharedPreference: SharedPreference) {
                     viewPagerItem(it.title, it.gridData, hasDetails = true, isSmall = false)
                 }
                 SpecialType.HorizontalScrollItem -> {
-                    viewPagerItem(it.title, it.gridData,  hasDetails = false, isSmall = true)
+                    viewPagerItem(it.title, it.gridData, hasDetails = false, isSmall = true)
                 }
                 SpecialType.ViewPagerWithTitleItem -> {
                     ViewPagerItemDesign(it.title, it.gridData)
@@ -154,7 +161,10 @@ fun ViewPagerItemDesign(titleStr: String, data: List<SpecialData>) {
 
     val state = rememberPagerState()
     Surface(
-        color = colorResource(id = R.color.dark_jungle_green_50)
+        color = colorResource(id = R.color.dark_jungle_green_50),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp)
     ) {
         ConstraintLayout {
             val (mainTitle, viewPager, dots) = createRefs()
@@ -165,8 +175,8 @@ fun ViewPagerItemDesign(titleStr: String, data: List<SpecialData>) {
                     fontSize = 20.sp,
                     fontFamily = FontFamily(Font(R.font.poppins_semibold)),
                     modifier = Modifier.constrainAs(mainTitle) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
+                        top.linkTo(parent.top, margin = 9.dp)
+                        start.linkTo(parent.start, margin = 16.dp)
                     }
                 )
             }
@@ -178,13 +188,17 @@ fun ViewPagerItemDesign(titleStr: String, data: List<SpecialData>) {
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .constrainAs(viewPager) {
-                        top.linkTo(mainTitle.bottom)
+                        top.linkTo(mainTitle.bottom, margin = 9.dp)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
             ) { page ->
                 val item = data[page]
-                ConstraintLayout(modifier = Modifier.padding(8.dp)) {
+                ConstraintLayout(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 9.dp)
+                ) {
                     val (image, description, dateRF, type) = createRefs()
                     AsyncImage(
                         model = "",
@@ -197,7 +211,10 @@ fun ViewPagerItemDesign(titleStr: String, data: List<SpecialData>) {
                             .height(300.dp)
                             .clip(RoundedCornerShape(5.dp))
                             .constrainAs(image) {
-                                top.linkTo(parent.top)
+                                top.linkTo(
+                                    parent.top,
+                                    margin = if (titleStr.isNotEmpty()) 9.dp else 7.dp
+                                )
                                 start.linkTo(parent.start)
                                 end.linkTo(parent.end)
                             })
@@ -215,13 +232,14 @@ fun ViewPagerItemDesign(titleStr: String, data: List<SpecialData>) {
                     }
 
                     Text(
-                        text = item.title ?: "This is title ",
+                        text = item.title,
                         fontSize = 16.sp,
                         color = Color.White,
                         fontFamily = FontFamily(Font(R.font.poppins_regular)),
                         modifier = Modifier.constrainAs(description) {
-                            top.linkTo(dateRF.bottom, margin = 14.dp)
-                            start.linkTo(image.start)
+                            top.linkTo(dateRF.bottom, margin = 11.dp)
+                            start.linkTo(parent.start)
+                            if (item.date.isNotEmpty()) end.linkTo(parent.end)
                         }
                     )
                     Text(
@@ -242,7 +260,7 @@ fun ViewPagerItemDesign(titleStr: String, data: List<SpecialData>) {
                 totalDots = data.size,
                 selectedIndex = state.currentPage,
                 modifier = Modifier.constrainAs(dots) {
-                    top.linkTo(viewPager.bottom, margin = 26.dp)
+                    top.linkTo(viewPager.bottom, margin = 24.dp)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom, margin = 20.dp)
@@ -252,6 +270,7 @@ fun ViewPagerItemDesign(titleStr: String, data: List<SpecialData>) {
     }
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun DateDesign(days: String, hours: String, minutes: String) {
     Row(
@@ -264,57 +283,68 @@ fun DateDesign(days: String, hours: String, minutes: String) {
                 text = days,
                 fontSize = 24.sp,
                 color = Color.White,
-                fontFamily = FontFamily(Font(R.font.poppins_medium))
+                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
             )
             Text(
                 text = stringResource(id = R.string.day),
                 fontSize = 12.sp,
                 color = Color.White,
-                fontFamily = FontFamily(Font(R.font.poppins_medium))
+                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+
             )
         }
-        Spacer(modifier = Modifier.padding(19.dp))
-        Text(
-            text = ":",
-            fontSize = 20.sp,
-            color = Color.White,
-            fontFamily = FontFamily(Font(R.font.poppins_semibold))
-        )
-        Spacer(modifier = Modifier.padding(19.dp))
-        Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
-            Text(
-                text = hours,
-                fontSize = 24.sp,
-                color = Color.White,
-                fontFamily = FontFamily(Font(R.font.poppins_medium))
-            )
-            Text(
-                text = stringResource(id = R.string.hour),
-                fontSize = 12.sp,
-                color = Color.White,
-                fontFamily = FontFamily(Font(R.font.poppins_medium))
-            )
-        }
-        Spacer(modifier = Modifier.padding(19.dp))
+        Spacer(modifier = Modifier.padding(start = 19.dp))
         Text(
             text = ":",
             fontSize = 20.sp,
             color = Color.White,
             fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+
         )
-        Spacer(modifier = Modifier.padding(19.dp))
+        Spacer(modifier = Modifier.padding(start = 19.dp))
+        Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
+            Text(
+                text = hours,
+                fontSize = 24.sp,
+                color = Color.White,
+                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+
+            )
+            Text(
+                text = stringResource(id = R.string.hour),
+                fontSize = 12.sp,
+                color = Color.White,
+                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+            )
+        }
+        Spacer(modifier = Modifier.padding(start = 19.dp))
+        Text(
+            text = ":",
+            fontSize = 20.sp,
+            color = Color.White,
+            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+        )
+        Spacer(modifier = Modifier.padding(start = 19.dp))
         Column() {
             Text(
                 text = minutes,
                 fontSize = 24.sp,
                 color = Color.White,
-                fontFamily = FontFamily(Font(R.font.poppins_medium))
+                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
             )
             Text(
                 text = stringResource(id = R.string.min),
                 fontSize = 12.sp,
                 color = Color.White,
-                fontFamily = FontFamily(Font(R.font.poppins_medium))
+                fontFamily = FontFamily(Font(R.font.poppins_medium)),
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
             )
         }
     }
@@ -322,15 +352,23 @@ fun DateDesign(days: String, hours: String, minutes: String) {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun viewPagerItem(titleStr: String, gridData: List<SpecialData>, hasDetails: Boolean,isSmall:Boolean) {
-   var height = 193.dp
-       var width =193.dp
-    if(isSmall)
-    {
+fun viewPagerItem(
+    titleStr: String,
+    gridData: List<SpecialData>,
+    hasDetails: Boolean,
+    isSmall: Boolean
+) {
+    var height = 193.dp
+    var width = 193.dp
+    if (isSmall) {
         height = 180.dp
         width = 126.dp
     }
-    ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 19.dp)
+    ) {
         val (title, viewPager) = createRefs()
         Text(
             text = titleStr,
@@ -339,7 +377,7 @@ fun viewPagerItem(titleStr: String, gridData: List<SpecialData>, hasDetails: Boo
             fontFamily = FontFamily(Font(R.font.poppins_semibold)),
             modifier = Modifier.constrainAs(title) {
                 top.linkTo(parent.top)
-                start.linkTo(parent.start)
+                start.linkTo(parent.start, margin = 16.dp)
             }
         )
         LazyRow(
@@ -373,7 +411,8 @@ fun viewPagerItem(titleStr: String, gridData: List<SpecialData>, hasDetails: Boo
                                 text = titleStr,
                                 fontSize = 14.sp,
                                 color = Color.White,
-                                fontFamily = FontFamily(Font(R.font.poppins_regular))
+                                fontFamily = FontFamily(Font(R.font.poppins_regular)),
+                                modifier = Modifier.padding(top = 14.dp)
                             )
                     }
                 }

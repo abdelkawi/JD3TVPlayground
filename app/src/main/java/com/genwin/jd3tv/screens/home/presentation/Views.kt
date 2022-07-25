@@ -22,6 +22,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -41,13 +43,19 @@ import com.genwin.jd3tv.R
 import com.genwin.jd3tv.R.drawable.*
 import com.genwin.jd3tv.R.font.*
 import com.genwin.jd3tv.common.SharedPreference
+import com.genwin.jd3tv.screens.events.presentation.Event
 import com.genwin.jd3tv.screens.home.domain.entity.BottomTab
 import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
 import com.genwin.jd3tv.screens.home.domain.entity.SectionType.*
+import com.genwin.jd3tv.screens.hosts.presentation.Host
+import com.genwin.jd3tv.screens.search.presentation.Search
+import com.genwin.jd3tv.screens.shop.presentation.Shop
+import com.genwin.jd3tv.screens.specials.presentation.SpecialsScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun Main(
     sections: List<HomeSection>,
@@ -84,19 +92,19 @@ fun Main(
                             bottomBarState.value = true
                         }
                     }
-                    "experiences" -> {
+                    "hosts" -> {
                         composable(it.route) {
                             Host(10, "Hosts", sharedPreference = sharedPreference)
                             bottomBarState.value = true
                         }
                     }
-                    "merch" -> {
+                    "shop" -> {
                         composable(it.route) {
                             Shop(sharedPreference = sharedPreference)
                             bottomBarState.value = true
                         }
                     }
-                    "coin" -> {
+                    "specials" -> {
                         composable(it.route) {
                             SpecialsScreen(
                                 sharedPreference = sharedPreference
@@ -141,7 +149,7 @@ fun Main(
                 ) {
                     val backStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = backStackEntry?.destination?.route
-                    tabs.map { BottomTab(it.title, it.route) }.forEach {
+                    tabs.forEach {
                         val isSelected = currentRoute == it.route
                         BottomNavigationItem(selected = isSelected, onClick = {
                             navController.navigate(it.route) {
@@ -154,7 +162,7 @@ fun Main(
                         },
                             icon = {
                                 Icon(
-                                    painterResource(id = ic_bottom_bar),
+                                    painterResource(id = it.icon),
                                     contentDescription = ""
                                 )
                             },
@@ -162,8 +170,12 @@ fun Main(
                             unselectedContentColor = Color.White,
                             label = {
                                 Text(
-                                    text = it.title
-                                )
+                                    text = it.title,
+                                    fontSize = 12.sp,
+                                    fontFamily = FontFamily((Font(poppins_semibold))),
+                                        maxLines = 1,
+                                    style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+                                    )
                             }
                         )
                     }
@@ -218,14 +230,14 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
             }
         }
         composable("shows") {
-            Category(
+            ShowsMovies(
                 "Shows",
                 sharedPreference = sharedPreference,
                 navController = homeNavController
             )
         }
         composable("movies") {
-            Category(
+            ShowsMovies(
                 "Movies",
                 sharedPreference = sharedPreference,
                 navController = homeNavController
@@ -501,7 +513,7 @@ fun Header(sharedPreference: SharedPreference) {
                 contentScale = ContentScale.Inside,
                 alignment = Alignment.TopStart,
                 modifier = Modifier.constrainAs(logo) {
-                    top.linkTo(parent.top, margin = 20.dp)
+                    top.linkTo(parent.top, margin = 6.dp)
                     start.linkTo(parent.start)
                 }
             )
@@ -517,7 +529,7 @@ fun Header(sharedPreference: SharedPreference) {
                         .clip(CircleShape)
                         .background(Color.White)
                         .constrainAs(profileImg) {
-                            top.linkTo(parent.top, margin = 16.dp)
+                            top.linkTo(parent.top, margin = 6.dp)
                             end.linkTo(parent.end)
                         }
                 ) else {
@@ -529,7 +541,7 @@ fun Header(sharedPreference: SharedPreference) {
                         .width(28.dp)
                         .border(1.dp, Color.White, CircleShape)
                         .constrainAs(profileImg) {
-                            top.linkTo(parent.top, margin = 16.dp)
+                            top.linkTo(parent.top, margin = 6.dp)
                             end.linkTo(parent.end)
                         }
                 ) {
@@ -715,16 +727,11 @@ fun Banner(sharedPreference: SharedPreference, homeNavController: NavHostControl
             )
             IconButton(onClick = { }) {
                 Image(
-                    painter = painterResource(ic_play_button),
+                    painter = painterResource(play_button),
                     contentDescription = "",
                     Modifier.background(color = colorResource(id = android.R.color.transparent))
                 )
-                Text(
-                    text = "Play",
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(poppins_semibold))
-                )
+
             }
         }
         HomeHeader(sharedPreference = sharedPreference, homeNavController)

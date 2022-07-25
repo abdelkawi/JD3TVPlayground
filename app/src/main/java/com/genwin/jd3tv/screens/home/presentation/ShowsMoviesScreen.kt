@@ -26,12 +26,16 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.SharedPreference
+import com.genwin.jd3tv.screens.specials.presentation.Special
+import com.genwin.jd3tv.screens.specials.presentation.SpecialData
+import com.genwin.jd3tv.screens.specials.presentation.SpecialType
+import com.genwin.jd3tv.screens.specials.presentation.viewPagerItem
 
 //
 // Created by Dina Mounib on 7/23/22.
 //
 @Composable
-fun Category(
+fun ShowsMovies(
     categoryType: String,
     sharedPreference: SharedPreference,
     navController:NavHostController,
@@ -53,6 +57,9 @@ fun Category(
                 SpecialType.ViewPagerWithDateAndTitleItem -> {
                     viewPagerItem(it.title, it.gridData, hasDetails = false, isSmall = true)
                 }
+                SpecialType.HorizontalScrollWithDetailsItem -> {}
+                SpecialType.HorizontalScrollItem -> {}
+                SpecialType.ViewPagerWithTitleItem -> {}
             }
         }
     }
@@ -109,15 +116,9 @@ fun CategoryBanner(
             )
             IconButton(onClick = { }) {
                 Image(
-                    painter = painterResource(R.drawable.ic_play_button),
+                    painter = painterResource(R.drawable.play_button),
                     contentDescription = "",
                     Modifier.background(color = colorResource(id = android.R.color.transparent))
-                )
-                Text(
-                    text = "Play",
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_semibold))
                 )
             }
         }

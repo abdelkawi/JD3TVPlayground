@@ -1,12 +1,12 @@
-package com.genwin.jd3tv.screens.home.presentation
+package com.genwin.jd3tv.screens.hosts.presentation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.GridItemSpan
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.SharedPreference
+import com.genwin.jd3tv.screens.home.presentation.Header
 
 //
 // Created by Dina Mounib on 7/20/22.
@@ -32,7 +33,7 @@ fun Host(hostSize: Int, titleStr: String, sharedPreference: SharedPreference) {
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.Black),
-        cells = GridCells.Fixed(2),
+        columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(6.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
 

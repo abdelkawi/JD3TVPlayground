@@ -1,10 +1,10 @@
-package com.genwin.jd3tv.screens.home.presentation
+package com.genwin.jd3tv.screens.search.presentation
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.GridItemSpan
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -41,6 +41,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.SharedPreference
+import com.genwin.jd3tv.screens.hosts.presentation.HostCell
 
 //
 // Created by Dina Mounib on 7/21/22.
@@ -52,7 +53,7 @@ fun Search(sharedPreference: SharedPreference,navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.Black),
-        cells = GridCells.Fixed(2),
+        columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(13.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
 

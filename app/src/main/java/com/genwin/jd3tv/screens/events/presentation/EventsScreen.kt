@@ -1,11 +1,11 @@
-package com.genwin.jd3tv.screens.home.presentation
+package com.genwin.jd3tv.screens.events.presentation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.GridItemSpan
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -32,6 +32,8 @@ import com.genwin.jd3tv.screens.home.data.ItemDetailsResponse
 import com.genwin.jd3tv.screens.home.data.MainPhoto
 import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
 import com.genwin.jd3tv.screens.home.domain.entity.SectionType
+import com.genwin.jd3tv.screens.home.presentation.DotsIndicator
+import com.genwin.jd3tv.screens.home.presentation.Header
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -46,12 +48,12 @@ fun Event(sharedPreference: SharedPreference) {
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.Black),
-        cells = GridCells.Fixed(2),
+        columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(13.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
 
         ) {
-        item(span = {
+        item (span = {
             GridItemSpan(2)
         }) {
             Column(
