@@ -30,8 +30,10 @@ import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.Result.Error
 import com.genwin.jd3tv.common.Result.Success
 import com.genwin.jd3tv.common.SharedPreference
+import com.genwin.jd3tv.screens.home.data.ItemDetailsRequest
 import com.genwin.jd3tv.screens.home.domain.entity.BottomTab
 import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
+import com.genwin.jd3tv.screens.home.domain.entity.SectionType
 import com.genwin.jd3tv.screens.splash.data.SplashResponse
 import com.genwin.jd3tv.screens.splash.presentation.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -130,7 +132,7 @@ class MainActivity : ComponentActivity() {
                         content = {
                             CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Ltr) {
                                 Main(
-                                    sections = sections,
+                                    sections = getHmeData(sections),
                                     tabs = staticTabs,
 //                                    tabs = tabs.map { BottomTab(it, it) }
 //                                        .subList(1, 6),
@@ -148,6 +150,63 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    fun getHmeData(sections: List<HomeSection>): List<HomeSection> {
+        val fullSections = mutableListOf<HomeSection>()
+//        var sections = mutableListOf<ItemDetailsRequest>()
+//        sections.add(ItemDetailsRequest(emptyList(),"","", emptyList()))
+//        sections.add(ItemDetailsRequest(emptyList(),"","", emptyList()))
+//        sections.add(ItemDetailsRequest(emptyList(),"","", emptyList()))
+//        sections.add(ItemDetailsRequest(emptyList(),"","", emptyList()))
+//        sections.add(ItemDetailsRequest(emptyList(),"","", emptyList()))
+
+        fullSections.add(
+            HomeSection(
+                "Popular movies", SectionType.Contest, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add(
+            HomeSection(
+                "JD3 TV Picks", SectionType.ViewPager, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add(
+            HomeSection(
+                "Podcasts", SectionType.CardWithTitle, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add(
+            HomeSection(
+                "Exclusive NFT", SectionType.Card, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add(
+            HomeSection(
+                "Hosts", SectionType.Host, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add(
+            HomeSection(
+                "Shop", SectionType.Shop, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.forEach {
+            it.setItems(sections[0].getItems())
+        }
+        return fullSections
     }
 
     @Composable

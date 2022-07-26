@@ -9,7 +9,7 @@ import kotlin.random.Random
 
 class HomeSection(
   val title: String,
-  val type: SectionType,
+  var type: SectionType,
   val endpoint: String,
   val dataRequest:ItemDetailsRequest
   ) {
@@ -31,5 +31,5 @@ class HomeSection(
 
 
 enum class SectionType {
-  Card, ViewPager, CardWithTitle, Contest
+  Card, ViewPager, CardWithTitle, Contest,Host,Shop
 }
