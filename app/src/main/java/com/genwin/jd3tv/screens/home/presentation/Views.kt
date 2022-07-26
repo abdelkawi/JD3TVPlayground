@@ -212,13 +212,7 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
             ) {
                 Banner(sharedPreference, homeNavController)
                 sections.forEach { section ->
-                    Text(
-                        text = section.title,
-                        color = Color.White,
-                        fontFamily = FontFamily(Font(poppins_semibold)),
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(top = 19.dp, start = 16.dp)
-                    )
+
                     when (section.type) {
                         Card -> {
                             CardsSection(section = section)
@@ -230,11 +224,11 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
                         Contest -> {
                             Contest(section = section)
                         }
-                        Host->{
-                            HostSection()
+                        Host -> {
+                            HostSection(section = section)
                         }
-                        Shop->{
-                            ShopSection()
+                        Shop -> {
+                            ShopSection(section = section)
                         }
 //                        else -> {
 //                            viewPagerWithDots(section = section)
@@ -275,85 +269,99 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
 }
 
 
+@Composable
+fun getSectionTitle(title: String) {
+    Text(
+        text = title,
+        color = Color.White,
+        fontFamily = FontFamily(Font(poppins_semibold)),
+        fontSize = 20.sp,
+        modifier = Modifier.padding(top = 19.dp, start = 16.dp)
+    )
+}
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun viewPagerWithDots(section: HomeSection) {
     val state = rememberPagerState()
     Surface(
-        color = Color.Black
+        color = colorResource(id = R.color.dark_jungle_green_50)
     ) {
-        ConstraintLayout {
-            val (viewPager, dots, topSpacer, bottomSpacer) = createRefs()
-            HorizontalPager(
-                state = state,
-                count = 10,//section.getItems().size,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .constrainAs(viewPager) {
-                        top.linkTo(parent.top)
+        Column {
+            getSectionTitle(section.title)
+            ConstraintLayout {
+                val (viewPager, dots, topSpacer, bottomSpacer) = createRefs()
+                HorizontalPager(
+                    state = state,
+                    count = 10,//section.getItems().size,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .constrainAs(viewPager) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                ) { page ->
+//                val item = section.getItems()[page]
+                    ConstraintLayout(modifier = Modifier.padding(8.dp)) {
+                        val (image, title, type) = createRefs()
+                        AsyncImage(
+                            model = "",//item.mainPhoto?.fileUrl ?: "",
+                            contentDescription = "",
+                            placeholder = painterResource(image_1),
+                            error = painterResource(image_1),
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(300.dp)
+                                .clip(RoundedCornerShape(5.dp))
+                                .constrainAs(image) {
+                                    top.linkTo(parent.top)
+                                    start.linkTo(parent.start)
+                                    end.linkTo(parent.end)
+                                })
+
+                        Text(
+                            text = "This is title ",//item.title ?:,
+                            fontSize = 16.sp,
+                            color = Color.White,
+                            fontFamily = FontFamily(Font(poppins_regular)),
+                            modifier = Modifier.constrainAs(title) {
+                                top.linkTo(image.bottom, margin = 16.dp)
+                                start.linkTo(image.start)
+                            }
+                        )
+                        Text(
+                            text = "Contest",
+                            fontSize = 16.sp,
+                            color = Color.White,
+                            fontFamily = FontFamily(Font(poppins_semibold)),
+                            modifier = Modifier
+                                .constrainAs(type) {
+                                    bottom.linkTo(image.bottom, margin = 16.dp)
+                                    end.linkTo(image.end, margin = 16.dp)
+                                }
+                                .background(Color.Magenta, shape = RoundedCornerShape(5.dp))
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier
+                    .padding(4.dp)
+                    .constrainAs(topSpacer) { top.linkTo(viewPager.bottom) })
+                DotsIndicator(
+                    totalDots = 10,// section.getItems().size,
+                    selectedIndex = state.currentPage,
+                    modifier = Modifier.constrainAs(dots) {
+                        top.linkTo(topSpacer.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                    }
-            ) { page ->
-//                val item = section.getItems()[page]
-                ConstraintLayout(modifier = Modifier.padding(8.dp)) {
-                    val (image, title, type) = createRefs()
-                    AsyncImage(
-                        model = "",//item.mainPhoto?.fileUrl ?: "",
-                        contentDescription = "",
-                        placeholder = painterResource(image_1),
-                        error = painterResource(image_1),
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp)
-                            .clip(RoundedCornerShape(5.dp))
-                            .constrainAs(image) {
-                                top.linkTo(parent.top)
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
-                            })
-
-                    Text(
-                        text =  "This is title ",//item.title ?:,
-                        fontSize = 16.sp,
-                        color = Color.White,
-                        fontFamily = FontFamily(Font(poppins_regular)),
-                        modifier = Modifier.constrainAs(title) {
-                            top.linkTo(image.bottom, margin = 16.dp)
-                            start.linkTo(image.start)
-                        }
-                    )
-                    Text(
-                        text = "Contest",
-                        fontSize = 16.sp,
-                        color = Color.White,
-                        fontFamily = FontFamily(Font(poppins_semibold)),
-                        modifier = Modifier
-                            .constrainAs(type) {
-                                bottom.linkTo(image.bottom, margin = 16.dp)
-                                end.linkTo(image.end, margin = 16.dp)
-                            }
-                            .background(Color.Magenta, shape = RoundedCornerShape(5.dp))
-                    )
-                }
+                    }, Color(0xFFe225ff)
+                )
+                Spacer(modifier = Modifier
+                    .padding(4.dp)
+                    .constrainAs(bottomSpacer) { top.linkTo(dots.bottom) })
             }
-            Spacer(modifier = Modifier
-                .padding(4.dp)
-                .constrainAs(topSpacer) { top.linkTo(viewPager.bottom) })
-            DotsIndicator(
-                totalDots =10,// section.getItems().size,
-                selectedIndex = state.currentPage,
-                modifier = Modifier.constrainAs(dots) {
-                    top.linkTo(topSpacer.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }, Color(0xFFe225ff)
-            )
-            Spacer(modifier = Modifier
-                .padding(4.dp)
-                .constrainAs(bottomSpacer) { top.linkTo(dots.bottom) })
         }
     }
 }
@@ -414,7 +422,8 @@ fun Profile(
                 .fillMaxWidth()
                 .padding(start = 36.dp, top = 55.dp)
                 .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.Start) {
+            horizontalAlignment = Alignment.Start
+        ) {
             if (noImage) {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -778,34 +787,37 @@ fun Contest(section: HomeSection) {
     Surface(
         color = Color(R.color.dark_jungle_green)
     ) {
-        HorizontalPager(
-            count = 10,//section.getItems().size,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-        ) { page ->
-            // Our page content
-            Column {
-                AsyncImage(
-                    model = "" ,
+        Column {
+            getSectionTitle(title = section.title)
+            HorizontalPager(
+                count = 10,//section.getItems().size,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+            ) { page ->
+                // Our page content
+                Column {
+                    AsyncImage(
+                        model = "",
 //                    section.getItems()[page].mainPhoto?.fileUrl ?: "",
-                    placeholder = painterResource(image_1),
-                    contentDescription = null,
-                    error = painterResource(image_1),
-                    contentScale = ContentScale.FillBounds,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(223.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                )
-                Spacer(modifier = Modifier.height(14.dp))
-                Text(
-                    text = "",//section.getItems()[page].title ?: "",
-                    modifier = Modifier.fillMaxWidth(),
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(poppins_regular))
-                )
+                        placeholder = painterResource(image_1),
+                        contentDescription = null,
+                        error = painterResource(image_1),
+                        contentScale = ContentScale.FillBounds,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(223.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                    )
+                    Spacer(modifier = Modifier.height(14.dp))
+                    Text(
+                        text = "",//section.getItems()[page].title ?: "",
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontFamily = FontFamily(Font(poppins_regular))
+                    )
+                }
             }
         }
     }
@@ -815,8 +827,9 @@ fun Contest(section: HomeSection) {
 @Composable
 fun CardsSection(section: HomeSection) {
     Column {
+        getSectionTitle(section.title)
         LazyRow(modifier = Modifier.padding(start = 16.dp)) {
-            items(10){//section.getItems()) {
+            items(10) {//section.getItems()) {
                 AsyncImage(
                     model = "",//it.mainPhoto?.fileUrl ?: "",
                     placeholder = painterResource(image_1),
@@ -837,11 +850,12 @@ fun CardsSection(section: HomeSection) {
 
 @Composable
 fun CardsWithTitleSection(section: HomeSection) {
-    LazyRow (modifier = Modifier.padding(start = 16.dp)){
-        items(10){//section.getItems()) { item ->
+    getSectionTitle(section.title)
+    LazyRow(modifier = Modifier.padding(start = 16.dp)) {
+        items(10) {//section.getItems()) { item ->
             Column {
                 AsyncImage(
-                    model ="" ,//item.mainPhoto?.fileUrl ?: "",
+                    model = "",//item.mainPhoto?.fileUrl ?: "",
                     placeholder = painterResource(image_1),
                     contentDescription = null,
                     error = painterResource(image_1),
@@ -865,36 +879,42 @@ fun CardsWithTitleSection(section: HomeSection) {
 }
 
 @Composable
-fun HostSection(){
-    LazyRow(modifier = Modifier.padding(start = 16.dp)){
-        items(10){//section.getItems()) { item ->
-                AsyncImage(
-                    model ="" ,//item.mainPhoto?.fileUrl ?: "",
-                    placeholder = painterResource(image_1),
-                    contentDescription = null,
-                    error = painterResource(image_1),
-                    modifier = Modifier
-                        .height(126.dp).padding(end = 10.dp)
-                        .width(126.dp).clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
+fun HostSection(section: HomeSection) {
+    getSectionTitle(section.title)
+    LazyRow(modifier = Modifier.padding(start = 16.dp)) {
+        items(10) {//section.getItems()) { item ->
+            AsyncImage(
+                model = "",//item.mainPhoto?.fileUrl ?: "",
+                placeholder = painterResource(image_1),
+                contentDescription = null,
+                error = painterResource(image_1),
+                modifier = Modifier
+                    .height(126.dp)
+                    .padding(end = 10.dp)
+                    .width(126.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
         }
     }
 }
 
 @Composable
-fun ShopSection(){
+fun ShopSection(section: HomeSection) {
+    getSectionTitle(section.title)
     LazyRow {
-        items(10){//section.getItems()) { item ->
+        items(10) {//section.getItems()) { item ->
             AsyncImage(
-                model ="" ,//item.mainPhoto?.fileUrl ?: "",
+                model = "",//item.mainPhoto?.fileUrl ?: "",
                 placeholder = painterResource(ic_product),
                 contentDescription = null,
                 error = painterResource(ic_product),
                 modifier = Modifier
-                    .height(126.dp).padding(end = 10.dp)
+                    .height(126.dp)
+                    .padding(end = 10.dp)
                     .width(126.dp)
-                    .clip(RoundedCornerShape(6.dp)).background(color=Color.White),
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(color = Color.White),
                 contentScale = ContentScale.Inside
             )
         }
