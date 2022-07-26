@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.SharedPreference
@@ -38,8 +40,7 @@ import com.genwin.jd3tv.screens.specials.presentation.viewPagerItem
 fun ShowsMovies(
     categoryType: String,
     sharedPreference: SharedPreference,
-    navController: NavHostController,
-    openCategoryScreen: Boolean = false
+    navController: NavHostController
 ) {
     Column(
         modifier = Modifier
@@ -47,8 +48,7 @@ fun ShowsMovies(
             .background(Color.Black)
             .wrapContentHeight()
     ) {
-        CategoryBanner(sharedPreference, navController, categoryType, openCategoryScreen)
-
+        CategoryBanner(sharedPreference, navController, categoryType)
 
         getCategories().forEach {
             when (it.type) {
@@ -63,6 +63,7 @@ fun ShowsMovies(
                 SpecialType.ViewPagerWithTitleItem -> {}
             }
         }
+
     }
 }
 
@@ -71,7 +72,7 @@ fun CategoryBanner(
     sharedPreference: SharedPreference,
     navController: NavHostController,
     title: String,
-    openCategoryScreen: Boolean = false
+    selectedIndex: String = ""
 ) {
     ConstraintLayout() {
         val (image, dataContainer, gradient) = createRefs()
@@ -127,8 +128,7 @@ fun CategoryBanner(
         CategoryHeader(
             sharedPreference = sharedPreference,
             navController,
-            title,
-            openCategoryScreen
+            title, selectedIndex
         )
     }
 }
@@ -138,9 +138,11 @@ fun CategoryHeader(
     sharedPreference: SharedPreference,
     navController: NavHostController,
     title: String,
-    openCategoryScreen: Boolean
+    selectedIndex: String
 ) {
     var expanded by remember { mutableStateOf(false) }
+    var openCategory by remember { mutableStateOf(false) }
+    var selectedCategory by remember { mutableStateOf(selectedIndex.ifEmpty { "Categories" }) }
     Row {
         ConstraintLayout() {
             val (logo, profileImg, gradient, container) = createRefs()
@@ -203,7 +205,7 @@ fun CategoryHeader(
             }
 
             ConstraintLayout(modifier = Modifier.constrainAs(container) {
-                top.linkTo(logo.bottom, 26.dp)
+                top.linkTo(logo.bottom, 23.dp)
                 start.linkTo(parent.start, margin = 16.dp)
             }) {
                 val (text1, text2, arrow2) = createRefs()
@@ -219,7 +221,9 @@ fun CategoryHeader(
                 )
 
                 ClickableText(
-                    text = AnnotatedString(stringResource(id = R.string.movies)),
+                    text = AnnotatedString(
+                        selectedCategory.ifEmpty { stringResource(id = R.string.movies) }
+                    ),
                     onClick = {
                         expanded = true
                     },
@@ -243,19 +247,9 @@ fun CategoryHeader(
                             start.linkTo(text2.end, margin = 6.dp)
                         }
                         .clickable {
-//                            if (openCategoryScreen) {
-//                                ShowsMovies(
-//                                    categoryType = title,
-//                                    sharedPreference = sharedPreference,
-//                                    navController = navController,
-//                                    openCategoryScreen = false
-//                                )
-//                            } else {
-                                expanded = true
-//                            }
+                            expanded = true
                         }
                 )
-
                 val categoriesItem = mutableListOf<String>()
                 categoriesItem.add("New Shows")
                 categoriesItem.add("Podcasts")
@@ -275,7 +269,11 @@ fun CategoryHeader(
                     }
                 ) {
                     categoriesItem.forEach {
-                        DropdownMenuItem(onClick = { expanded = false }) {
+                        DropdownMenuItem(onClick = {
+                            selectedCategory = it
+                            expanded = false
+                            openCategory = true
+                        }) {
                             Text(
                                 it,
                                 color = colorResource(id = R.color.smoky_black),
@@ -290,6 +288,11 @@ fun CategoryHeader(
                             )
 
                     }
+                }
+
+                if (openCategory) {
+                    navController.navigate("category/$title/$selectedCategory")
+                    openCategory = false
                 }
             }
         }

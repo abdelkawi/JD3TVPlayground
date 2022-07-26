@@ -34,10 +34,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.R.drawable.*
@@ -173,9 +175,13 @@ fun Main(
                                     text = it.title,
                                     fontSize = 12.sp,
                                     fontFamily = FontFamily((Font(poppins_semibold))),
-                                        maxLines = 1,
-                                    style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+                                    maxLines = 1,
+                                    style = TextStyle(
+                                        platformStyle = PlatformTextStyle(
+                                            includeFontPadding = false
+                                        )
                                     )
+                                )
                             }
                         )
                     }
@@ -241,6 +247,19 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
                 "Movies",
                 sharedPreference = sharedPreference,
                 navController = homeNavController
+            )
+        }
+        composable(
+            "category/{title}/{selected_cat}",
+            arguments = listOf(navArgument("title") { type = NavType.StringType },
+                navArgument("selected_cat") { type = NavType.StringType })
+        ) {
+
+            CategoryScreen(
+                it.arguments?.getString("title") ?: "",
+                sharedPreference = sharedPreference,
+                navController = homeNavController,
+                it.arguments?.getString("selected_cat") ?: ""
             )
         }
     }
