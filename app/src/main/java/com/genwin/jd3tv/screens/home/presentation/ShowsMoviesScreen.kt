@@ -38,7 +38,8 @@ import com.genwin.jd3tv.screens.specials.presentation.viewPagerItem
 fun ShowsMovies(
     categoryType: String,
     sharedPreference: SharedPreference,
-    navController:NavHostController,
+    navController: NavHostController,
+    openCategoryScreen: Boolean = false
 ) {
     Column(
         modifier = Modifier
@@ -46,7 +47,7 @@ fun ShowsMovies(
             .background(Color.Black)
             .wrapContentHeight()
     ) {
-        CategoryBanner(sharedPreference,navController, categoryType)
+        CategoryBanner(sharedPreference, navController, categoryType, openCategoryScreen)
 
 
         getCategories().forEach {
@@ -68,8 +69,9 @@ fun ShowsMovies(
 @Composable
 fun CategoryBanner(
     sharedPreference: SharedPreference,
-    navController:NavHostController,
-    title: String
+    navController: NavHostController,
+    title: String,
+    openCategoryScreen: Boolean = false
 ) {
     ConstraintLayout() {
         val (image, dataContainer, gradient) = createRefs()
@@ -122,15 +124,21 @@ fun CategoryBanner(
                 )
             }
         }
-        CategoryHeader(sharedPreference = sharedPreference,navController, title)
+        CategoryHeader(
+            sharedPreference = sharedPreference,
+            navController,
+            title,
+            openCategoryScreen
+        )
     }
 }
 
 @Composable
 fun CategoryHeader(
     sharedPreference: SharedPreference,
-    navController:NavHostController,
-    title: String
+    navController: NavHostController,
+    title: String,
+    openCategoryScreen: Boolean
 ) {
     var expanded by remember { mutableStateOf(false) }
     Row {
@@ -153,7 +161,8 @@ fun CategoryHeader(
                     .constrainAs(logo) {
                         top.linkTo(parent.top, margin = 6.dp)
                         start.linkTo(parent.start, margin = 6.dp)
-                    }.clickable { navController.popBackStack() }
+                    }
+                    .clickable { navController.popBackStack() }
             )
 
             if (sharedPreference.getPhoto().isNotEmpty())
@@ -233,7 +242,18 @@ fun CategoryHeader(
                             bottom.linkTo(text2.bottom)
                             start.linkTo(text2.end, margin = 6.dp)
                         }
-                        .clickable { expanded = true }
+                        .clickable {
+//                            if (openCategoryScreen) {
+//                                ShowsMovies(
+//                                    categoryType = title,
+//                                    sharedPreference = sharedPreference,
+//                                    navController = navController,
+//                                    openCategoryScreen = false
+//                                )
+//                            } else {
+                                expanded = true
+//                            }
+                        }
                 )
 
                 val categoriesItem = mutableListOf<String>()

@@ -64,15 +64,43 @@ fun Host(hostSize: Int, titleStr: String, sharedPreference: SharedPreference) {
                     .wrapContentSize(Alignment.Center)
             )
         }
-        items(numbers.size) {
-            Row(modifier = Modifier.padding(top = 14.dp, start = 5.dp, end = 5.dp)) {
-                HostCell("", "Host 1")
-            }
+        item(span ={ GridItemSpan(2)})
+        {
+            HostRow("", "Host 1","", "Host 2")
         }
+        item(span ={ GridItemSpan(2)})
+        {
+            HostRow("", "Host 1","", "Host 2")
+        }
+        item(span ={ GridItemSpan(2)})
+        {
+            HostRow("", "Host 1","", "Host 2")
+        }
+//        items(numbers.size) {
+//            Row(modifier = Modifier.padding(top = 14.dp, start = 5.dp, end = 5.dp)) {
+//                //HostCell("", "Host 1")
+//
+//            }
+//        }
 
     }
 }
 
+@Composable
+fun HostRow(image1: String, hostName1: String,image2: String, hostName2: String){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 30.dp, end = 30.dp)
+    ) {
+        Box(modifier = Modifier.weight(0.5f)) {
+            HostCell(image1,hostName1)
+        }
+        Box(modifier = Modifier.weight(0.5f)) {
+            HostCell(image2,hostName2)
+        }
+    }
+}
 @Composable
 fun HostCell(image: String, hostName: String) {
     Column(
@@ -82,7 +110,7 @@ fun HostCell(image: String, hostName: String) {
     ) {//horizontalAlignment = Layout.Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(R.drawable.ic_host), contentDescription = "",
-            contentScale = ContentScale.Inside
+            contentScale = ContentScale.Inside,
         )
         Spacer(modifier = Modifier.height(14.dp))
         Text(

@@ -18,6 +18,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -136,16 +139,20 @@ fun Event(sharedPreference: SharedPreference) {
                 fontSize = 20.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 19.dp, start = 30.dp, end = 30.dp)
+                    .padding(top = 19.dp, start = 25.dp, end = 25.dp)
             )
         }
-        items(2) {
-            EventItem(
-                "",
-                "16 - 18 Jun 2022",
-                "The 6th frequency"
-            )
+        item(span={GridItemSpan(2)})
+        {
+            EventRow("","16 - 18 Jun 2022", "The 6th frequency","","16 - 18 Jun 2022", "The 6th frequency")
         }
+//        items(2) {
+//            EventItem(
+//                "",
+//                "16 - 18 Jun 2022",
+//                "The 6th frequency"
+//            )
+//        }
         item(span = {
             GridItemSpan(2)
         }) {
@@ -156,65 +163,90 @@ fun Event(sharedPreference: SharedPreference) {
                 fontSize = 20.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 19.dp, start = 30.dp, end = 30.dp)
+                    .padding(top = 19.dp, start = 25.dp, end = 25.dp)
 
             )
         }
-        items(2) {
-            EventItem(
-                "",
-                "16 - 18 Jun 2022",
-                "The 6th frequency"
-            )
+        item(span={GridItemSpan(2)})
+        {
+            EventRow("","16 - 18 Jun 2022", "The 6th frequency","","16 - 18 Jun 2022", "The 6th frequency")
         }
+//        items(2) {
+//            EventItem(
+//                "",
+//                "16 - 18 Jun 2022",
+//                "The 6th frequency"
+//            )
+//        }
     }
 }
 
 @Composable
+fun EventRow(
+    itemUrl: String, dateStr: String, titleStr: String,
+    itemUrl2: String, dateStr2: String, titleStr2: String
+) {
+    Row(modifier = Modifier.fillMaxWidth().padding(start = 25.dp,end=25.dp))
+    {
+        Box(modifier = Modifier.weight(0.5f).padding(end = 10.dp))
+        {
+            EventItem(itemUrl, dateStr, titleStr)
+        }
+        Box(modifier = Modifier.weight(0.5f))
+        {
+            EventItem(itemUrl2, dateStr2, titleStr2)
+        }
+
+    }
+}
+
+@OptIn(ExperimentalTextApi::class)
+@Composable
 fun EventItem(
     itemUrl: String, dateStr: String, titleStr: String
 ) {
-        ConstraintLayout(
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        val (img1, title1, date1) = createRefs()
+        AsyncImage(
+            model = itemUrl,
+            contentDescription = "",
+            placeholder = painterResource(R.drawable.image_1),
+            error = painterResource(R.drawable.image_1),
+            contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxSize()
-        ) {
-            val (img1, title1, date1) = createRefs()
-            AsyncImage(
-                model = itemUrl,
-                contentDescription = "",
-                placeholder = painterResource(R.drawable.image_1),
-                error = painterResource(R.drawable.image_1),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(246.dp)
-                    .width(152.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .constrainAs(img1) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                    })
-            Text(
-                text = dateStr,
-                color = Color.White,
-                fontSize = 12.sp,
-                fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                modifier = Modifier.constrainAs(date1) {
-                    top.linkTo(img1.bottom, margin = 10.dp)
-                    start.linkTo(img1.start)
-
+                .height(246.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .constrainAs(img1) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
                 })
+        Text(
+            text = dateStr,
+            color = Color.White,
+            fontSize = 12.sp,
+            fontFamily = FontFamily(Font(R.font.poppins_regular)),
+            modifier = Modifier.constrainAs(date1) {
+                top.linkTo(img1.bottom, margin = 10.dp)
+                start.linkTo(img1.start)
 
-            Text(
-                text = titleStr,
-                color = Color.White,
-                fontSize = 14.sp,
-                fontFamily = FontFamily(Font(R.font.poppins_regular)),
-                modifier = Modifier.constrainAs(title1) {
-                    top.linkTo(date1.bottom, margin = 2.dp)
-                    start.linkTo(img1.start)
+            },style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+        )
 
-                })
-        }
+        Text(
+            text = titleStr,
+            color = Color.White,
+            fontSize = 14.sp,
+            fontFamily = FontFamily(Font(R.font.poppins_regular)),
+            modifier = Modifier.constrainAs(title1) {
+                top.linkTo(date1.bottom, margin = 2.dp)
+                start.linkTo(img1.start)
+
+            },style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+        )
+    }
 }
 
 @OptIn(ExperimentalPagerApi::class)
