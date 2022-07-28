@@ -31,5 +31,5 @@ class HomeSection(
 
 
 enum class SectionType {
-  Card, ViewPager, CardWithTitle, Contest,Host,Shop
+  Card, ViewPager, CardWithTitle, Contest, Host, Shop, FaithItem,FullItem
 }

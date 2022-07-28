@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/indigo">
+    android:background="@drawable/ic_bg">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/login_gradient">
+        android:background="@drawable/bg_graphic">
 
 
         <ImageView
@@ -95,7 +95,7 @@
             app:passwordToggleDrawable="@drawable/show_password_selector"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/white"
-            app:startIconDrawable="@drawable/ic_passwprd_icon"
+            app:startIconDrawable="@drawable/ic_password"
             app:startIconTint="@color/white">
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -107,6 +107,7 @@
                 android:hint="@string/password"
                 android:paddingTop="18dp"
                 android:paddingBottom="15dp"
+                android:focusableInTouchMode="true"
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
                 android:paddingStart="10dp"
@@ -119,18 +120,29 @@
 
         <CheckBox
             android:id="@+id/rememberMeCB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginTop="13dp"
-            android:buttonTint="@color/white"
             android:fontFamily="@font/poppins_medium"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:text="@string/remember_me"
+            android:background="@drawable/check_box_selector"
+            android:button="@null"
+            app:buttonCompat="@null"
             android:textColor="@color/white"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="@+id/passwordLayoutTextInput"
             app:layout_constraintTop_toBottomOf="@+id/passwordLayoutTextInput" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remember_me"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@+id/rememberMeCB"
+            app:layout_constraintTop_toTopOf="@+id/rememberMeCB"
+            app:layout_constraintBottom_toBottomOf="@+id/rememberMeCB"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/signInBtn"

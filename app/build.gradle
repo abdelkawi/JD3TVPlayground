@@ -7,6 +7,7 @@ plugins {
   id 'kotlin-android-extensions'
 
 }
+apply plugin: 'kotlin-android'
 
 android {
   compileSdk 32
@@ -92,4 +93,9 @@ dependencies {
 
   def lottieVersion = "3.4.0"
   implementation "com.airbnb.android:lottie:$lottieVersion"
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
+//repositories {
+//    mavenCentral()
+//}

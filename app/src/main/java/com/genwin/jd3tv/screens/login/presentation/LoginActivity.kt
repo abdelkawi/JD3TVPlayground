@@ -1,13 +1,17 @@
 package com.genwin.jd3tv.screens.login.presentation
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.Result.Error
@@ -68,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
                                 1
                             ) + res.data.lastName?.substring(0, 1)
                         )
-                          }
+                    }
                 }
                 is Error -> {
 
@@ -107,9 +111,44 @@ class LoginActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
         }
+
         emailET.addTextChangedListener(emailTW)
         passwordET.addTextChangedListener(passwordTW)
-
+        emailET.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
+            if (b)
+                emailLayoutTextInput.setStartIconTintList(
+                    ContextCompat.getColorStateList(
+                        this@LoginActivity,
+                        R.color.medium_purple
+                    )
+                )
+            else
+                emailLayoutTextInput.setStartIconTintList(
+                    ContextCompat.getColorStateList(
+                        this@LoginActivity,
+                        R.color.white
+                    )
+                )
+        }
+        passwordET.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
+            if (b) {
+                setPasswordColor(R.color.medium_purple)
+            } else {
+               setPasswordColor(R.color.white)
+            }
+        }
+        passwordET.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                passwordET.clearFocus()
+                emailET.clearFocus()
+                val imm: InputMethodManager =
+                    v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(v.windowToken, 0)
+                true
+            } else {
+                false
+            }
+        }
         signInBtn.setOnClickListener {
             viewModel.onEvent(LoginFormEvent.Submit)
             if (viewModel.state.emailError != null)
@@ -121,5 +160,21 @@ class LoginActivity : AppCompatActivity() {
 
 
         }
+    }
+
+    private fun setPasswordColor(color:Int)
+    {
+        passwordLayoutTextInput.setStartIconTintList(
+            ContextCompat.getColorStateList(
+                this@LoginActivity,
+                color
+            )
+        )
+        passwordLayoutTextInput.setEndIconTintList(
+            ContextCompat.getColorStateList(
+                this@LoginActivity,
+                color
+            )
+        )
     }
 }

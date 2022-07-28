@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
@@ -54,6 +55,7 @@ import com.genwin.jd3tv.screens.home.domain.entity.SectionType.*
 import com.genwin.jd3tv.screens.hosts.presentation.Host
 import com.genwin.jd3tv.screens.search.presentation.Search
 import com.genwin.jd3tv.screens.shop.presentation.Shop
+import com.genwin.jd3tv.screens.specials.presentation.SpecialData
 import com.genwin.jd3tv.screens.specials.presentation.SpecialsScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -230,6 +232,12 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
                         Shop -> {
                             ShopSection(section = section)
                         }
+                        FaithItem -> {
+                            homeFaithViewPagerItem(section.title)
+                        }
+                        FullItem->{
+                            Banner(sharedPreference = sharedPreference, homeNavController = homeNavController,hasHeader = false)
+                        }
 //                        else -> {
 //                            viewPagerWithDots(section = section)
 //                        }
@@ -270,14 +278,69 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
 
 
 @Composable
-fun getSectionTitle(title: String) {
+fun getSectionTitle(title: String, topPadding: Int = 19) {
     Text(
         text = title,
         color = Color.White,
         fontFamily = FontFamily(Font(poppins_semibold)),
         fontSize = 20.sp,
-        modifier = Modifier.padding(top = 19.dp, start = 16.dp)
+        modifier = Modifier.padding(top = topPadding.dp, start = 16.dp)
     )
+}
+
+@Composable
+fun homeFaithViewPagerItem(
+    titleStr: String
+) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 19.dp)
+    ) {
+        val (title, viewPager) = createRefs()
+        Text(
+            text = titleStr,
+            fontSize = 20.sp,
+            color = Color.White,
+            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+            modifier = Modifier.constrainAs(title) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start, margin = 16.dp)
+            }
+        )
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .constrainAs(viewPager) {
+                    top.linkTo(title.bottom, margin = 9.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
+            state = rememberLazyListState()
+        ) {
+            items(10) {
+                Row() {
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Column() {
+                        AsyncImage(
+                            model = "",
+                            contentDescription = "",
+                            placeholder = painterResource(R.drawable.image_1),
+                            error = painterResource(R.drawable.image_1),
+                            contentScale = ContentScale.FillBounds,
+                            modifier = Modifier
+                                .width(126.dp)
+                                .height(180.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+
 }
 
 @OptIn(ExperimentalPagerApi::class)
@@ -288,7 +351,7 @@ fun viewPagerWithDots(section: HomeSection) {
         color = colorResource(id = R.color.dark_jungle_green_50)
     ) {
         Column {
-            getSectionTitle(section.title)
+            getSectionTitle(section.title, 9)
             ConstraintLayout {
                 val (viewPager, dots, topSpacer, bottomSpacer) = createRefs()
                 HorizontalPager(
@@ -298,13 +361,13 @@ fun viewPagerWithDots(section: HomeSection) {
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .constrainAs(viewPager) {
-                            top.linkTo(parent.top)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
+                            top.linkTo(parent.top, margin = 9.dp)
+                            start.linkTo(parent.start, margin = 16.dp)
+                            end.linkTo(parent.end, margin = 16.dp)
                         }
                 ) { page ->
 //                val item = section.getItems()[page]
-                    ConstraintLayout(modifier = Modifier.padding(8.dp)) {
+                    ConstraintLayout() {
                         val (image, title, type) = createRefs()
                         AsyncImage(
                             model = "",//item.mainPhoto?.fileUrl ?: "",
@@ -347,13 +410,12 @@ fun viewPagerWithDots(section: HomeSection) {
                     }
                 }
                 Spacer(modifier = Modifier
-                    .padding(4.dp)
                     .constrainAs(topSpacer) { top.linkTo(viewPager.bottom) })
                 DotsIndicator(
                     totalDots = 10,// section.getItems().size,
                     selectedIndex = state.currentPage,
                     modifier = Modifier.constrainAs(dots) {
-                        top.linkTo(topSpacer.bottom)
+                        top.linkTo(topSpacer.bottom, margin = 26.dp)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }, Color(0xFFe225ff)
@@ -723,7 +785,7 @@ fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostCon
 }
 
 @Composable
-fun Banner(sharedPreference: SharedPreference, homeNavController: NavHostController) {
+fun Banner(sharedPreference: SharedPreference, homeNavController: NavHostController,hasHeader:Boolean=true) {
     ConstraintLayout() {
         val (image, dataContainer, gradient) = createRefs()
         Image(
@@ -776,6 +838,7 @@ fun Banner(sharedPreference: SharedPreference, homeNavController: NavHostControl
 
             }
         }
+        if(hasHeader)
         HomeHeader(sharedPreference = sharedPreference, homeNavController)
 
     }
@@ -792,7 +855,7 @@ fun Contest(section: HomeSection) {
             HorizontalPager(
                 count = 10,//section.getItems().size,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .padding(start = 16.dp, end = 16.dp)
                     .fillMaxWidth()
             ) { page ->
                 // Our page content

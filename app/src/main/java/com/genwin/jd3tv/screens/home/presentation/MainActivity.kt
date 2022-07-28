@@ -170,7 +170,26 @@ class MainActivity : ComponentActivity() {
         )
         fullSections.add(
             HomeSection(
+                "Featured Shows", SectionType.Contest, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add(
+            HomeSection(
                 "JD3 TV Picks", SectionType.ViewPager, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add( HomeSection(
+            "", SectionType.FullItem, "", ItemDetailsRequest(
+                emptyList(), "", "", emptyList()
+            )
+        ))
+        fullSections.add(
+            HomeSection(
+                "New on JD3 TV", SectionType.Contest, "", ItemDetailsRequest(
                     emptyList(), "", "", emptyList()
                 )
             )
@@ -191,7 +210,44 @@ class MainActivity : ComponentActivity() {
         )
         fullSections.add(
             HomeSection(
-                "Hosts", SectionType.Host, "", ItemDetailsRequest(
+                "Documentaries", SectionType.Contest, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+
+        fullSections.add(
+            HomeSection(
+                "Sports Entertainment", SectionType.Contest, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add(
+            HomeSection(
+                "Upcoming Events", SectionType.ViewPager, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add(
+            HomeSection(
+                "JD3 TV Originals", SectionType.Contest, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add(
+            HomeSection(
+                "Faith", SectionType.FaithItem, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+
+        fullSections.add(
+            HomeSection(
+                "Masterclass", SectionType.ViewPager, "", ItemDetailsRequest(
                     emptyList(), "", "", emptyList()
                 )
             )
@@ -199,6 +255,34 @@ class MainActivity : ComponentActivity() {
         fullSections.add(
             HomeSection(
                 "Shop", SectionType.Shop, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add(
+            HomeSection(
+                "TV Series", SectionType.Contest, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add(
+            HomeSection(
+                "Talk shows", SectionType.Contest, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add(
+            HomeSection(
+                "Not to miss", SectionType.ViewPager, "", ItemDetailsRequest(
+                    emptyList(), "", "", emptyList()
+                )
+            )
+        )
+        fullSections.add(
+            HomeSection(
+                "Hosts", SectionType.Host, "", ItemDetailsRequest(
                     emptyList(), "", "", emptyList()
                 )
             )
