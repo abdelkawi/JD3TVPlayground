@@ -74,7 +74,8 @@ fun CategoryBanner(
     title: String,
     selectedIndex: String = ""
 ) {
-    ConstraintLayout() {
+    ConstraintLayout( modifier = Modifier
+        .fillMaxWidth()) {
         val (image, dataContainer, gradient) = createRefs()
         Image(
             painter = painterResource(id = R.drawable.movie_poster_),
@@ -143,8 +144,8 @@ fun CategoryHeader(
     var expanded by remember { mutableStateOf(false) }
     var openCategory by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf(selectedIndex.ifEmpty { "Categories" }) }
-    Row {
-        ConstraintLayout() {
+    Row (modifier = Modifier.fillMaxWidth()){
+        ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
             val (logo, profileImg, gradient, container) = createRefs()
             Image(
                 painter = painterResource(id = R.drawable.top_bar_gradient),
@@ -154,10 +155,11 @@ fun CategoryHeader(
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                 })
-            Row(modifier = Modifier
+            Row(modifier = Modifier.fillMaxWidth()
                     .constrainAs(logo) {
                         top.linkTo(parent.top, margin = 6.dp)
                         start.linkTo(parent.start, margin = 6.dp)
+                        end.linkTo(parent.end, margin = 10.dp)
                     }) {
                 Header(
                     sharedPreference = sharedPreference,

@@ -682,8 +682,10 @@ fun Header(
 
 @Composable
 fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostController) {
-    Row() {
-        ConstraintLayout() {
+    Row( modifier = Modifier
+        .fillMaxSize()) {
+        ConstraintLayout( modifier = Modifier
+            .fillMaxSize()) {
             val (logo, gradient, container) = createRefs()
             Image(
                 painter = painterResource(id = top_bar_gradient),
@@ -693,9 +695,10 @@ fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostCon
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                 })
-            Row(modifier = Modifier.constrainAs(logo) {
+            Column(modifier = Modifier.fillMaxWidth().constrainAs(logo) {
                 top.linkTo(parent.top, margin = 10.dp)
                 start.linkTo(parent.start, margin = 10.dp)
+                end.linkTo(parent.end, margin = 10.dp)
             }) {
                 Header(sharedPreference = sharedPreference, onClick = { })
             }
