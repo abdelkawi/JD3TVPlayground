@@ -12,8 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.PlatformTextStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -28,7 +26,7 @@ import com.genwin.jd3tv.screens.home.presentation.Header
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Host(hostSize: Int, titleStr: String, sharedPreference: SharedPreference) {
-    val numbers = (0..10).toList()
+    val numbers = (0..hostSize).toList()
 
     LazyVerticalGrid(
         modifier = Modifier
@@ -47,7 +45,7 @@ fun Host(hostSize: Int, titleStr: String, sharedPreference: SharedPreference) {
                     .fillMaxWidth()
                     .padding(top = 6.dp, start = 16.dp, end = 16.dp)
             ) {
-                Header(sharedPreference = sharedPreference)
+                Header(sharedPreference = sharedPreference, onClick = {})
             }
         }
         item(span = {

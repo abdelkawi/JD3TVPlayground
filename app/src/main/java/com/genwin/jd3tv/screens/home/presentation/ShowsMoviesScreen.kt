@@ -154,54 +154,16 @@ fun CategoryHeader(
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                 })
-            Image(
-                painter = painterResource(id = R.drawable.back_button),
-                contentDescription = "",
-                contentScale = ContentScale.Inside,
-                alignment = Alignment.TopStart,
-                modifier = Modifier
+            Row(modifier = Modifier
                     .constrainAs(logo) {
                         top.linkTo(parent.top, margin = 6.dp)
                         start.linkTo(parent.start, margin = 6.dp)
-                    }
-                    .clickable { navController.popBackStack() }
-            )
-
-            if (sharedPreference.getPhoto().isNotEmpty())
-                AsyncImage(
-                    model = sharedPreference.getPhoto(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .width(28.dp)
-                        .height(28.dp)
-                        .clip(CircleShape)
-                        .background(Color.White)
-                        .constrainAs(profileImg) {
-                            top.linkTo(parent.top, margin = 16.dp)
-                            end.linkTo(parent.end, margin = 16.dp)
-                        }
-                ) else {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .background(colorResource(id = R.color.persian_blue), shape = CircleShape)
-                        .height(28.dp)
-                        .width(28.dp)
-                        .border(1.dp, Color.White, CircleShape)
-                        .constrainAs(profileImg) {
-                            top.linkTo(parent.top, margin = 16.dp)
-                            end.linkTo(parent.end, margin = 16.dp)
-                        }
-                ) {
-                    Text(
-                        text = sharedPreference.getNickName(),
-                        fontSize = 14.sp,
-                        textAlign = TextAlign.Center,
-                        color = Color.White,
-                        fontFamily = FontFamily(Font(R.font.poppins_semibold))
-                    )
-                }
+                    }) {
+                Header(
+                    sharedPreference = sharedPreference,
+                    onClick = { navController.popBackStack() },
+                    showBack = true
+                )
             }
 
             ConstraintLayout(modifier = Modifier.constrainAs(container) {

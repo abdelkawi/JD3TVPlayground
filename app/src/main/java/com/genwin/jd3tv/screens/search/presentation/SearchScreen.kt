@@ -41,6 +41,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.SharedPreference
+import com.genwin.jd3tv.screens.home.presentation.Header
 import com.genwin.jd3tv.screens.hosts.presentation.HostCell
 
 //
@@ -64,7 +65,7 @@ fun Search(sharedPreference: SharedPreference,navController: NavController) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-            ) { SearchHeader(sharedPreference = sharedPreference,navController) }
+            ) { Header(sharedPreference = sharedPreference,onClick={ navController.popBackStack()}, showBack = true) }
         }
         item(span = {
             GridItemSpan(2)
@@ -149,60 +150,4 @@ fun searchBar() {
             disabledIndicatorColor = Color.Transparent
         )
     )
-}
-
-@Composable
-fun SearchHeader(sharedPreference: SharedPreference,navController: NavController) {
-    Row(modifier = Modifier.fillMaxSize()) {
-        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-            val (logo, back, profileImg) = createRefs()
-            Image(
-                painter = painterResource(id = R.drawable.back_button),
-                contentDescription = "",
-                contentScale = ContentScale.Inside,
-                alignment = Alignment.TopStart,
-                modifier = Modifier
-                    .constrainAs(logo) {
-                        top.linkTo(parent.top, margin = 6.dp)
-                        start.linkTo(parent.start, margin = 6.dp)
-                    }.clickable { navController.popBackStack() }
-            )
-            if (sharedPreference.getPhoto().isNotEmpty())
-                AsyncImage(
-                    model = sharedPreference.getPhoto(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .width(28.dp)
-                        .height(28.dp)
-                        .clip(CircleShape)
-                        .background(Color.White)
-                        .constrainAs(profileImg) {
-                            top.linkTo(parent.top, margin = 16.dp)
-                            end.linkTo(parent.end, margin = 16.dp)
-                        }
-                ) else {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .background(colorResource(id = R.color.persian_blue), shape = CircleShape)
-                        .height(28.dp)
-                        .width(28.dp)
-                        .border(1.dp, Color.White, CircleShape)
-                        .constrainAs(profileImg) {
-                            top.linkTo(parent.top, margin = 16.dp)
-                            end.linkTo(parent.end, margin = 16.dp)
-                        }
-                ) {
-                    Text(
-                        text = sharedPreference.getNickName(),
-                        fontSize = 14.sp,
-                        textAlign = TextAlign.Center,
-                        color = Color.White,
-                        fontFamily = FontFamily(Font(R.font.poppins_semibold))
-                    )
-                }
-            }
-        }
-    }
 }

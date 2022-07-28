@@ -85,7 +85,7 @@ fun Shop(sharedPreference: SharedPreference) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth().padding(top=6.dp, start = 16.dp,end=16.dp)
-            ) { Header(sharedPreference = sharedPreference) }
+            ) { Header(sharedPreference = sharedPreference, onClick = {}) }
         }
         item(span = {
             GridItemSpan(2)

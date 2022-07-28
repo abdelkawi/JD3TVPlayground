@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -61,276 +62,280 @@ import com.google.accompanist.pager.rememberPagerState
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun Main(
-  sections: List<HomeSection>,
-  tabs: List<BottomTab>,
-  sharedPreference: SharedPreference,
-  navController: NavHostController
+    sections: List<HomeSection>,
+    tabs: List<BottomTab>,
+    sharedPreference: SharedPreference,
+    navController: NavHostController
 ) {
-  val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
-  ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-    val (content, bottomBar) = createRefs()
-    NavHost(
-      navController = navController,
-      startDestination = "home",
-      modifier = Modifier
-        .constrainAs(content) {
-          top.linkTo(parent.top)
-          start.linkTo(parent.start)
-          end.linkTo(parent.end)
-          bottom.linkTo(bottomBar.top)
-          height = Dimension.fillToConstraints
-        }
-    ) {
-      tabs.forEach {
-        when (it.route) {
-          "home" -> {
-            composable(it.route) {
-              Home(sections, sharedPreference)
-              bottomBarState.value = true
+    val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val (content, bottomBar) = createRefs()
+        NavHost(
+            navController = navController,
+            startDestination = "home",
+            modifier = Modifier
+                .constrainAs(content) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(bottomBar.top)
+                    height = Dimension.fillToConstraints
+                }
+        ) {
+            tabs.forEach {
+                when (it.route) {
+                    "home" -> {
+                        composable(it.route) {
+                            Home(sections, sharedPreference)
+                            bottomBarState.value = true
+                        }
+                    }
+                    "events" -> {
+                        composable(it.route) {
+                            Event(sharedPreference = sharedPreference)
+                            bottomBarState.value = true
+                        }
+                    }
+                    "hosts" -> {
+                        composable(it.route) {
+                            Host(10, "Hosts", sharedPreference = sharedPreference)
+                            bottomBarState.value = true
+                        }
+                    }
+                    "shop" -> {
+                        composable(it.route) {
+                            Shop(sharedPreference = sharedPreference)
+                            bottomBarState.value = true
+                        }
+                    }
+                    "specials" -> {
+                        composable(it.route) {
+                            SpecialsScreen(
+                                sharedPreference = sharedPreference
+                            )
+                            bottomBarState.value = true
+                        }
+                    }
+                    else -> {
+                        composable(it.route) {
+                            Text("this is another one ", fontSize = 30.sp, color = Color.White)
+                            bottomBarState.value = true
+                        }
+                    }
+
+                }
+
             }
-          }
-          "events" -> {
-            composable(it.route) {
-              Event(sharedPreference = sharedPreference)
-              bottomBarState.value = true
+
+            composable("search") {
+                Search(
+                    sharedPreference = sharedPreference,
+                    navController = navController
+                )
+                bottomBarState.value = false
             }
-          }
-          "hosts" -> {
-            composable(it.route) {
-              Host(10, "Hosts", sharedPreference = sharedPreference)
-              bottomBarState.value = true
-            }
-          }
-          "shop" -> {
-            composable(it.route) {
-              Shop(sharedPreference = sharedPreference)
-              bottomBarState.value = true
-            }
-          }
-          "specials" -> {
-            composable(it.route) {
-              SpecialsScreen(
-                sharedPreference = sharedPreference
-              )
-              bottomBarState.value = true
-            }
-          }
-          else -> {
-            composable(it.route) {
-              Text("this is another one ", fontSize = 30.sp, color = Color.White)
-              bottomBarState.value = true
-            }
-          }
 
         }
-
-      }
-
-      composable("search") {
-        Search(
-          sharedPreference = sharedPreference,
-          navController = navController
+        AnimatedVisibility(
+            visible = bottomBarState.value,
+            enter = slideInVertically(initialOffsetY = { it }),
+            exit = slideOutVertically(targetOffsetY = { it }),
+            modifier = Modifier
+                .constrainAs(bottomBar) {
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .wrapContentHeight(),
+            content = {
+                BottomNavigation(
+                    backgroundColor = Color(0xff1f212a)
+                ) {
+                    val backStackEntry by navController.currentBackStackEntryAsState()
+                    val currentRoute = backStackEntry?.destination?.route
+                    tabs.forEach {
+                        val isSelected = currentRoute == it.route
+                        BottomNavigationItem(selected = isSelected, onClick = {
+                            navController.navigate(it.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                            icon = {
+                                Icon(
+                                    painterResource(id = it.icon),
+                                    contentDescription = ""
+                                )
+                            },
+                            selectedContentColor = colorResource(id = R.color.psychedelic_purple),
+                            unselectedContentColor = Color.White,
+                            label = {
+                                Text(
+                                    text = it.title,
+                                    fontSize = 12.sp,
+                                    fontFamily = FontFamily((Font(poppins_semibold))),
+                                    maxLines = 1
+                                )
+                            }
+                        )
+                    }
+                }
+            }
         )
-        bottomBarState.value = false
-      }
 
     }
-    AnimatedVisibility(
-      visible = bottomBarState.value,
-      enter = slideInVertically(initialOffsetY = { it }),
-      exit = slideOutVertically(targetOffsetY = { it }),
-      modifier = Modifier
-        .constrainAs(bottomBar) {
-          bottom.linkTo(parent.bottom)
-          start.linkTo(parent.start)
-          end.linkTo(parent.end)
-        }
-        .wrapContentHeight(),
-      content = {
-        BottomNavigation(
-          backgroundColor = Color(0xff1f212a)
-        ) {
-          val backStackEntry by navController.currentBackStackEntryAsState()
-          val currentRoute = backStackEntry?.destination?.route
-          tabs.forEach {
-            val isSelected = currentRoute == it.route
-            BottomNavigationItem(selected = isSelected, onClick = {
-              navController.navigate(it.route) {
-                popUpTo(navController.graph.findStartDestination().id) {
-                  saveState = true
-                }
-                launchSingleTop = true
-                restoreState = true
-              }
-            },
-              icon = {
-                Icon(
-                  painterResource(id = it.icon),
-                  contentDescription = ""
-                )
-              },
-              selectedContentColor = colorResource(id = R.color.psychedelic_purple),
-              unselectedContentColor = Color.White,
-              label = {
-                Text(
-                  text = it.title,
-                  fontSize = 12.sp,
-                  fontFamily = FontFamily((Font(poppins_semibold))),
-                  maxLines = 1
-                )
-              }
-            )
-          }
-        }
-      }
-    )
-
-  }
 
 }
 
 
 @Composable
 fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
-  val homeNavController = rememberNavController()
-  NavHost(
-    navController = homeNavController,
-    startDestination = "main"
-  ) {
-    composable("main") {
-      Column(
-        modifier = Modifier
-          .verticalScroll(rememberScrollState())
-          .background(Color.Black)
-          .wrapContentHeight()
-      ) {
-        Banner(sharedPreference, homeNavController)
-        sections.forEach { section ->
+    val homeNavController = rememberNavController()
+    NavHost(
+        navController = homeNavController,
+        startDestination = "main"
+    ) {
+        composable("main") {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .background(Color.Black)
+                    .wrapContentHeight()
+            ) {
+                Banner(sharedPreference, homeNavController)
+                sections.forEach { section ->
 
-          when (section.type) {
-            Card -> {
-              CardsSection(section = section)
-            }
-            CardWithTitle -> CardsWithTitleSection(section = section)
-            ViewPager -> {
-              viewPagerWithDots(section = section)
-            }
-            Contest -> {
-              Contest(section = section)
-            }
-            Host -> {
-              HostSection(section = section)
-            }
-            Shop -> {
-              ShopSection(section = section)
-            }
-            FaithItem -> {
-              homeFaithViewPagerItem(section.title)
-            }
-            FullItem -> {
-              Banner(sharedPreference = sharedPreference, homeNavController = homeNavController, hasHeader = false)
-            }
+                    when (section.type) {
+                        Card -> {
+                            CardsSection(section = section)
+                        }
+                        CardWithTitle -> CardsWithTitleSection(section = section)
+                        ViewPager -> {
+                            viewPagerWithDots(section = section)
+                        }
+                        Contest -> {
+                            Contest(section = section)
+                        }
+                        Host -> {
+                            HostSection(section = section)
+                        }
+                        Shop -> {
+                            ShopSection(section = section)
+                        }
+                        FaithItem -> {
+                            homeFaithViewPagerItem(section.title)
+                        }
+                        FullItem -> {
+                            Banner(
+                                sharedPreference = sharedPreference,
+                                homeNavController = homeNavController,
+                                hasHeader = false
+                            )
+                        }
 //                        else -> {
 //                            viewPagerWithDots(section = section)
 //                        }
-          }
+                    }
+                }
+            }
         }
-      }
-    }
-    composable("shows") {
-      ShowsMovies(
-        "Shows",
-        sharedPreference = sharedPreference,
-        navController = homeNavController
-      )
-    }
-    composable("movies") {
-      ShowsMovies(
-        "Movies",
-        sharedPreference = sharedPreference,
-        navController = homeNavController
-      )
-    }
-    composable(
-      "category/{title}/{selected_cat}",
-      arguments = listOf(navArgument("title") { type = NavType.StringType },
-        navArgument("selected_cat") { type = NavType.StringType })
-    ) {
+        composable("shows") {
+            ShowsMovies(
+                "Shows",
+                sharedPreference = sharedPreference,
+                navController = homeNavController
+            )
+        }
+        composable("movies") {
+            ShowsMovies(
+                "Movies",
+                sharedPreference = sharedPreference,
+                navController = homeNavController
+            )
+        }
+        composable(
+            "category/{title}/{selected_cat}",
+            arguments = listOf(navArgument("title") { type = NavType.StringType },
+                navArgument("selected_cat") { type = NavType.StringType })
+        ) {
 
-      CategoryScreen(
-        it.arguments?.getString("title") ?: "",
-        sharedPreference = sharedPreference,
-        navController = homeNavController,
-        it.arguments?.getString("selected_cat") ?: ""
-      )
+            CategoryScreen(
+                it.arguments?.getString("title") ?: "",
+                sharedPreference = sharedPreference,
+                navController = homeNavController,
+                it.arguments?.getString("selected_cat") ?: ""
+            )
+        }
     }
-  }
 
 }
 
 
 @Composable
 fun getSectionTitle(title: String, topPadding: Int = 19) {
-  Text(
-    text = title,
-    color = Color.White,
-    fontFamily = FontFamily(Font(poppins_semibold)),
-    fontSize = 20.sp,
-    modifier = Modifier.padding(top = topPadding.dp, start = 16.dp)
-  )
+    Text(
+        text = title,
+        color = Color.White,
+        fontFamily = FontFamily(Font(poppins_semibold)),
+        fontSize = 20.sp,
+        modifier = Modifier.padding(top = topPadding.dp, start = 16.dp)
+    )
 }
 
 @Composable
 fun homeFaithViewPagerItem(
-  titleStr: String
+    titleStr: String
 ) {
-  ConstraintLayout(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(top = 19.dp)
-  ) {
-    val (title, viewPager) = createRefs()
-    Text(
-      text = titleStr,
-      fontSize = 20.sp,
-      color = Color.White,
-      fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-      modifier = Modifier.constrainAs(title) {
-        top.linkTo(parent.top)
-        start.linkTo(parent.start, margin = 16.dp)
-      }
-    )
-    LazyRow(
-      modifier = Modifier
-        .fillMaxWidth()
-        .wrapContentHeight()
-        .constrainAs(viewPager) {
-          top.linkTo(title.bottom, margin = 9.dp)
-          start.linkTo(parent.start)
-          end.linkTo(parent.end)
-        },
-      state = rememberLazyListState()
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 19.dp)
     ) {
-      items(10) {
-        Row() {
-          Spacer(modifier = Modifier.width(10.dp))
-          Column() {
-            AsyncImage(
-              model = "",
-              contentDescription = "",
-              placeholder = painterResource(R.drawable.image_1),
-              error = painterResource(R.drawable.image_1),
-              contentScale = ContentScale.FillBounds,
-              modifier = Modifier
-                .width(126.dp)
-                .height(180.dp)
-                .clip(RoundedCornerShape(10.dp))
-            )
-          }
+        val (title, viewPager) = createRefs()
+        Text(
+            text = titleStr,
+            fontSize = 20.sp,
+            color = Color.White,
+            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+            modifier = Modifier.constrainAs(title) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start, margin = 16.dp)
+            }
+        )
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .constrainAs(viewPager) {
+                    top.linkTo(title.bottom, margin = 9.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
+            state = rememberLazyListState()
+        ) {
+            items(10) {
+                Row() {
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Column() {
+                        AsyncImage(
+                            model = "",
+                            contentDescription = "",
+                            placeholder = painterResource(R.drawable.image_1),
+                            error = painterResource(R.drawable.image_1),
+                            contentScale = ContentScale.FillBounds,
+                            modifier = Modifier
+                                .width(126.dp)
+                                .height(180.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                        )
+                    }
+                }
+            }
         }
-      }
     }
-  }
 
 
 }
@@ -338,647 +343,627 @@ fun homeFaithViewPagerItem(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun viewPagerWithDots(section: HomeSection) {
-  val state = rememberPagerState()
-  Surface(
-    color = colorResource(id = R.color.dark_jungle_green_50)
-  ) {
-    Column {
-      getSectionTitle(section.title, 9)
-      ConstraintLayout {
-        val (viewPager, dots, topSpacer, bottomSpacer) = createRefs()
-        HorizontalPager(
-          state = state,
-          count = 10,//section.getItems().size,
-          modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .constrainAs(viewPager) {
-              top.linkTo(parent.top, margin = 9.dp)
-              start.linkTo(parent.start, margin = 16.dp)
-              end.linkTo(parent.end, margin = 16.dp)
-            }
-        ) { page ->
+    val state = rememberPagerState()
+    Surface(
+        color = colorResource(id = R.color.dark_jungle_green_50)
+    ) {
+        Column {
+            getSectionTitle(section.title, 9)
+            ConstraintLayout {
+                val (viewPager, dots, topSpacer, bottomSpacer) = createRefs()
+                HorizontalPager(
+                    state = state,
+                    count = 10,//section.getItems().size,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .constrainAs(viewPager) {
+                            top.linkTo(parent.top, margin = 9.dp)
+                            start.linkTo(parent.start, margin = 16.dp)
+                            end.linkTo(parent.end, margin = 16.dp)
+                        }
+                ) { page ->
 //                val item = section.getItems()[page]
-          ConstraintLayout(modifier = Modifier.padding(horizontal = 16.dp)) {
-            val (image, title, type) = createRefs()
-            AsyncImage(
-              model = "",//item.mainPhoto?.fileUrl ?: "",
-              contentDescription = "",
-              placeholder = painterResource(image_1),
-              error = painterResource(image_1),
-              contentScale = ContentScale.Crop,
-              modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp)
-                .clip(RoundedCornerShape(5.dp))
-                .constrainAs(image) {
-                  top.linkTo(parent.top)
-                  start.linkTo(parent.start)
-                  end.linkTo(parent.end)
-                })
+                    ConstraintLayout(modifier = Modifier.padding(horizontal = 16.dp)) {
+                        val (image, title, type) = createRefs()
+                        AsyncImage(
+                            model = "",//item.mainPhoto?.fileUrl ?: "",
+                            contentDescription = "",
+                            placeholder = painterResource(image_1),
+                            error = painterResource(image_1),
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(300.dp)
+                                .clip(RoundedCornerShape(5.dp))
+                                .constrainAs(image) {
+                                    top.linkTo(parent.top)
+                                    start.linkTo(parent.start)
+                                    end.linkTo(parent.end)
+                                })
 
-            Text(
-              text = "This is title ",//item.title ?:,
-              fontSize = 16.sp,
-              color = Color.White,
-              fontFamily = FontFamily(Font(poppins_regular)),
-              modifier = Modifier.constrainAs(title) {
-                top.linkTo(image.bottom, margin = 16.dp)
-              }
-            )
-            Text(
-              text = "Contest".uppercase(),
-              fontSize = 13.sp,
-              color = Color.White,
-              fontFamily = FontFamily(Font(poppins_semibold)),
-              textAlign = TextAlign.Center,
-              modifier = Modifier
-                .constrainAs(type) {
-                  bottom.linkTo(image.bottom, margin = 16.dp)
-                  end.linkTo(image.end, margin = 16.dp)
+                        Text(
+                            text = "This is title ",//item.title ?:,
+                            fontSize = 16.sp,
+                            color = Color.White,
+                            fontFamily = FontFamily(Font(poppins_regular)),
+                            modifier = Modifier.constrainAs(title) {
+                                top.linkTo(image.bottom, margin = 16.dp)
+                            }
+                        )
+                        Text(
+                            text = "Contest".uppercase(),
+                            fontSize = 13.sp,
+                            color = Color.White,
+                            fontFamily = FontFamily(Font(poppins_semibold)),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .constrainAs(type) {
+                                    bottom.linkTo(image.bottom, margin = 16.dp)
+                                    end.linkTo(image.end, margin = 16.dp)
+                                }
+                                .width(80.dp)
+                                .height(28.dp)
+                                .padding(2.dp)
+                                .background(Color.Magenta, shape = RoundedCornerShape(6.dp))
+                        )
+                    }
                 }
-                .width(80.dp)
-                .height(28.dp)
-                .padding(2.dp)
-                .background(Color.Magenta, shape = RoundedCornerShape(6.dp))
-            )
-          }
+                Spacer(modifier = Modifier
+                    .constrainAs(topSpacer) { top.linkTo(viewPager.bottom) })
+                DotsIndicator(
+                    totalDots = 10,// section.getItems().size,
+                    selectedIndex = state.currentPage,
+                    modifier = Modifier.constrainAs(dots) {
+                        top.linkTo(topSpacer.bottom, margin = 26.dp)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }, Color(0xFFe225ff)
+                )
+                Spacer(modifier = Modifier
+                    .padding(4.dp)
+                    .constrainAs(bottomSpacer) { top.linkTo(dots.bottom) })
+            }
         }
-        Spacer(modifier = Modifier
-          .constrainAs(topSpacer) { top.linkTo(viewPager.bottom) })
-        DotsIndicator(
-          totalDots = 10,// section.getItems().size,
-          selectedIndex = state.currentPage,
-          modifier = Modifier.constrainAs(dots) {
-            top.linkTo(topSpacer.bottom, margin = 26.dp)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-          }, Color(0xFFe225ff)
-        )
-        Spacer(modifier = Modifier
-          .padding(4.dp)
-          .constrainAs(bottomSpacer) { top.linkTo(dots.bottom) })
-      }
     }
-  }
 }
 
 @Composable
 fun DotsIndicator(
-  totalDots: Int,
-  selectedIndex: Int,
-  modifier: Modifier,
-  backGroundColor: Color
+    totalDots: Int,
+    selectedIndex: Int,
+    modifier: Modifier,
+    backGroundColor: Color
 ) {
-  LazyRow(
-    modifier = modifier,
-    horizontalArrangement = Arrangement.Center,
-    verticalAlignment = Alignment.CenterVertically
-  ) {
+    LazyRow(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
 
-    items(totalDots) { index ->
-      if (index == selectedIndex) {
-        Box(
-          modifier = Modifier
-            .width(20.dp)
-            .height(6.dp)
-            .clip(RoundedCornerShape(2.dp))
-            .background(backGroundColor)
-        )
-      } else {
-        Box(
-          modifier = Modifier
-            .size(6.dp)
-            .clip(CircleShape)
-            .background(color = Color.White)
-        )
-      }
+        items(totalDots) { index ->
+            if (index == selectedIndex) {
+                Box(
+                    modifier = Modifier
+                        .width(20.dp)
+                        .height(6.dp)
+                        .clip(RoundedCornerShape(2.dp))
+                        .background(backGroundColor)
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .size(6.dp)
+                        .clip(CircleShape)
+                        .background(color = Color.White)
+                )
+            }
 
-      if (index != totalDots - 1) {
-        Spacer(modifier = Modifier.padding(horizontal = 2.dp))
-      }
+            if (index != totalDots - 1) {
+                Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+            }
+        }
     }
-  }
 
 }
 
 @Composable
 fun Profile(
-  email: String,
-  nickName: String,
-  photo: String,
-  fullName: String,
-  sharedPreference: SharedPreference
+    email: String,
+    nickName: String,
+    photo: String,
+    fullName: String,
+    sharedPreference: SharedPreference
 ) {
-  var noImage = true
-  if (photo.isNotEmpty())
-    noImage = false
-  CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Ltr) {
-    Column(
-      Modifier
-        .fillMaxWidth()
-        .padding(start = 36.dp, top = 55.dp)
-        .verticalScroll(rememberScrollState()),
-      horizontalAlignment = Alignment.Start
-    ) {
-      if (noImage) {
-        Box(
-          contentAlignment = Alignment.Center,
-          modifier = Modifier
-            .background(Color.White, shape = CircleShape)
-            .height(34.dp)
-            .width(34.dp)
-            .border(1.dp, colorResource(id = R.color.languid_lavender), CircleShape)
+    var noImage = true
+    if (photo.isNotEmpty())
+        noImage = false
+    CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Ltr) {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(start = 36.dp, top = 55.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.Start
         ) {
-          Text(
-            text = nickName,
-            fontSize = 12.sp,
-            textAlign = TextAlign.Center,
-            fontFamily = FontFamily(Font(poppins_semibold))
-          )
+            if (noImage) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .background(Color.White, shape = CircleShape)
+                        .height(34.dp)
+                        .width(34.dp)
+                        .border(1.dp, colorResource(id = R.color.languid_lavender), CircleShape)
+                ) {
+                    Text(
+                        text = nickName,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center,
+                        fontFamily = FontFamily(Font(poppins_semibold))
+                    )
+                }
+            } else
+                AsyncImage(
+                    model = photo, contentDescription = null, modifier = Modifier
+                        .clip(CircleShape)
+                        .width(28.dp)
+                        .height(28.dp)
+                        .clip(CircleShape)
+                        .background(Color.White)
+                )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = fullName,
+                fontFamily = FontFamily(Font(poppins_semibold)),
+                fontSize = 18.sp,
+                color = Color.White
+            )
+            Text(
+                text = email,
+                fontFamily = FontFamily(Font(poppins_regular)),
+                fontSize = 14.sp,
+                color = Color.White
+            )
+            Spacer(modifier = Modifier.height(45.dp))
+            Text(
+                text = stringResource(R.string.library),
+                fontFamily = FontFamily(Font(poppins_medium)),
+                fontSize = 16.sp,
+                color = colorResource(R.color.snow)
+            )
+            Spacer(modifier = Modifier.height(35.dp))
+            Text(
+                text = stringResource(id = R.string.orders),
+                fontFamily = FontFamily(Font(poppins_medium)),
+                fontSize = 16.sp,
+                color = colorResource(R.color.snow)
+            )
+            Spacer(modifier = Modifier.height(35.dp))
+            Text(
+                text = stringResource(id = R.string.transaction),
+                fontFamily = FontFamily(Font(poppins_medium)),
+                fontSize = 16.sp,
+                color = colorResource(R.color.snow)
+            )
+            Spacer(modifier = Modifier.height(35.dp))
+            Text(
+                text = stringResource(id = R.string.membership),
+                fontFamily = FontFamily(Font(poppins_medium)),
+                fontSize = 16.sp,
+                color = colorResource(R.color.snow)
+            )
+            Spacer(modifier = Modifier.height(35.dp))
+            Text(
+                text = stringResource(id = R.string.account_info),
+                fontFamily = FontFamily(Font(poppins_medium)),
+                fontSize = 16.sp,
+                color = colorResource(R.color.snow)
+            )
+            Spacer(modifier = Modifier.height(35.dp))
+            Text(
+                text = stringResource(id = R.string.payment_method),
+                fontFamily = FontFamily(Font(poppins_medium)),
+                fontSize = 16.sp,
+                color = colorResource(R.color.snow)
+            )
+            Spacer(modifier = Modifier.height(35.dp))
+            Text(
+                text = stringResource(id = R.string.sign_out),
+                fontFamily = FontFamily(Font(poppins_medium)),
+                fontSize = 16.sp,
+                color = colorResource(R.color.snow),
+                modifier = Modifier.clickable { sharedPreference.signOut() })
+            Spacer(modifier = Modifier.height(35.dp))
         }
-      } else
-        AsyncImage(
-          model = photo, contentDescription = null, modifier = Modifier
-            .clip(CircleShape)
-            .width(28.dp)
-            .height(28.dp)
-            .clip(CircleShape)
-            .background(Color.White)
-        )
-      Spacer(modifier = Modifier.height(4.dp))
-      Text(
-        text = fullName,
-        fontFamily = FontFamily(Font(poppins_semibold)),
-        fontSize = 18.sp,
-        color = Color.White
-      )
-      Text(
-        text = email,
-        fontFamily = FontFamily(Font(poppins_regular)),
-        fontSize = 14.sp,
-        color = Color.White
-      )
-      Spacer(modifier = Modifier.height(45.dp))
-      Text(
-        text = stringResource(R.string.library),
-        fontFamily = FontFamily(Font(poppins_medium)),
-        fontSize = 16.sp,
-        color = colorResource(R.color.snow)
-      )
-      Spacer(modifier = Modifier.height(35.dp))
-      Text(
-        text = stringResource(id = R.string.orders),
-        fontFamily = FontFamily(Font(poppins_medium)),
-        fontSize = 16.sp,
-        color = colorResource(R.color.snow)
-      )
-      Spacer(modifier = Modifier.height(35.dp))
-      Text(
-        text = stringResource(id = R.string.transaction),
-        fontFamily = FontFamily(Font(poppins_medium)),
-        fontSize = 16.sp,
-        color = colorResource(R.color.snow)
-      )
-      Spacer(modifier = Modifier.height(35.dp))
-      Text(
-        text = stringResource(id = R.string.membership),
-        fontFamily = FontFamily(Font(poppins_medium)),
-        fontSize = 16.sp,
-        color = colorResource(R.color.snow)
-      )
-      Spacer(modifier = Modifier.height(35.dp))
-      Text(
-        text = stringResource(id = R.string.account_info),
-        fontFamily = FontFamily(Font(poppins_medium)),
-        fontSize = 16.sp,
-        color = colorResource(R.color.snow)
-      )
-      Spacer(modifier = Modifier.height(35.dp))
-      Text(
-        text = stringResource(id = R.string.payment_method),
-        fontFamily = FontFamily(Font(poppins_medium)),
-        fontSize = 16.sp,
-        color = colorResource(R.color.snow)
-      )
-      Spacer(modifier = Modifier.height(35.dp))
-      Text(
-        text = stringResource(id = R.string.sign_out),
-        fontFamily = FontFamily(Font(poppins_medium)),
-        fontSize = 16.sp,
-        color = colorResource(R.color.snow),
-        modifier = Modifier.clickable { sharedPreference.signOut() })
-      Spacer(modifier = Modifier.height(35.dp))
     }
-  }
 }
 
 @Composable
 fun ErrorView(errorTxt: String, reloadAction: () -> Unit) {
-  ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-    val (retryBtn, errorMsg) = createRefs()
-    Button(onClick = { reloadAction.invoke() }, modifier = Modifier.constrainAs(retryBtn) {
-      top.linkTo(errorMsg.bottom)
-      start.linkTo(parent.start)
-      end.linkTo(parent.end)
-    }) {
-      Text(text = "Retry", color = Color.White)
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val (retryBtn, errorMsg) = createRefs()
+        Button(onClick = { reloadAction.invoke() }, modifier = Modifier.constrainAs(retryBtn) {
+            top.linkTo(errorMsg.bottom)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }) {
+            Text(text = "Retry", color = Color.White)
+        }
+        Text(
+            text = errorTxt,
+            modifier = Modifier.constrainAs(errorMsg) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
+            color = Color.Black,
+            fontSize = 14.sp,
+            fontFamily = FontFamily(Font(poppins_regular))
+        )
+
+
     }
-    Text(
-      text = errorTxt,
-      modifier = Modifier.constrainAs(errorMsg) {
-        top.linkTo(parent.top)
-        bottom.linkTo(parent.bottom)
-        start.linkTo(parent.start)
-        end.linkTo(parent.end)
-      },
-      color = Color.Black,
-      fontSize = 14.sp,
-      fontFamily = FontFamily(Font(poppins_regular))
-    )
-
-
-  }
 }
 
 @Composable
-fun Header(sharedPreference: SharedPreference) {
-  Row(modifier = Modifier.fillMaxSize()) {
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-      val (logo, profileImg) = createRefs()
-      Image(
-        painter = painterResource(id = ic_jd_tv_logo),
-        contentDescription = "",
-        contentScale = ContentScale.Inside,
-        alignment = Alignment.TopStart,
-        modifier = Modifier.constrainAs(logo) {
-          top.linkTo(parent.top, margin = 6.dp)
-          start.linkTo(parent.start)
-        }
-      )
+fun Header(
+    sharedPreference: SharedPreference,
+    onClick: () -> Unit,
+    showBack: Boolean = false
+) {
+    Row(modifier = Modifier.fillMaxSize()) {
+        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+            val (logo, profileImg) = createRefs()
+            if (showBack)
+                Image(
+                    painter = painterResource(id = R.drawable.back_button),
+                    contentDescription = "",
+                    contentScale = ContentScale.Inside,
+                    alignment = Alignment.TopStart,
+                    modifier = Modifier
+                        .constrainAs(logo) {
+                            top.linkTo(parent.top, margin = 6.dp)
+                            start.linkTo(parent.start, margin = 6.dp)
+                        }
+                        .clickable { onClick }
+                )
+            else
+                Image(
+                    painter = painterResource(id = ic_jd_tv_logo),
+                    contentDescription = "",
+                    contentScale = ContentScale.Inside,
+                    alignment = Alignment.TopStart,
+                    modifier = Modifier.constrainAs(logo) {
+                        top.linkTo(parent.top, margin = 6.dp)
+                        start.linkTo(parent.start)
+                    }
+                )
 
-      if (sharedPreference.getPhoto().isNotEmpty())
-        AsyncImage(
-          model = sharedPreference.getPhoto(),
-          contentDescription = null,
-          modifier = Modifier
-            .clip(CircleShape)
-            .width(28.dp)
-            .height(28.dp)
-            .clip(CircleShape)
-            .background(Color.White)
-            .constrainAs(profileImg) {
-              top.linkTo(parent.top, margin = 6.dp)
-              end.linkTo(parent.end)
+            if (sharedPreference.getPhoto().isNotEmpty())
+                AsyncImage(
+                    model = sharedPreference.getPhoto(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .width(28.dp)
+                        .height(28.dp)
+                        .clip(CircleShape)
+                        .background(Color.White)
+                        .constrainAs(profileImg) {
+                            top.linkTo(parent.top, margin = 6.dp)
+                            end.linkTo(parent.end)
+                        }
+                ) else {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .background(colorResource(id = R.color.persian_blue), shape = CircleShape)
+                        .height(28.dp)
+                        .width(28.dp)
+                        .border(1.dp, Color.White, CircleShape)
+                        .constrainAs(profileImg) {
+                            top.linkTo(parent.top, margin = 6.dp)
+                            end.linkTo(parent.end)
+                        }
+                ) {
+                    Text(
+                        text = sharedPreference.getNickName(),
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        fontFamily = FontFamily(Font(poppins_semibold))
+                    )
+                }
             }
-        ) else {
-        Box(
-          contentAlignment = Alignment.Center,
-          modifier = Modifier
-            .background(colorResource(id = R.color.persian_blue), shape = CircleShape)
-            .height(28.dp)
-            .width(28.dp)
-            .border(1.dp, Color.White, CircleShape)
-            .constrainAs(profileImg) {
-              top.linkTo(parent.top, margin = 6.dp)
-              end.linkTo(parent.end)
-            }
-        ) {
-          Text(
-            text = sharedPreference.getNickName(),
-            fontSize = 14.sp,
-            textAlign = TextAlign.Center,
-            color = Color.White,
-            fontFamily = FontFamily(Font(poppins_semibold))
-          )
         }
-      }
     }
-  }
 }
 
 @Composable
 fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostController) {
-  Row() {
-    ConstraintLayout() {
-      val (logo, profileImg, gradient, container) = createRefs()
-      Image(
-        painter = painterResource(id = top_bar_gradient),
-        contentDescription = "",
-        modifier = Modifier.constrainAs(gradient) {
-          start.linkTo(parent.start)
-          end.linkTo(parent.end)
-          top.linkTo(parent.top)
-        })
-      Image(
-        painter = painterResource(id = ic_jd_tv_logo),
-        contentDescription = "",
-        contentScale = ContentScale.Inside,
-        alignment = Alignment.TopStart,
-        modifier = Modifier.constrainAs(logo) {
-          top.linkTo(parent.top, margin = 16.dp)
-          start.linkTo(parent.start, margin = 16.dp)
-        }
-      )
-
-      if (sharedPreference.getPhoto().isNotEmpty())
-        AsyncImage(
-          model = sharedPreference.getPhoto(),
-          contentDescription = null,
-          modifier = Modifier
-            .clip(CircleShape)
-            .width(28.dp)
-            .height(28.dp)
-            .clip(CircleShape)
-            .background(Color.White)
-            .constrainAs(profileImg) {
-              top.linkTo(parent.top, margin = 16.dp)
-              end.linkTo(parent.end, margin = 16.dp)
+    Row() {
+        ConstraintLayout() {
+            val (logo, gradient, container) = createRefs()
+            Image(
+                painter = painterResource(id = top_bar_gradient),
+                contentDescription = "",
+                modifier = Modifier.constrainAs(gradient) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                })
+            Row(modifier = Modifier.constrainAs(logo) {
+                top.linkTo(parent.top, margin = 10.dp)
+                start.linkTo(parent.start, margin = 10.dp)
+            }) {
+                Header(sharedPreference = sharedPreference, onClick = { })
             }
-        ) else {
-        Box(
-          contentAlignment = Alignment.Center,
-          modifier = Modifier
-            .background(colorResource(id = R.color.persian_blue), shape = CircleShape)
-            .height(28.dp)
-            .width(28.dp)
-            .border(1.dp, Color.White, CircleShape)
-            .constrainAs(profileImg) {
-              top.linkTo(parent.top, margin = 16.dp)
-              end.linkTo(parent.end, margin = 16.dp)
+            ConstraintLayout(modifier = Modifier.constrainAs(container) {
+                top.linkTo(logo.bottom, 26.dp)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }) {
+                val (text1, text2, arrow1, arrow2) = createRefs()
+                ClickableText(
+                    text = AnnotatedString(stringResource(id = R.string.shows)),
+                    onClick = {
+                        homeNavController.navigate("shows")
+                    },
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily(Font(poppins_medium))
+                    ),
+                    modifier = Modifier.constrainAs(text1) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    }
+                )
+
+                Image(
+                    painter = painterResource(ic_arrow_dropdown),
+                    contentDescription = "", alignment = Alignment.Center,
+                    modifier = Modifier.constrainAs(arrow1) {
+                        top.linkTo(text1.top)
+                        bottom.linkTo(text1.bottom)
+                        start.linkTo(text1.end, margin = 6.dp)
+                    }
+                )
+
+                ClickableText(
+                    text = AnnotatedString(stringResource(id = R.string.movies)),
+                    onClick = {
+                        homeNavController.navigate("movies")
+                    },
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily(Font(poppins_medium))
+                    ),
+                    modifier = Modifier.constrainAs(text2) {
+                        top.linkTo(parent.top)
+                        start.linkTo(arrow1.end, margin = 30.dp)
+                    }
+                )
+                Image(
+                    painter = painterResource(ic_arrow_dropdown),
+                    contentDescription = "", alignment = Alignment.Center,
+                    modifier = Modifier.constrainAs(arrow2) {
+                        top.linkTo(text2.top)
+                        bottom.linkTo(text2.bottom)
+                        start.linkTo(text2.end, margin = 6.dp)
+                    }
+                )
             }
-        ) {
-          Text(
-            text = sharedPreference.getNickName(),
-            fontSize = 12.sp,
-            textAlign = TextAlign.Center,
-            color = Color.White,
-            fontFamily = FontFamily(Font(poppins_semibold))
-          )
         }
-      }
-
-      ConstraintLayout(modifier = Modifier.constrainAs(container) {
-        top.linkTo(logo.bottom, 26.dp)
-        start.linkTo(parent.start)
-        end.linkTo(parent.end)
-      }) {
-        val (text1, text2, arrow1, arrow2) = createRefs()
-        ClickableText(
-          text = AnnotatedString(stringResource(id = R.string.shows)),
-          onClick = {
-            homeNavController.navigate("shows")
-          },
-          style = TextStyle(
-            color = Color.White,
-            fontSize = 18.sp,
-            fontFamily = FontFamily(Font(poppins_medium))
-          ),
-          modifier = Modifier.constrainAs(text1) {
-            top.linkTo(parent.top)
-            start.linkTo(parent.start)
-          }
-        )
-
-        Image(
-          painter = painterResource(ic_arrow_dropdown),
-          contentDescription = "", alignment = Alignment.Center,
-          modifier = Modifier.constrainAs(arrow1) {
-            top.linkTo(text1.top)
-            bottom.linkTo(text1.bottom)
-            start.linkTo(text1.end, margin = 6.dp)
-          }
-        )
-
-        ClickableText(
-          text = AnnotatedString(stringResource(id = R.string.movies)),
-          onClick = {
-            homeNavController.navigate("movies")
-          },
-          style = TextStyle(
-            color = Color.White,
-            fontSize = 18.sp,
-            fontFamily = FontFamily(Font(poppins_medium))
-          ),
-          modifier = Modifier.constrainAs(text2) {
-            top.linkTo(parent.top)
-            start.linkTo(arrow1.end, margin = 30.dp)
-          }
-        )
-        Image(
-          painter = painterResource(ic_arrow_dropdown),
-          contentDescription = "", alignment = Alignment.Center,
-          modifier = Modifier.constrainAs(arrow2) {
-            top.linkTo(text2.top)
-            bottom.linkTo(text2.bottom)
-            start.linkTo(text2.end, margin = 6.dp)
-          }
-        )
-      }
     }
-  }
 }
 
 @Composable
-fun Banner(sharedPreference: SharedPreference, homeNavController: NavHostController, hasHeader: Boolean = true) {
-  ConstraintLayout() {
-    val (image, dataContainer, gradient) = createRefs()
-    Image(
-      painter = painterResource(id = movie_poster_),
-      contentDescription = "",
-      modifier = Modifier
-        .constrainAs(image) {
-          top.linkTo(parent.top)
-          start.linkTo(parent.start)
-          end.linkTo(parent.end)
-        }
-    )
-    Image(
-      painter = painterResource(id = ic_gradient_transparent),
-      contentDescription = "",
-      modifier = Modifier.constrainAs(gradient) {
-        start.linkTo(parent.start)
-        bottom.linkTo(image.bottom)
-        end.linkTo(parent.end)
-      }
-    )
-    Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .constrainAs(dataContainer) {
-          bottom.linkTo(image.bottom)
-          start.linkTo(image.start)
-          end.linkTo(image.end)
-        },
-      horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-      Text(
-        text = "Walk Of Fame",
-        fontSize = 50.sp,
-        color = Color.White,
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-          .padding(16.dp)
-          .wrapContentWidth(),
-        fontFamily = FontFamily(Font(cooper_std_black))
-      )
-      Text(
-        text = "Drama * Romance",
-        fontSize = 18.sp,
-        color = Color.White,
-        fontFamily = FontFamily(Font(poppins_medium))
-      )
-      IconButton(onClick = { }) {
+fun Banner(
+    sharedPreference: SharedPreference,
+    homeNavController: NavHostController,
+    hasHeader: Boolean = true
+) {
+    ConstraintLayout() {
+        val (image, dataContainer, gradient) = createRefs()
         Image(
-          painter = painterResource(play_button),
-          contentDescription = "",
-          Modifier.background(color = colorResource(id = android.R.color.transparent))
+            painter = painterResource(id = movie_poster_),
+            contentDescription = "",
+            modifier = Modifier
+                .constrainAs(image) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
         )
+        Image(
+            painter = painterResource(id = ic_gradient_transparent),
+            contentDescription = "",
+            modifier = Modifier.constrainAs(gradient) {
+                start.linkTo(parent.start)
+                bottom.linkTo(image.bottom)
+                end.linkTo(parent.end)
+            }
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(dataContainer) {
+                    bottom.linkTo(image.bottom)
+                    start.linkTo(image.start)
+                    end.linkTo(image.end)
+                },
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Walk Of Fame",
+                fontSize = 50.sp,
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .wrapContentWidth(),
+                fontFamily = FontFamily(Font(cooper_std_black))
+            )
+            Text(
+                text = "Drama * Romance",
+                fontSize = 18.sp,
+                color = Color.White,
+                fontFamily = FontFamily(Font(poppins_medium))
+            )
+            IconButton(onClick = { }) {
+                Image(
+                    painter = painterResource(play_button),
+                    contentDescription = "",
+                    Modifier.background(color = colorResource(id = android.R.color.transparent))
+                )
 
-      }
+            }
+        }
+        if (hasHeader)
+            HomeHeader(sharedPreference = sharedPreference, homeNavController)
+
     }
-    if (hasHeader)
-      HomeHeader(sharedPreference = sharedPreference, homeNavController)
-
-  }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Contest(section: HomeSection) {
-  Surface(
-    color = Color(R.color.dark_jungle_green)
-  ) {
-    Column {
-      getSectionTitle(title = section.title)
-      HorizontalPager(
-        count = 10,//section.getItems().size,
-        modifier = Modifier
-          .padding(start = 16.dp, end = 16.dp)
-          .fillMaxWidth()
-      ) { page ->
-        // Our page content
+    Surface(
+        color = Color(R.color.dark_jungle_green)
+    ) {
         Column {
-          AsyncImage(
-            model = "",
+            getSectionTitle(title = section.title)
+            HorizontalPager(
+                count = 10,//section.getItems().size,
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp)
+                    .fillMaxWidth()
+            ) { page ->
+                // Our page content
+                Column {
+                    AsyncImage(
+                        model = "",
 //                    section.getItems()[page].mainPhoto?.fileUrl ?: "",
-            placeholder = painterResource(image_1),
-            contentDescription = null,
-            error = painterResource(image_1),
-            contentScale = ContentScale.FillBounds,
-            modifier = Modifier
-              .fillMaxWidth()
-              .height(223.dp)
-              .clip(RoundedCornerShape(10.dp))
-          )
-          Spacer(modifier = Modifier.height(14.dp))
-          Text(
-            text = "",//section.getItems()[page].title ?: "",
-            modifier = Modifier.fillMaxWidth(),
-            color = Color.White,
-            fontSize = 16.sp,
-            fontFamily = FontFamily(Font(poppins_regular))
-          )
+                        placeholder = painterResource(image_1),
+                        contentDescription = null,
+                        error = painterResource(image_1),
+                        contentScale = ContentScale.FillBounds,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(223.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                    )
+                    Spacer(modifier = Modifier.height(14.dp))
+                    Text(
+                        text = "",//section.getItems()[page].title ?: "",
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontFamily = FontFamily(Font(poppins_regular))
+                    )
+                }
+            }
         }
-      }
     }
-  }
 }
 
 
 @Composable
 fun CardsSection(section: HomeSection) {
-  Column {
-    getSectionTitle(section.title)
-    LazyRow(modifier = Modifier.padding(start = 16.dp)) {
-      items(10) {//section.getItems()) {
-        AsyncImage(
-          model = "",//it.mainPhoto?.fileUrl ?: "",
-          placeholder = painterResource(image_1),
-          contentDescription = null,
-          error = painterResource(image_1),
-          modifier = Modifier
-            .height(180.dp)
-            .width(126.dp)
-            .clip(RoundedCornerShape(4.dp)),
-          contentScale = ContentScale.Crop
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-      }
+    Column {
+        getSectionTitle(section.title)
+        LazyRow(modifier = Modifier.padding(start = 16.dp)) {
+            items(10) {//section.getItems()) {
+                AsyncImage(
+                    model = "",//it.mainPhoto?.fileUrl ?: "",
+                    placeholder = painterResource(image_1),
+                    contentDescription = null,
+                    error = painterResource(image_1),
+                    modifier = Modifier
+                        .height(180.dp)
+                        .width(126.dp)
+                        .clip(RoundedCornerShape(4.dp)),
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+            }
+        }
     }
-  }
 
 }
 
 @Composable
 fun CardsWithTitleSection(section: HomeSection) {
-  getSectionTitle(section.title)
-  LazyRow(modifier = Modifier.padding(start = 16.dp)) {
-    items(10) {//section.getItems()) { item ->
-      Column {
-        AsyncImage(
-          model = "",//item.mainPhoto?.fileUrl ?: "",
-          placeholder = painterResource(image_1),
-          contentDescription = null,
-          error = painterResource(image_1),
-          modifier = Modifier
-            .height(180.dp)
-            .width(126.dp)
-            .clip(RoundedCornerShape(10.dp)),
-          contentScale = ContentScale.Crop
-        )
-        Text(
-          text = "test",//item.title ?: "",
-          modifier = Modifier.padding(top = 14.dp),
-          color = Color.White,
-          fontSize = 14.sp,
-          fontFamily = FontFamily(Font(poppins_regular))
-        )
-      }
-      Spacer(modifier = Modifier.width(10.dp))
+    getSectionTitle(section.title)
+    LazyRow(modifier = Modifier.padding(start = 16.dp)) {
+        items(10) {//section.getItems()) { item ->
+            Column {
+                AsyncImage(
+                    model = "",//item.mainPhoto?.fileUrl ?: "",
+                    placeholder = painterResource(image_1),
+                    contentDescription = null,
+                    error = painterResource(image_1),
+                    modifier = Modifier
+                        .height(180.dp)
+                        .width(126.dp)
+                        .clip(RoundedCornerShape(10.dp)),
+                    contentScale = ContentScale.Crop
+                )
+                Text(
+                    text = "test",//item.title ?: "",
+                    modifier = Modifier.padding(top = 14.dp),
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily(Font(poppins_regular))
+                )
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+        }
     }
-  }
 }
 
 @Composable
 fun HostSection(section: HomeSection) {
-  getSectionTitle(section.title)
-  LazyRow(modifier = Modifier.padding(start = 16.dp)) {
-    items(10) {//section.getItems()) { item ->
-      AsyncImage(
-        model = "",//item.mainPhoto?.fileUrl ?: "",
-        placeholder = painterResource(image_1),
-        contentDescription = null,
-        error = painterResource(image_1),
-        modifier = Modifier
-          .height(126.dp)
-          .padding(end = 10.dp)
-          .width(126.dp)
-          .clip(CircleShape),
-        contentScale = ContentScale.Crop
-      )
+    getSectionTitle(section.title)
+    LazyRow(modifier = Modifier.padding(start = 16.dp)) {
+        items(10) {//section.getItems()) { item ->
+            AsyncImage(
+                model = "",//item.mainPhoto?.fileUrl ?: "",
+                placeholder = painterResource(image_1),
+                contentDescription = null,
+                error = painterResource(image_1),
+                modifier = Modifier
+                    .height(126.dp)
+                    .padding(end = 10.dp)
+                    .width(126.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+        }
     }
-  }
 }
 
 @Composable
 fun ShopSection(section: HomeSection) {
-  getSectionTitle(section.title)
-  LazyRow {
-    items(10) {//section.getItems()) { item ->
-      AsyncImage(
-        model = "",//item.mainPhoto?.fileUrl ?: "",
-        placeholder = painterResource(ic_product),
-        contentDescription = null,
-        error = painterResource(ic_product),
-        modifier = Modifier
-          .height(126.dp)
-          .padding(end = 10.dp)
-          .width(126.dp)
-          .clip(RoundedCornerShape(6.dp))
-          .background(color = Color.White),
-        contentScale = ContentScale.Inside
-      )
+    getSectionTitle(section.title)
+    LazyRow {
+        items(10) {//section.getItems()) { item ->
+            AsyncImage(
+                model = "",//item.mainPhoto?.fileUrl ?: "",
+                placeholder = painterResource(ic_product),
+                contentDescription = null,
+                error = painterResource(ic_product),
+                modifier = Modifier
+                    .height(126.dp)
+                    .padding(end = 10.dp)
+                    .width(126.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(color = Color.White),
+                contentScale = ContentScale.Inside
+            )
+        }
     }
-  }
 }

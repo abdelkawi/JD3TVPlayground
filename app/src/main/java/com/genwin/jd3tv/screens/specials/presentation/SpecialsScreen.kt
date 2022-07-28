@@ -47,7 +47,7 @@ fun SpecialsScreen(sharedPreference: SharedPreference) {
             .wrapContentHeight()
             .padding(top = 6.dp)
     ) {
-        Header(sharedPreference = sharedPreference)
+        Header(sharedPreference = sharedPreference,{})
         Text(
             text = stringResource(id = R.string.special), fontSize = 24.sp,
             fontFamily = FontFamily(
