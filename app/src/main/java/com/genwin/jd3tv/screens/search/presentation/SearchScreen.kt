@@ -50,54 +50,65 @@ import com.genwin.jd3tv.screens.hosts.presentation.HostCell
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Search(sharedPreference: SharedPreference,navController: NavController) {
-    LazyVerticalGrid(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.Black),
-        columns = GridCells.Fixed(2),
-        verticalArrangement = Arrangement.spacedBy(13.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+   Column(modifier = Modifier
+       .fillMaxSize().background(color = Color.Black)) {
+       LazyVerticalGrid(
+           modifier = Modifier
+               .fillMaxSize()
+               .padding(start = 16.dp, end = 16.dp)
+               .background(color = Color.Black),
+           columns = GridCells.Fixed(2),
+           verticalArrangement = Arrangement.spacedBy(13.dp),
+           horizontalArrangement = Arrangement.spacedBy(16.dp),
 
-        ) {
-        item(span = {
-            GridItemSpan(2)
-        }) {
-            Column(
-                modifier = Modifier.padding(top = 6.dp, start = 16.dp, end = 16.dp)
-                    .fillMaxWidth()
-            ) { Header(sharedPreference = sharedPreference,onClick={ navController.popBackStack()}, showBack = true) }
-        }
-        item(span = {
-            GridItemSpan(2)
-        }) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                searchBar()
-            }
-        }
-        item(span = {
-            GridItemSpan(2)
-        }) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "Search results for 'movie'",
-                    color = colorResource(id = R.color.white),
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins_regular))
-                )
-            }
-        }
-        items(count = 10) {
-            Column {
-                HostCell("", "Host 1")
-            }
-        }
-    }
+           ) {
+           item(span = {
+               GridItemSpan(2)
+           }) {
+               Column(
+                   modifier = Modifier
+                       .padding(top = 6.dp)
+                       .fillMaxWidth()
+               ) {
+                   Header(
+                       sharedPreference = sharedPreference,
+                       onClick = { navController.popBackStack() },
+                       showBack = true
+                   )
+               }
+           }
+           item(span = {
+               GridItemSpan(2)
+           }) {
+               Column(
+                   modifier = Modifier
+                       .fillMaxWidth()
+               ) {
+                   searchBar()
+               }
+           }
+           item(span = {
+               GridItemSpan(2)
+           }) {
+               Column(
+                   modifier = Modifier
+                       .fillMaxWidth()
+               ) {
+                   Text(
+                       text = "Search results for 'movie'",
+                       color = colorResource(id = R.color.white),
+                       fontSize = 20.sp,
+                       fontFamily = FontFamily(Font(R.font.poppins_regular))
+                   )
+               }
+           }
+           items(count = 10) {
+               Column {
+                   HostCell("", "Host 1")
+               }
+           }
+       }
+   }
 }
 
 @Composable
@@ -127,7 +138,9 @@ fun searchBar() {
             imeAction = ImeAction.Search
         ),
         modifier = Modifier
-            .fillMaxWidth().defaultMinSize(minHeight = 36.dp).scale(scaleY = 0.9F, scaleX = 1F),
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 36.dp)
+            .scale(scaleY = 0.9F, scaleX = 1F),
         textStyle = androidx.compose.ui.text.TextStyle(
             color = colorResource(id = R.color.glitter),
             fontSize = 17.sp,

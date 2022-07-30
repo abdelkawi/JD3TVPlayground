@@ -6,6 +6,9 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,6 +18,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,11 +37,9 @@ import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.Result.Error
 import com.genwin.jd3tv.common.Result.Success
 import com.genwin.jd3tv.common.SharedPreference
-import com.genwin.jd3tv.screens.home.data.ItemDetailsRequest
 import com.genwin.jd3tv.screens.home.data.getHomeData
 import com.genwin.jd3tv.screens.home.domain.entity.BottomTab
 import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
-import com.genwin.jd3tv.screens.home.domain.entity.SectionType
 import com.genwin.jd3tv.screens.splash.data.SplashResponse
 import com.genwin.jd3tv.screens.splash.presentation.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -125,7 +129,7 @@ class MainActivity : ComponentActivity() {
           .background(Color.Black)
       ) {
         val navController = rememberNavController()
-
+        val searchState = rememberSaveable { (mutableStateOf(true)) }
         CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Rtl) {
           Scaffold(
             drawerContent = {
@@ -139,14 +143,14 @@ class MainActivity : ComponentActivity() {
 //                                    tabs = tabs.map { BottomTab(it, it) }
 //                                        .subList(1, 6),
                   sharedPreference = sharedPreference,
-                  navController
+                  navController,searchState
                 )
               }
             },
             drawerBackgroundColor = Color(0xE6460383),
             floatingActionButtonPosition = FabPosition.Center,
             floatingActionButton = {
-              setFloatingButton(navController)
+              setFloatingButton(navController,searchState)
             }
           )
         }
@@ -166,32 +170,41 @@ class MainActivity : ComponentActivity() {
   }
 
   @Composable
-  private fun setFloatingButton(navController: NavController) {
+  private fun setFloatingButton(navController: NavController, searchState: MutableState<Boolean>) {
     val configuration = LocalConfiguration.current
     CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Ltr) {
-      ExtendedFloatingActionButton(
-        modifier = Modifier.offset(
-          x = (configuration.screenWidthDp.div(
-            2
-          )
-            .minus(26)).dp,
-          y = -50.dp
-        ),
-        icon = {
-          Image(
-            painter = painterResource(id = R.drawable.ic_search_icon),
-            contentDescription = "fab",
-            contentScale = ContentScale.FillBounds
-          )
-        },
-        text = { Text("") },
-        shape = CircleShape,
-        backgroundColor = colorResource(id = android.R.color.transparent),
-        onClick = {
-          navController.navigate("search")
-        },
-        elevation = FloatingActionButtonDefaults.elevation(0.dp)
+      AnimatedVisibility(
+        visible= searchState.value,
+        enter = slideInVertically(initialOffsetY = { it }),
+        exit = slideOutVertically(targetOffsetY = { it }),
+       content = {
+         ExtendedFloatingActionButton(
+           modifier = Modifier.offset(
+             x = (configuration.screenWidthDp.div(
+               2
+             )
+               .minus(26)).dp,
+             y = -50.dp
+           ),
+           icon = {
+             Image(
+               painter = painterResource(id = R.drawable.ic_search_icon),
+               contentDescription = "fab",
+               contentScale = ContentScale.FillBounds
+             )
+           },
+           text = { Text("") },
+           shape = CircleShape,
+           backgroundColor = colorResource(id = android.R.color.transparent),
+           onClick = {
+             navController.navigate("search")
+           },
+           elevation = FloatingActionButtonDefaults.elevation(0.dp)
+         )
+       }
       )
+
+
     }
   }
 }

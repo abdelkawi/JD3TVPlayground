@@ -65,10 +65,11 @@ fun Main(
     sections: List<HomeSection>,
     tabs: List<BottomTab>,
     sharedPreference: SharedPreference,
-    navController: NavHostController
+    navController: NavHostController,
+    searchState: MutableState<Boolean>
 ) {
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
-    val searchState = rememberSaveable { (mutableStateOf(true)) }
+
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (content, bottomBar) = createRefs()
         NavHost(
