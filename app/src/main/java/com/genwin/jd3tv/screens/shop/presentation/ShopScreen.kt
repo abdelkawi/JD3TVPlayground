@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.SharedPreference
+import com.genwin.jd3tv.screens.events.presentation.EventRow
 import com.genwin.jd3tv.screens.home.presentation.DotsIndicator
 import com.genwin.jd3tv.screens.home.presentation.Header
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -69,6 +70,16 @@ fun Shop(sharedPreference: SharedPreference) {
             "", grids, ShopType.Grid
         )
     )
+    shops.add(
+        ShopData(
+            "", grids, ShopType.Grid
+        )
+    )
+    shops.add(
+        ShopData(
+            "", grids, ShopType.Grid
+        )
+    )
     val numbers = (0..10).toList()
     LazyVerticalGrid(
         modifier = Modifier
@@ -84,7 +95,8 @@ fun Shop(sharedPreference: SharedPreference) {
         }) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth().padding(top=6.dp, start = 16.dp,end=16.dp)
+                    .fillMaxWidth()
+                    .padding(top = 6.dp, start = 16.dp, end = 16.dp)
             ) { Header(sharedPreference = sharedPreference, onClick = {}) }
         }
         item(span = {
@@ -122,11 +134,27 @@ fun Shop(sharedPreference: SharedPreference) {
                     }) { CollectionShop(10) }
                 }
                 ShopType.Grid -> {
-                    items(numbers.size) {
-                        Column (modifier = Modifier.padding(top= 20.dp)){
-                            GridItemShop()
+                    item(span = {
+                        GridItemSpan(2)
+                    }) {
+                        Column {
+                            Spacer(modifier = Modifier.padding(top = 20.dp))
+                            EventRow(
+                                "",
+                                "16 - 18 Jun 2022",
+                                "The 6th frequency",
+                                "",
+                                "16 - 18 Jun 2022",
+                                "The 6th frequency"
+                            )
                         }
+
                     }
+//                    items(numbers.size) {
+//                        Column(modifier = Modifier.padding(top = 20.dp, start = 10.dp, end = 10.dp)) {
+//                            GridItemShop()
+//                        }
+//                    }
                 }
             }
         }
@@ -140,17 +168,17 @@ fun CardShop(cardTitle: String) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (image, text) = createRefs()
         Image(
-            painter = painterResource(R.drawable.ic_host), contentDescription = "",
-            contentScale = ContentScale.Inside,
+            painter = painterResource(R.drawable.ic_product), contentDescription = "",
+            contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .fillMaxWidth()
+                .height(223.dp)
                 .padding(16.dp)
                 .constrainAs(image) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                 }
-                .fillMaxWidth()
         )
         Text(
             text = cardTitle,
@@ -182,8 +210,8 @@ fun CollectionShop(size: Int) {
             fontSize = 20.sp,
             fontFamily = FontFamily(Font(R.font.poppins_semibold)),
             modifier = Modifier.constrainAs(title) {
-                start.linkTo(parent.start)
-                top.linkTo(parent.top,margin=13.dp)
+                start.linkTo(parent.start, margin = 16.dp)
+                top.linkTo(parent.top, margin = 13.dp)
             })
         HorizontalPager(
             state = state,
@@ -227,13 +255,14 @@ fun CollectionShop(size: Int) {
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun ViewPagerItem() {
-    ConstraintLayout(modifier = Modifier.padding(8.dp)) {
+    ConstraintLayout(modifier = Modifier.padding(start = 8.dp, end = 8.dp)) {
         val (image, title, type) = createRefs()
         Image(
             painter = painterResource(R.drawable.ic_host), contentDescription = "",
             contentScale = ContentScale.Inside,
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(start = 10.dp)
                 .clip(RoundedCornerShape(5.dp))
                 .constrainAs(image) {
                     top.linkTo(parent.top)
@@ -247,10 +276,12 @@ fun ViewPagerItem() {
             fontSize = 16.sp,
             color = Color.White,
             fontFamily = FontFamily(Font(R.font.poppins_regular)),
-            modifier = Modifier.constrainAs(title) {
-                top.linkTo(image.bottom, margin = 7.dp)
-                start.linkTo(image.start)
-            },
+            modifier = Modifier
+                .padding(start = 10.dp)
+                .constrainAs(title) {
+                    top.linkTo(image.bottom, margin = 7.dp)
+                    start.linkTo(image.start)
+                },
             style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
         )
         Text(
@@ -259,6 +290,7 @@ fun ViewPagerItem() {
             fontSize = 14.sp,
             fontFamily = FontFamily(Font(R.font.poppins_regular)),
             modifier = Modifier
+                .padding(start = 10.dp)
                 .constrainAs(type) {
                     top.linkTo(title.bottom, margin = 3.dp)
                 },

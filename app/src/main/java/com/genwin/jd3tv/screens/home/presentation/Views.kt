@@ -68,6 +68,7 @@ fun Main(
     navController: NavHostController
 ) {
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
+    val searchState = rememberSaveable { (mutableStateOf(true)) }
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (content, bottomBar) = createRefs()
         NavHost(
@@ -88,24 +89,28 @@ fun Main(
                         composable(it.route) {
                             Home(sections, sharedPreference)
                             bottomBarState.value = true
+                            searchState.value = true
                         }
                     }
                     "events" -> {
                         composable(it.route) {
                             Event(sharedPreference = sharedPreference)
                             bottomBarState.value = true
+                            searchState.value = true
                         }
                     }
                     "hosts" -> {
                         composable(it.route) {
                             Host(10, "Hosts", sharedPreference = sharedPreference)
                             bottomBarState.value = true
+                            searchState.value = true
                         }
                     }
                     "shop" -> {
                         composable(it.route) {
                             Shop(sharedPreference = sharedPreference)
                             bottomBarState.value = true
+                            searchState.value = true
                         }
                     }
                     "specials" -> {
@@ -114,12 +119,14 @@ fun Main(
                                 sharedPreference = sharedPreference
                             )
                             bottomBarState.value = true
+                            searchState.value = true
                         }
                     }
                     else -> {
                         composable(it.route) {
                             Text("this is another one ", fontSize = 30.sp, color = Color.White)
                             bottomBarState.value = true
+                            searchState.value = true
                         }
                     }
 
@@ -133,6 +140,7 @@ fun Main(
                     navController = navController
                 )
                 bottomBarState.value = false
+                searchState.value = false
             }
 
         }
@@ -626,7 +634,7 @@ fun Header(
                             top.linkTo(parent.top, margin = 6.dp)
                             start.linkTo(parent.start, margin = 6.dp)
                         }
-                        .clickable { onClick }
+                        .clickable { onClick.invoke() }
                 )
             else
                 Image(
@@ -682,10 +690,14 @@ fun Header(
 
 @Composable
 fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostController) {
-    Row( modifier = Modifier
-        .fillMaxSize()) {
-        ConstraintLayout( modifier = Modifier
-            .fillMaxSize()) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
             val (logo, gradient, container) = createRefs()
             Image(
                 painter = painterResource(id = top_bar_gradient),
@@ -695,11 +707,15 @@ fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostCon
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                 })
-            Column(modifier = Modifier.fillMaxWidth().constrainAs(logo) {
-                top.linkTo(parent.top, margin = 10.dp)
-                start.linkTo(parent.start, margin = 10.dp)
-                end.linkTo(parent.end, margin = 10.dp)
-            }) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp, start = 10.dp, end = 10.dp)
+                    .constrainAs(logo) {
+                        top.linkTo(parent.top, margin = 10.dp)
+                        start.linkTo(parent.start, margin = 10.dp)
+                        end.linkTo(parent.end, margin = 10.dp)
+                    }) {
                 Header(sharedPreference = sharedPreference, onClick = { })
             }
             ConstraintLayout(modifier = Modifier.constrainAs(container) {

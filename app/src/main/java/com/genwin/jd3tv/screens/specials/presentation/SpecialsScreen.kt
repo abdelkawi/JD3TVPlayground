@@ -45,7 +45,7 @@ fun SpecialsScreen(sharedPreference: SharedPreference) {
             .verticalScroll(rememberScrollState())
             .background(Color.Black)
             .wrapContentHeight()
-            .padding(top = 6.dp)
+            .padding(top = 6.dp, start = 16.dp, end = 16.dp)
     ) {
         Header(sharedPreference = sharedPreference,{})
         Text(

@@ -63,7 +63,7 @@ fun Search(sharedPreference: SharedPreference,navController: NavController) {
             GridItemSpan(2)
         }) {
             Column(
-                modifier = Modifier
+                modifier = Modifier.padding(top = 6.dp, start = 16.dp, end = 16.dp)
                     .fillMaxWidth()
             ) { Header(sharedPreference = sharedPreference,onClick={ navController.popBackStack()}, showBack = true) }
         }

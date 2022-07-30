@@ -155,11 +155,11 @@ fun CategoryHeader(
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                 })
-            Row(modifier = Modifier.fillMaxWidth()
+            Row(modifier = Modifier.fillMaxWidth().padding(top = 6.dp, start = 6.dp, end = 10.dp)
                     .constrainAs(logo) {
-                        top.linkTo(parent.top, margin = 6.dp)
-                        start.linkTo(parent.start, margin = 6.dp)
-                        end.linkTo(parent.end, margin = 10.dp)
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
                     }) {
                 Header(
                     sharedPreference = sharedPreference,
