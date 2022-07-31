@@ -1,6 +1,7 @@
 package com.genwin.jd3tv.screens.home.data
 
 import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
+import com.genwin.jd3tv.screens.home.domain.entity.SectionType
 import com.genwin.jd3tv.screens.home.domain.entity.SectionType.Card
 import com.genwin.jd3tv.screens.home.domain.entity.SectionType.CardWithTitle
 import com.genwin.jd3tv.screens.home.domain.entity.SectionType.Contest
@@ -13,139 +14,100 @@ import com.genwin.jd3tv.screens.home.domain.entity.SectionType.ViewPager
 
 fun getHomeData(sections: List<HomeSection>): List<HomeSection> {
   val fullSections = mutableListOf<HomeSection>()
-//        var sections = mutableListOf<ItemDetailsRequest>()
-//        sections.add(ItemDetailsRequest(emptyList(),"","", emptyList()))
-//        sections.add(ItemDetailsRequest(emptyList(),"","", emptyList()))
-//        sections.add(ItemDetailsRequest(emptyList(),"","", emptyList()))
-//        sections.add(ItemDetailsRequest(emptyList(),"","", emptyList()))
-//        sections.add(ItemDetailsRequest(emptyList(),"","", emptyList()))
-
   fullSections.add(
-    HomeSection(
-      "Popular movies", Contest, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "", FullItem
     )
   )
   fullSections.add(
-    HomeSection(
-      "Featured Shows", Contest, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "Popular movies", Contest)
+  )
+  fullSections.add(
+    setHomeData(
+      "Featured Shows", Contest
     )
   )
   fullSections.add(
-    HomeSection(
-      "JD3 TV Picks", ViewPager, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "JD3 TV Picks", ViewPager
     )
   )
   fullSections.add(
-    HomeSection(
-      "", FullItem, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "", FullItem
     )
   )
   fullSections.add(
-    HomeSection(
-      "New on JD3 TV", Contest, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "New on JD3 TV", Contest
     )
   )
   fullSections.add(
-    HomeSection(
-      "Podcasts", CardWithTitle, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "Podcasts", CardWithTitle
     )
   )
   fullSections.add(
-    HomeSection(
-      "Exclusive NFT", Card, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "Exclusive NFT", Card
     )
   )
   fullSections.add(
-    HomeSection(
-      "Documentaries", Contest, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "Documentaries", Contest
     )
   )
 
   fullSections.add(
-    HomeSection(
-      "Sports Entertainment", Contest, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "Sports Entertainment", Contest
     )
   )
   fullSections.add(
-    HomeSection(
-      "Upcoming Events", ViewPager, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "Upcoming Events", ViewPager
     )
   )
   fullSections.add(
-    HomeSection(
-      "JD3 TV Originals", Contest, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "JD3 TV Originals", Contest
     )
   )
   fullSections.add(
-    HomeSection(
-      "Faith", FaithItem, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "Faith", FaithItem
     )
   )
 
   fullSections.add(
-    HomeSection(
-      "Masterclass", ViewPager, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "Masterclass", ViewPager
     )
   )
   fullSections.add(
-    HomeSection(
-      "Shop", Shop, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "Shop", Shop
     )
   )
   fullSections.add(
-    HomeSection(
-      "TV Series", Contest, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "TV Series", Contest
     )
   )
   fullSections.add(
-    HomeSection(
-      "Talk shows", Contest, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "Talk shows", Contest
     )
   )
   fullSections.add(
-    HomeSection(
-      "Not to miss", ViewPager, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "Not to miss", ViewPager
     )
   )
   fullSections.add(
-    HomeSection(
-      "Hosts", Host, "", ItemDetailsRequest(
-        emptyList(), "", "", emptyList()
-      )
+    setHomeData(
+      "Hosts", Host
     )
   )
   fullSections.forEach {
@@ -153,3 +115,10 @@ fun getHomeData(sections: List<HomeSection>): List<HomeSection> {
   }
   return fullSections
 }
+
+fun setHomeData(title:String,type: SectionType):HomeSection =
+  HomeSection(
+    title, type, "", ItemDetailsRequest(
+      emptyList(), "", "", emptyList()
+    )
+  )

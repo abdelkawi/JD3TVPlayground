@@ -34,9 +34,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.genwin.jd3tv.R
+import com.genwin.jd3tv.common.ErrorView
 import com.genwin.jd3tv.common.Result.Error
 import com.genwin.jd3tv.common.Result.Success
 import com.genwin.jd3tv.common.SharedPreference
+import com.genwin.jd3tv.screens.home.Profile
 import com.genwin.jd3tv.screens.home.data.getHomeData
 import com.genwin.jd3tv.screens.home.domain.entity.BottomTab
 import com.genwin.jd3tv.screens.home.domain.entity.HomeSection
