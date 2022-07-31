@@ -43,14 +43,13 @@ fun Home(
         startDestination = "main"
     ) {
         composable("main") {
-            ConstraintLayout(modifier = Modifier
+            ConstraintLayout(modifier = Modifier.verticalScroll(rememberScrollState())
                 .background(Color.Black)
                 .fillMaxWidth()){
                 val (header,homeData) = createRefs()
 
                 Column(
                     modifier = Modifier
-                        .verticalScroll(rememberScrollState())
                         .background(Color.Black)
                         .wrapContentHeight().constrainAs(homeData){
                             top.linkTo(parent.top)
