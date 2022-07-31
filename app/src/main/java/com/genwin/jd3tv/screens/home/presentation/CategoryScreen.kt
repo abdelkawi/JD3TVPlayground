@@ -2,13 +2,10 @@ package com.genwin.jd3tv.screens.home.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,7 +26,8 @@ fun CategoryScreen(
     categoryType: String,
     sharedPreference: SharedPreference,
     navController: NavHostController,
-    selectedCategory:String
+    selectedCategory:String,
+    scaffoldState: ScaffoldState
 ) {
     Column(
         modifier = Modifier
@@ -37,7 +35,7 @@ fun CategoryScreen(
             .background(Color.Black)
             .wrapContentHeight()
     ) {
-        CategoryBanner(sharedPreference = sharedPreference, navController, categoryType,selectedCategory)
+        CategoryBanner(sharedPreference = sharedPreference, navController, categoryType,selectedCategory,scaffoldState)
         CategoryRow()
         CategoryRow()
         CategoryRow()

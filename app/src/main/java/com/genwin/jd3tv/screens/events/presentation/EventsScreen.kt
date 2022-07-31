@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,8 +20,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.PlatformTextStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -46,7 +45,7 @@ import com.google.accompanist.pager.rememberPagerState
 //
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Event(sharedPreference: SharedPreference) {
+fun Event(sharedPreference: SharedPreference, scaffoldState: ScaffoldState) {
     LazyVerticalGrid(
         modifier = Modifier
             .fillMaxSize()
@@ -63,7 +62,7 @@ fun Event(sharedPreference: SharedPreference) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 6.dp, start = 16.dp, end = 16.dp)
-            ) { Header(sharedPreference = sharedPreference, onClick = {}) }
+            ) { Header(sharedPreference = sharedPreference, onClick = {},scaffoldState= scaffoldState) }
         }
         item(span = {
             GridItemSpan(2)
@@ -232,7 +231,7 @@ fun EventItem(
                 top.linkTo(img1.bottom, margin = 10.dp)
                 start.linkTo(img1.start)
 
-            },style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+            }
         )
 
         Text(
@@ -244,7 +243,7 @@ fun EventItem(
                 top.linkTo(date1.bottom, margin = 2.dp)
                 start.linkTo(img1.start)
 
-            },style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+            }
         )
     }
 }

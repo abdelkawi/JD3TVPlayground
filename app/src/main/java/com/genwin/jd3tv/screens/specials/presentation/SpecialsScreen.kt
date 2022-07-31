@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,8 +20,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.PlatformTextStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -39,7 +38,7 @@ import com.google.accompanist.pager.rememberPagerState
 // Created by Dina Mounib on 7/23/22.
 //
 @Composable
-fun SpecialsScreen(sharedPreference: SharedPreference) {
+fun SpecialsScreen(sharedPreference: SharedPreference, scaffoldState: ScaffoldState) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -47,7 +46,7 @@ fun SpecialsScreen(sharedPreference: SharedPreference) {
             .wrapContentHeight()
             .padding(top = 6.dp, start = 16.dp, end = 16.dp)
     ) {
-        Header(sharedPreference = sharedPreference,{})
+        Header(sharedPreference = sharedPreference,{},scaffoldState=scaffoldState)
         Text(
             text = stringResource(id = R.string.special), fontSize = 24.sp,
             fontFamily = FontFamily(
@@ -283,15 +282,13 @@ fun DateDesign(days: String, hours: String, minutes: String) {
                 text = days,
                 fontSize = 24.sp,
                 color = Color.White,
-                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+                fontFamily = FontFamily(Font(R.font.poppins_medium))
             )
             Text(
                 text = stringResource(id = R.string.day),
                 fontSize = 12.sp,
                 color = Color.White,
-                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+                fontFamily = FontFamily(Font(R.font.poppins_medium))
 
             )
         }
@@ -300,8 +297,7 @@ fun DateDesign(days: String, hours: String, minutes: String) {
             text = ":",
             fontSize = 20.sp,
             color = Color.White,
-            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+            fontFamily = FontFamily(Font(R.font.poppins_semibold))
 
         )
         Spacer(modifier = Modifier.padding(start = 19.dp))
@@ -310,25 +306,20 @@ fun DateDesign(days: String, hours: String, minutes: String) {
                 text = hours,
                 fontSize = 24.sp,
                 color = Color.White,
-                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
-
+                fontFamily = FontFamily(Font(R.font.poppins_medium))
             )
             Text(
                 text = stringResource(id = R.string.hour),
                 fontSize = 12.sp,
                 color = Color.White,
-                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
-            )
+                fontFamily = FontFamily(Font(R.font.poppins_medium)))
         }
         Spacer(modifier = Modifier.padding(start = 19.dp))
         Text(
             text = ":",
             fontSize = 20.sp,
             color = Color.White,
-            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
-            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+            fontFamily = FontFamily(Font(R.font.poppins_semibold))
         )
         Spacer(modifier = Modifier.padding(start = 19.dp))
         Column() {
@@ -336,15 +327,13 @@ fun DateDesign(days: String, hours: String, minutes: String) {
                 text = minutes,
                 fontSize = 24.sp,
                 color = Color.White,
-                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+                fontFamily = FontFamily(Font(R.font.poppins_medium))
             )
             Text(
                 text = stringResource(id = R.string.min),
                 fontSize = 12.sp,
                 color = Color.White,
-                fontFamily = FontFamily(Font(R.font.poppins_medium)),
-                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+                fontFamily = FontFamily(Font(R.font.poppins_medium))
             )
         }
     }

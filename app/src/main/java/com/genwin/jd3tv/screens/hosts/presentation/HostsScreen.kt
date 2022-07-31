@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,7 +26,7 @@ import com.genwin.jd3tv.screens.home.presentation.Header
 //
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Host(hostSize: Int, titleStr: String, sharedPreference: SharedPreference) {
+fun Host(hostSize: Int, titleStr: String, sharedPreference: SharedPreference, scaffoldState: ScaffoldState) {
     val numbers = (0..hostSize).toList()
 
     LazyVerticalGrid(
@@ -45,7 +46,7 @@ fun Host(hostSize: Int, titleStr: String, sharedPreference: SharedPreference) {
                     .fillMaxWidth()
                     .padding(top = 6.dp, start = 16.dp, end = 16.dp)
             ) {
-                Header(sharedPreference = sharedPreference, onClick = {})
+                Header(sharedPreference = sharedPreference, onClick = {}, scaffoldState = scaffoldState)
             }
         }
         item(span = {

@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,7 +42,7 @@ import com.google.accompanist.pager.rememberPagerState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Shop(sharedPreference: SharedPreference) {
+fun Shop(sharedPreference: SharedPreference, scaffoldState: ScaffoldState) {
     val shops = mutableListOf<ShopData>()
     val grids = mutableListOf<GridData>()
     grids.add(GridData("Product Name 1", "Price 1"))
@@ -97,7 +98,7 @@ fun Shop(sharedPreference: SharedPreference) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 6.dp, start = 16.dp, end = 16.dp)
-            ) { Header(sharedPreference = sharedPreference, onClick = {}) }
+            ) { Header(sharedPreference = sharedPreference, onClick = {}, scaffoldState = scaffoldState) }
         }
         item(span = {
             GridItemSpan(2)
@@ -281,9 +282,7 @@ fun ViewPagerItem() {
                 .constrainAs(title) {
                     top.linkTo(image.bottom, margin = 7.dp)
                     start.linkTo(image.start)
-                },
-            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
-        )
+                })
         Text(
             text = "Price",
             color = Color.White,
@@ -293,9 +292,7 @@ fun ViewPagerItem() {
                 .padding(start = 10.dp)
                 .constrainAs(type) {
                     top.linkTo(title.bottom, margin = 3.dp)
-                },
-            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
-
+                }
         )
     }
 }
@@ -313,16 +310,13 @@ fun GridItemShop() {
             text = "Product Name",
             color = Color.White,
             fontSize = 14.sp,
-            fontFamily = FontFamily(Font(R.font.poppins_regular)),
-            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+            fontFamily = FontFamily(Font(R.font.poppins_regular))
         )
         Text(
             text = "Price",
             color = Color.White,
             fontSize = 14.sp,
-            fontFamily = FontFamily(Font(R.font.poppins_regular)),
-            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
-
+            fontFamily = FontFamily(Font(R.font.poppins_regular))
         )
 
     }

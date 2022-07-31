@@ -2,15 +2,12 @@ package com.genwin.jd3tv.screens.home.presentation
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -18,14 +15,10 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
-import coil.compose.AsyncImage
 import com.genwin.jd3tv.R
 import com.genwin.jd3tv.common.SharedPreference
 import com.genwin.jd3tv.screens.specials.presentation.Special
@@ -40,7 +33,8 @@ import com.genwin.jd3tv.screens.specials.presentation.viewPagerItem
 fun ShowsMovies(
     categoryType: String,
     sharedPreference: SharedPreference,
-    navController: NavHostController
+    navController: NavHostController,
+    scaffoldState: ScaffoldState
 ) {
     Column(
         modifier = Modifier
@@ -48,7 +42,7 @@ fun ShowsMovies(
             .background(Color.Black)
             .wrapContentHeight()
     ) {
-        CategoryBanner(sharedPreference, navController, categoryType)
+        CategoryBanner(sharedPreference, navController, categoryType, scaffoldState = scaffoldState)
 
         getCategories().forEach {
             when (it.type) {
@@ -72,7 +66,8 @@ fun CategoryBanner(
     sharedPreference: SharedPreference,
     navController: NavHostController,
     title: String,
-    selectedIndex: String = ""
+    selectedIndex: String = "",
+    scaffoldState: ScaffoldState
 ) {
     ConstraintLayout( modifier = Modifier
         .fillMaxWidth()) {
@@ -129,7 +124,7 @@ fun CategoryBanner(
         CategoryHeader(
             sharedPreference = sharedPreference,
             navController,
-            title, selectedIndex
+            title, selectedIndex,scaffoldState
         )
     }
 }
@@ -139,14 +134,15 @@ fun CategoryHeader(
     sharedPreference: SharedPreference,
     navController: NavHostController,
     title: String,
-    selectedIndex: String
+    selectedIndex: String,
+    scaffoldState:ScaffoldState
 ) {
     var expanded by remember { mutableStateOf(false) }
     var openCategory by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf(selectedIndex.ifEmpty { "Categories" }) }
     Row (modifier = Modifier.fillMaxWidth()){
         ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
-            val (logo, profileImg, gradient, container) = createRefs()
+            val (logo, gradient, container) = createRefs()
             Image(
                 painter = painterResource(id = R.drawable.top_bar_gradient),
                 contentDescription = "",
@@ -164,7 +160,7 @@ fun CategoryHeader(
                 Header(
                     sharedPreference = sharedPreference,
                     onClick = { navController.popBackStack() },
-                    showBack = true
+                    showBack = true, scaffoldState = scaffoldState
                 )
             }
 

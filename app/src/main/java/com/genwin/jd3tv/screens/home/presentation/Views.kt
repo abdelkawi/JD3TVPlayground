@@ -23,8 +23,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -33,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -58,18 +55,19 @@ import com.genwin.jd3tv.screens.specials.presentation.SpecialsScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalTextApi::class)
 @Composable
 fun Main(
     sections: List<HomeSection>,
     tabs: List<BottomTab>,
     sharedPreference: SharedPreference,
     navController: NavHostController,
-    searchState: MutableState<Boolean>
+    searchState: MutableState<Boolean>,
+    scaffoldState: ScaffoldState
+
 ) {
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
-
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (content, bottomBar) = createRefs()
         NavHost(
@@ -88,28 +86,28 @@ fun Main(
                 when (it.route) {
                     "home" -> {
                         composable(it.route) {
-                            Home(sections, sharedPreference)
+                            Home(sections, sharedPreference, scaffoldState)
                             bottomBarState.value = true
                             searchState.value = true
                         }
                     }
                     "events" -> {
                         composable(it.route) {
-                            Event(sharedPreference = sharedPreference)
+                            Event(sharedPreference = sharedPreference, scaffoldState)
                             bottomBarState.value = true
                             searchState.value = true
                         }
                     }
                     "hosts" -> {
                         composable(it.route) {
-                            Host(10, "Hosts", sharedPreference = sharedPreference)
+                            Host(10, "Hosts", sharedPreference = sharedPreference, scaffoldState)
                             bottomBarState.value = true
                             searchState.value = true
                         }
                     }
                     "shop" -> {
                         composable(it.route) {
-                            Shop(sharedPreference = sharedPreference)
+                            Shop(sharedPreference = sharedPreference, scaffoldState)
                             bottomBarState.value = true
                             searchState.value = true
                         }
@@ -117,7 +115,7 @@ fun Main(
                     "specials" -> {
                         composable(it.route) {
                             SpecialsScreen(
-                                sharedPreference = sharedPreference
+                                sharedPreference = sharedPreference, scaffoldState
                             )
                             bottomBarState.value = true
                             searchState.value = true
@@ -138,7 +136,8 @@ fun Main(
             composable("search") {
                 Search(
                     sharedPreference = sharedPreference,
-                    navController = navController
+                    navController = navController,
+                    scaffoldState = scaffoldState
                 )
                 bottomBarState.value = false
                 searchState.value = false
@@ -201,7 +200,11 @@ fun Main(
 
 
 @Composable
-fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
+fun Home(
+    sections: List<HomeSection>,
+    sharedPreference: SharedPreference,
+    scaffoldState: ScaffoldState
+) {
     val homeNavController = rememberNavController()
     NavHost(
         navController = homeNavController,
@@ -214,7 +217,7 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
                     .background(Color.Black)
                     .wrapContentHeight()
             ) {
-                Banner(sharedPreference, homeNavController)
+                Banner(sharedPreference, homeNavController, scaffoldState)
                 sections.forEach { section ->
 
                     when (section.type) {
@@ -240,7 +243,7 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
                         FullItem -> {
                             Banner(
                                 sharedPreference = sharedPreference,
-                                homeNavController = homeNavController,
+                                homeNavController = homeNavController, scaffoldState,
                                 hasHeader = false
                             )
                         }
@@ -255,14 +258,16 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
             ShowsMovies(
                 "Shows",
                 sharedPreference = sharedPreference,
-                navController = homeNavController
+                navController = homeNavController,
+                scaffoldState = scaffoldState
             )
         }
         composable("movies") {
             ShowsMovies(
                 "Movies",
                 sharedPreference = sharedPreference,
-                navController = homeNavController
+                navController = homeNavController,
+                scaffoldState = scaffoldState
             )
         }
         composable(
@@ -275,7 +280,8 @@ fun Home(sections: List<HomeSection>, sharedPreference: SharedPreference) {
                 it.arguments?.getString("title") ?: "",
                 sharedPreference = sharedPreference,
                 navController = homeNavController,
-                it.arguments?.getString("selected_cat") ?: ""
+                it.arguments?.getString("selected_cat") ?: "",
+                scaffoldState = scaffoldState
             )
         }
     }
@@ -308,7 +314,7 @@ fun homeFaithViewPagerItem(
             text = titleStr,
             fontSize = 20.sp,
             color = Color.White,
-            fontFamily = FontFamily(Font(R.font.poppins_semibold)),
+            fontFamily = FontFamily(Font(poppins_semibold)),
             modifier = Modifier.constrainAs(title) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start, margin = 16.dp)
@@ -332,8 +338,8 @@ fun homeFaithViewPagerItem(
                         AsyncImage(
                             model = "",
                             contentDescription = "",
-                            placeholder = painterResource(R.drawable.image_1),
-                            error = painterResource(R.drawable.image_1),
+                            placeholder = painterResource(image_1),
+                            error = painterResource(image_1),
                             contentScale = ContentScale.FillBounds,
                             modifier = Modifier
                                 .width(126.dp)
@@ -619,6 +625,7 @@ fun ErrorView(errorTxt: String, reloadAction: () -> Unit) {
 fun Header(
     sharedPreference: SharedPreference,
     onClick: () -> Unit,
+    scaffoldState: ScaffoldState,
     showBack: Boolean = false
 ) {
     Row(modifier = Modifier.fillMaxSize()) {
@@ -626,7 +633,7 @@ fun Header(
             val (logo, profileImg) = createRefs()
             if (showBack)
                 Image(
-                    painter = painterResource(id = R.drawable.back_button),
+                    painter = painterResource(id = back_button),
                     contentDescription = "",
                     contentScale = ContentScale.Inside,
                     alignment = Alignment.TopStart,
@@ -648,12 +655,13 @@ fun Header(
                         start.linkTo(parent.start)
                     }
                 )
-
+            val scope = rememberCoroutineScope()
             if (sharedPreference.getPhoto().isNotEmpty())
                 AsyncImage(
                     model = sharedPreference.getPhoto(),
                     contentDescription = null,
                     modifier = Modifier
+                        .clickable { scope.launch { scaffoldState.drawerState.open() } }
                         .clip(CircleShape)
                         .width(28.dp)
                         .height(28.dp)
@@ -669,6 +677,7 @@ fun Header(
                     modifier = Modifier
                         .background(colorResource(id = R.color.persian_blue), shape = CircleShape)
                         .height(28.dp)
+                        .clickable { scope.launch { scaffoldState.drawerState.open() } }
                         .width(28.dp)
                         .border(1.dp, Color.White, CircleShape)
                         .constrainAs(profileImg) {
@@ -690,7 +699,11 @@ fun Header(
 }
 
 @Composable
-fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostController) {
+fun HomeHeader(
+    sharedPreference: SharedPreference,
+    homeNavController: NavHostController,
+    scaffoldState: ScaffoldState
+) {
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -717,7 +730,11 @@ fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostCon
                         start.linkTo(parent.start, margin = 10.dp)
                         end.linkTo(parent.end, margin = 10.dp)
                     }) {
-                Header(sharedPreference = sharedPreference, onClick = { })
+                Header(
+                    sharedPreference = sharedPreference,
+                    onClick = { },
+                    scaffoldState = scaffoldState
+                )
             }
             ConstraintLayout(modifier = Modifier.constrainAs(container) {
                 top.linkTo(logo.bottom, 26.dp)
@@ -784,6 +801,7 @@ fun HomeHeader(sharedPreference: SharedPreference, homeNavController: NavHostCon
 fun Banner(
     sharedPreference: SharedPreference,
     homeNavController: NavHostController,
+    scaffoldState: ScaffoldState,
     hasHeader: Boolean = true
 ) {
     ConstraintLayout() {
@@ -824,7 +842,8 @@ fun Banner(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(16.dp)
-                    .wrapContentWidth(),
+                    .wrapContentWidth()
+                    .clickable { },
                 fontFamily = FontFamily(Font(cooper_std_black))
             )
             Text(
@@ -833,7 +852,7 @@ fun Banner(
                 color = Color.White,
                 fontFamily = FontFamily(Font(poppins_medium))
             )
-            IconButton(onClick = { }) {
+            IconButton(onClick = {}) {
                 Image(
                     painter = painterResource(play_button),
                     contentDescription = "",
@@ -843,7 +862,7 @@ fun Banner(
             }
         }
         if (hasHeader)
-            HomeHeader(sharedPreference = sharedPreference, homeNavController)
+            HomeHeader(sharedPreference = sharedPreference, homeNavController, scaffoldState)
 
     }
 }

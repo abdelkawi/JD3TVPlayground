@@ -9,10 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
@@ -49,7 +46,7 @@ import com.genwin.jd3tv.screens.hosts.presentation.HostCell
 //
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Search(sharedPreference: SharedPreference,navController: NavController) {
+fun Search(sharedPreference: SharedPreference,navController: NavController,scaffoldState: ScaffoldState) {
    Column(modifier = Modifier
        .fillMaxSize().background(color = Color.Black)) {
        LazyVerticalGrid(
@@ -73,7 +70,8 @@ fun Search(sharedPreference: SharedPreference,navController: NavController) {
                    Header(
                        sharedPreference = sharedPreference,
                        onClick = { navController.popBackStack() },
-                       showBack = true
+                       showBack = true,
+                       scaffoldState = scaffoldState
                    )
                }
            }

@@ -130,8 +130,10 @@ class MainActivity : ComponentActivity() {
       ) {
         val navController = rememberNavController()
         val searchState = rememberSaveable { (mutableStateOf(true)) }
+        val scaffoldState = rememberScaffoldState()
         CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Rtl) {
           Scaffold(
+            scaffoldState= scaffoldState,
             drawerContent = {
               ProfileDrawer(sharedPreference)
             },
@@ -143,7 +145,7 @@ class MainActivity : ComponentActivity() {
 //                                    tabs = tabs.map { BottomTab(it, it) }
 //                                        .subList(1, 6),
                   sharedPreference = sharedPreference,
-                  navController,searchState
+                  navController,searchState,scaffoldState
                 )
               }
             },
